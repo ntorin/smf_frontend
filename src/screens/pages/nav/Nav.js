@@ -10,23 +10,23 @@ class Nav extends React.Component {
         const items = [
             {
                 name: 'User Directory',
-                screen: 'storytime_buddies_frontend.UserDirectory'
+                screen: 'smf_frontend.UserDirectory'
             },
             {
                 name: 'Settings',
-                screen: 'storytime_buddies_frontend.Settings'
+                screen: 'smf_frontend.Settings'
             },
             {
                 name: 'Help',
-                screen: 'storytime_buddies_frontend.Help'
+                screen: 'smf_frontend.Help'
             },
             {
                 name: 'About',
-                screen: 'storytime_buddies_frontend.About'
+                screen: 'smf_frontend.About'
             },
             {
                 name: 'Log Out',
-                screen: 'storytime_buddies_frontend.Login'
+                screen: 'smf_frontend.Login'
             },
         ];
         const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });

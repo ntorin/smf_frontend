@@ -8,30 +8,14 @@ import Button from 'apsl-react-native-button'
 var tabs;
 
 iconsLoaded.then(() => {
-    tabs = [{
-        label: 'Lobbies',
-        screen: 'storytime_buddies_frontend.LobbyList',
-        icon: iconsMap['pencil'],
-        title: 'Available Lobbies',
-    },
-    {
-        label: 'Library',
-        screen: 'storytime_buddies_frontend.Library',
-        icon: iconsMap['book-bookmark'],
-        title: 'Story Library',
-    },
-    {
-        label: 'Messages',
-        screen: 'storytime_buddies_frontend.Messages',
-        icon: iconsMap['chat'],
-        title: 'Recent Messages',
-    },
-    {
-        label: 'Profile',
-        screen: 'storytime_buddies_frontend.MyProfile',
-        icon: iconsMap['person'],
-        title: 'Your Profile',
-    }];
+    tabs = [
+        {
+            label: 'Messages',
+            screen: 'smf_frontend.Messages',
+            icon: iconsMap['chat'],
+            title: 'Recent Messages',
+        },
+    ];
 
 
 });
@@ -92,7 +76,7 @@ class Login extends React.Component {
             },
             drawer: {
                 left: {
-                    screen: 'storytime_buddies_frontend.Nav'
+                    screen: 'smf_frontend.Nav'
                 }
             }
         });

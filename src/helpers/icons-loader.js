@@ -3,41 +3,28 @@
 // and use everywhere
 // https://gist.github.com/dropfen/4a2209d7274788027f782e8655be198f
 
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Entypo from 'react-native-vector-icons/Entypo';
+import Foundation from 'react-native-vector-icons/Foundation';
+import Octicons from 'react-native-vector-icons/Octicons';
+
 
 // define your suffixes by yourself..
 // here we use active, big, small, very-big..
 const replaceSuffixPattern = /--(active|big|small|very-big)/g;
 const icons = {
-  "ios-person": [30, "#bbb"],
-  "ios-person--big": [50, "#bbb"],
-
-  "ios-person--active": [30, "#fff"],
-  "ios-person--active--big": [50, "#fff"],
-  "ios-person--active--very-big": [100, "#fff"],
-
-  "ios-people": [30, "#bbb"],
-  "ios-people--active": [30, "#fff"],
-
-  "ios-keypad": [30, "#bbb"],
-  "ios-keypad--active": [30, "#fff"],
-
-  "ios-chatbubbles": [30, "#bbb"],
-  "ios-chatbubbles--active": [30, "#fff"],
-
-  // Use other Icon provider, see the logic at L39
-  "facebook": [30, "#bbb", FontAwesome],
-  "facebook--active": [30, "#fff", FontAwesome],
+  "pencil": [30, "#fff", Entypo],
+  "book-bookmark": [30, "#fff", Foundation],
+  "person": [30, "#fff", Octicons],
+  "chat": [30, "#fff", Entypo]
 }
 
-const defaultIconProvider = Ionicons;
+const defaultIconProvider = Entypo;
 
 let iconsMap = {};
 let iconsLoaded = new Promise((resolve, reject) => {
   new Promise.all(
     Object.keys(icons).map(iconName => {
-      const Provider = icons[iconName][2] || defaultIconProvider; // Ionicons
+      const Provider = icons[iconName][2] || defaultIconProvider; // Entypo
       return Provider.getImageSource(
         iconName.replace(replaceSuffixPattern, ''),
         icons[iconName][0],
