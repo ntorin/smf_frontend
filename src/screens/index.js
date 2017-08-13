@@ -1,46 +1,32 @@
-import {Navigation} from 'react-native-navigation';
+import { Navigation } from 'react-native-navigation';
 
-import Types from './Types';
-import Actions from './Actions';
-import Transitions from './Transitions';
 
-import Push from './types/Push';
-import Drawer from './types/Drawer';
-import LightBox from './types/LightBox';
-import Notification from './types/Notification';
-import Modal from './types/Modal';
-import TopTabs from './types/TopTabs';
-import TabOne from './types/tabs/TabOne';
-import TabTwo from './types/tabs/TabTwo';
+import Nav from './pages/nav/Nav';
+import Login from './pages/login/Login';
+import MyProfile from './pages/home/tabs/myProfile/MyProfile';
+import Messages from './pages/home/tabs/messages/Messages';
+import Chat from './pages/chat/Chat';
+import UserDirectory from './pages/nav/items/UserDirectory';
+import Settings from './pages/nav/items/Settings';
+import Help from './pages/nav/items/Help';
+import About from './pages/nav/items/About';
 
-import CollapsingHeader from './transitions/CollapsingHeader';
-import SharedElementTransitions from './transitions/SharedElementTransitions';
-
-import Cards from './transitions/sharedElementTransitions/Cards/Cards';
-import CardsInfo from './transitions/sharedElementTransitions/Cards/Info';
-
-import Masonry from './transitions/sharedElementTransitions/Masonry/Masonry';
-import MasonryItem from './transitions/sharedElementTransitions/Masonry/Item';
 
 export default function () {
-  Navigation.registerComponent('react_native_skeleton.Types', () => Types);
-  Navigation.registerComponent('react_native_skeleton.Actions', () => Actions);
-  Navigation.registerComponent('react_native_skeleton.Transitions', () => Transitions);
+  Navigation.registerComponent('storytime_buddies_frontend.Nav', () => Nav);
+  Navigation.registerComponent('storytime_buddies_frontend.Login', () => Login);
+  Navigation.registerComponent('storytime_buddies_frontend.LobbyList', () => LobbyList);
+  Navigation.registerComponent('storytime_buddies_frontend.Library', () => Library);
+  Navigation.registerComponent('storytime_buddies_frontend.MyProfile', () => MyProfile);
+  Navigation.registerComponent('storytime_buddies_frontend.Messages', () => Messages);
 
-  Navigation.registerComponent('react_native_skeleton.Types.Push', () => Push);
-  Navigation.registerComponent('react_native_skeleton.Types.Drawer', () => Drawer);
-  Navigation.registerComponent('react_native_skeleton.Types.Screen', () => Drawer);
-  Navigation.registerComponent('react_native_skeleton.Types.Modal', () => Modal);
-  Navigation.registerComponent('react_native_skeleton.Types.LightBox', () => LightBox);
-  Navigation.registerComponent('react_native_skeleton.Types.Notification', () => Notification);
-  Navigation.registerComponent('react_native_skeleton.Types.TopTabs', () => TopTabs);
-  Navigation.registerComponent('react_native_skeleton.Types.TopTabs.TabOne', () => TabOne);
-  Navigation.registerComponent('react_native_skeleton.Types.TopTabs.TabTwo', () => TabTwo);
+  Navigation.registerComponent('storytime_buddies_frontend.Chat', () => Chat);
 
-  Navigation.registerComponent('react_native_skeleton.Transitions.CollapsingHeader', () => CollapsingHeader);
-  Navigation.registerComponent('react_native_skeleton.Transitions.SharedElementTransitions', () => SharedElementTransitions);
-  Navigation.registerComponent('react_native_skeleton.Transitions.SharedElementTransitions.Cards', () => Cards);
-  Navigation.registerComponent('react_native_skeleton.Transitions.SharedElementTransitions.Cards.Info', () => CardsInfo);
-  Navigation.registerComponent('react_native_skeleton.Transitions.SharedElementTransitions.Masonry', () => Masonry);
-  Navigation.registerComponent('react_native_skeleton.Transitions.SharedElementTransitions.Masonry.Item', () => MasonryItem);
+  Navigation.registerComponent('storytime_buddies_frontend.UserDirectory', () => UserDirectory);
+  Navigation.registerComponent('storytime_buddies_frontend.Settings', () => Settings);
+  Navigation.registerComponent('storytime_buddies_frontend.Help', () => Help);
+  Navigation.registerComponent('storytime_buddies_frontend.About', () => About);
+
+
+
 }

@@ -45,12 +45,12 @@ android_library(
 
 android_build_config(
     name = "build_config",
-    package = "com.react_native_skeleton",
+    package = "com.smf_frontend",
 )
 
 android_resource(
     name = "res",
-    package = "com.react_native_skeleton",
+    package = "com.smf_frontend",
     res = "src/main/res",
 )
 

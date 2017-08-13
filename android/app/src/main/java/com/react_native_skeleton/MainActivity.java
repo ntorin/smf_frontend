@@ -1,4 +1,4 @@
-package com.react_native_skeleton;
+package com.smf_frontend;
 
 import com.facebook.react.ReactActivity;
 import com.reactnativenavigation.controllers.SplashActivity;

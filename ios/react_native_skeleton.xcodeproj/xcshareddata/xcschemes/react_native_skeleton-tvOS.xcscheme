@@ -29,9 +29,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-               BuildableName = "react_native_skeleton-tvOS.app"
-               BlueprintName = "react_native_skeleton-tvOS"
-               ReferencedContainer = "container:react_native_skeleton.xcodeproj">
+               BuildableName = "smf_frontend-tvOS.app"
+               BlueprintName = "smf_frontend-tvOS"
+               ReferencedContainer = "container:smf_frontend.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -43,9 +43,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2D02E48F1E0B4A5D006451C7"
-               BuildableName = "react_native_skeleton-tvOSTests.xctest"
-               BlueprintName = "react_native_skeleton-tvOSTests"
-               ReferencedContainer = "container:react_native_skeleton.xcodeproj">
+               BuildableName = "smf_frontend-tvOSTests.xctest"
+               BlueprintName = "smf_frontend-tvOSTests"
+               ReferencedContainer = "container:smf_frontend.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -61,9 +61,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2D02E48F1E0B4A5D006451C7"
-               BuildableName = "react_native_skeleton-tvOSTests.xctest"
-               BlueprintName = "react_native_skeleton-tvOSTests"
-               ReferencedContainer = "container:react_native_skeleton.xcodeproj">
+               BuildableName = "smf_frontend-tvOSTests.xctest"
+               BlueprintName = "smf_frontend-tvOSTests"
+               ReferencedContainer = "container:smf_frontend.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -71,9 +71,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-            BuildableName = "react_native_skeleton-tvOS.app"
-            BlueprintName = "react_native_skeleton-tvOS"
-            ReferencedContainer = "container:react_native_skeleton.xcodeproj">
+            BuildableName = "smf_frontend-tvOS.app"
+            BlueprintName = "smf_frontend-tvOS"
+            ReferencedContainer = "container:smf_frontend.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -94,9 +94,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-            BuildableName = "react_native_skeleton-tvOS.app"
-            BlueprintName = "react_native_skeleton-tvOS"
-            ReferencedContainer = "container:react_native_skeleton.xcodeproj">
+            BuildableName = "smf_frontend-tvOS.app"
+            BlueprintName = "smf_frontend-tvOS"
+            ReferencedContainer = "container:smf_frontend.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -113,9 +113,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-            BuildableName = "react_native_skeleton-tvOS.app"
-            BlueprintName = "react_native_skeleton-tvOS"
-            ReferencedContainer = "container:react_native_skeleton.xcodeproj">
+            BuildableName = "smf_frontend-tvOS.app"
+            BlueprintName = "smf_frontend-tvOS"
+            ReferencedContainer = "container:smf_frontend.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
