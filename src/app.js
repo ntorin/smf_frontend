@@ -11,6 +11,11 @@ import registerScreens from './screens';
     Navigation.startSingleScreenApp({
       screen: {
         screen: 'smf_frontend.Login',
+        navigatorStyle: {
+            navBarHidden: true,
+            navBarTransparent: true,
+            drawUnderNavBar: true,
+        },
       },
       animationType: Platform.OS === 'ios' ? 'slide-down' : 'fade'
     });

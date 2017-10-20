@@ -1,7 +1,8 @@
 import React from 'react';
 import { StyleSheet, View, Text, ListView } from 'react-native';
 import Button from 'apsl-react-native-button';
-
+import NavItem from 'components/NavItem';
+import LiteProfile from 'components/LiteProfile';
 
 class Nav extends React.Component {
 
@@ -10,22 +11,27 @@ class Nav extends React.Component {
         const items = [
             {
                 name: 'User Directory',
+                icon: require('assets/icons/directory.png'),
                 screen: 'smf_frontend.UserDirectory'
             },
             {
                 name: 'Settings',
+                icon: require('assets/icons/settings.png'),
                 screen: 'smf_frontend.Settings'
             },
             {
                 name: 'Help',
+                icon: require('assets/icons/help.png'),
                 screen: 'smf_frontend.Help'
             },
             {
                 name: 'About',
+                icon: require('assets/icons/about.png'),
                 screen: 'smf_frontend.About'
             },
             {
                 name: 'Log Out',
+                icon: require('assets/icons/logout.png'),
                 screen: 'smf_frontend.Login'
             },
         ];
@@ -37,21 +43,11 @@ class Nav extends React.Component {
         this.goToPage = this.goToPage.bind(this);
     }
 
-    render() {
-        return (
-            <View style={styles.container}>
-                <ListView
-                    dataSource={this.state.menu}
-                    renderRow={this.renderRow.bind(this)} />
-            </View>
-        )
-    }
+    
 
     renderRow(rowData) {
         return (
-            <Button style={styles.listItem}>
-                <Text>{rowData.name}</Text>
-            </Button>
+            <NavItem onPress={() => this.gotoPage(rowData)} icon={rowData.icon} text={rowData.name}/>
         )
     }
 
@@ -61,19 +57,29 @@ class Nav extends React.Component {
             title: rowData.name
         });
     }
+
+    render() {
+        return (
+            <View style={layout.container}>
+                <LiteProfile username={"username"} accountid={"account_id"}/>
+                <ListView
+                    style={layout.listView}
+                    dataSource={this.state.menu}
+                    renderRow={this.renderRow.bind(this)} />
+            </View>
+        )
+    }
 }
 
-const styles = StyleSheet.create({
+const layout = StyleSheet.create({
     container: {
         flex: 1,
-        width: 300,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#ffffff',
+        padding: 15,
+        backgroundColor: '#EDEDEE',
     },
 
-    listItem: {
-        borderWidth: 0
+    listView: {
+        top: 15
     },
 });
 
