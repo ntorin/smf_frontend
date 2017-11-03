@@ -2,15 +2,17 @@ import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { TabViewAnimated, TabBar, SceneMap } from 'react-native-tab-view';
 import PopulatableListView from 'components/PopulatableListView';
-import {PrimaryColor, BaseStyles} from 'helpers/styles';
+import { PrimaryColor, BaseStyles, NavNoElevation } from 'helpers/styles';
 
 class Discovery extends React.Component {
 
-    All = () => <PopulatableListView/>;
-    Users = () => <PopulatableListView/>;
-    Groups = () => <PopulatableListView/>;
+    static navigatorStyle = NavNoElevation;
 
-    constructor(props){
+    All = () => <PopulatableListView />;
+    Users = () => <PopulatableListView />;
+    Groups = () => <PopulatableListView />;
+
+    constructor(props) {
         super(props);
         this.state = {
             index: 0,
@@ -22,39 +24,51 @@ class Discovery extends React.Component {
         };
     }
 
-  _handleIndexChange = index => this.setState({ index });
+    _handleIndexChange = index => this.setState({ index });
 
-  _renderHeader = props => <TabBar style={styles.tabBar} {...props} />;
+    _renderHeader = props => <TabBar
+        {...props}
+        style={styles.tabBar}
+        indicatorStyle={styles.indicator}
+        labelStyle={styles.label}
+    />;
+    _renderScene = SceneMap({
+        '1': this.All,
+        '2': this.Users,
+        '3': this.Groups,
+    });
 
-  _renderScene = SceneMap({
-    '1': this.All,
-    '2': this.Users,
-    '3': this.Groups,
-  });
-
-  render() {
-    return (
-      <TabViewAnimated
-        style={layout.container}
-        navigationState={this.state}
-        renderScene={this._renderScene}
-        renderHeader={this._renderHeader}
-        onIndexChange={this._handleIndexChange}
-      />
-    );
-  }
+    render() {
+        return (
+            <TabViewAnimated
+                style={layout.container}
+                navigationState={this.state}
+                renderScene={this._renderScene}
+                renderHeader={this._renderHeader}
+                onIndexChange={this._handleIndexChange}
+            />
+        );
+    }
 }
 
 const styles = StyleSheet.create({
     tabBar: {
+        backgroundColor: '#FFFFFF',
+    },
+
+    indicator: {
         backgroundColor: PrimaryColor,
+    },
+
+    label: {
+        color: PrimaryColor,
     }
 });
 
 const layout = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
+    container: {
+        flex: 1,
+    },
 })
 
 export default Discovery;

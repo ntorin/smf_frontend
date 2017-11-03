@@ -13,7 +13,7 @@ class NavItem extends React.Component {
 
     render(){
         return(
-            <Button onPress={this.props.onPress}>
+            <Button onPress={() => this.props.onPress(this.props.rowData)}>
             <View style={layout.container}>
                 <Image source={this.props.icon}/>
                 <Text style={layout.text}>{this.props.text}</Text>           

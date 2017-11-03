@@ -32,3 +32,7 @@ export const NavStyle = {
             drawUnderTabBar: true,
             tabBarTranslucent: true,
         };
+
+export const NavNoElevation = {
+  topBarElevationShadowEnabled: false
+}

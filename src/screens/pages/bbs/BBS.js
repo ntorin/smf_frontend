@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Text, TextInput } from 'react-native';
 import PopulatableListView from 'components/PopulatableListView';
 import Button from 'components/Button';
-import {BaseStyles, PrimaryColor } from 'helpers/styles.js';
+import BaseStyles, { PrimaryColor } from 'helpers/styles.js';
 
 class BBS extends React.Component {
 
@@ -45,12 +45,11 @@ class BBS extends React.Component {
 
     render() {
         return (
-            <View>
+            <View style={BaseStyles.container}>
                 <View style={layout.searchPanel}>
                     <TextInput style={layout.searchBar}
-                        placeholder={'Search'}
+                        placeholder={'🔎 Search...'}
                         placeholderTextColor={PrimaryColor}
-                        underlineColorAndroid={PrimaryColor}
                         selectionColor={PrimaryColor}
                         textAlign='center'
                         onChangeText={(text) => this.setState({ searchQuery: text })}

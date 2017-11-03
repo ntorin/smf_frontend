@@ -15,6 +15,11 @@ class Nav extends React.Component {
                 screen: 'smf_frontend.UserDirectory'
             },
             {
+                name: 'Messages',
+                icon: require('assets/icons/messages.png'),
+                screen: 'smf_frontend.Messages'
+            },
+            {
                 name: 'Settings',
                 icon: require('assets/icons/settings.png'),
                 screen: 'smf_frontend.Settings'
@@ -47,14 +52,14 @@ class Nav extends React.Component {
 
     renderRow(rowData) {
         return (
-            <NavItem onPress={() => this.gotoPage(rowData)} icon={rowData.icon} text={rowData.name}/>
+            <NavItem rowData={rowData} onPress={this.goToPage} icon={rowData.icon} text={rowData.name}/>
         )
     }
 
     goToPage(rowData){
         this.props.navigator.push({
-            screen: rowData.screen,
-            title: rowData.name
+            screen: 'smf_frontend.Feed',
+            title: 'rowData.name'
         });
     }
 

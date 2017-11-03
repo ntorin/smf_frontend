@@ -2,10 +2,12 @@ import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { TabViewAnimated, TabBar, SceneMap } from 'react-native-tab-view';
 import PopulatableListView from 'components/PopulatableListView';
-import {BaseStyles, PrimaryColor} from 'helpers/styles.js';
+import BaseStyles, { PrimaryColor, NavNoElevation } from 'helpers/styles.js';
 import ProfileInfo from './ProfileInfo';
 
 class Profile extends React.Component {
+
+    static navigatorStyle = NavNoElevation;
 
     Info = () => <ProfileInfo />;
     Activity = () => <PopulatableListView />;
@@ -23,7 +25,12 @@ class Profile extends React.Component {
 
     _handleIndexChange = index => this.setState({ index });
 
-    _renderHeader = props => <TabBar style={styles.tabBar} {...props} />;
+    _renderHeader = props => <TabBar
+        {...props}
+        style={styles.tabBar}
+        indicatorStyle={styles.indicator}
+        labelStyle={styles.label}
+    />;
 
     _renderScene = SceneMap({
         '1': this.Info,
@@ -34,11 +41,10 @@ class Profile extends React.Component {
     render() {
         return (
             <TabViewAnimated
-              style={layout.container}
-              navigationState={this.state}
-              renderScene={this._renderScene}
-              renderHeader={this._renderHeader}
-              onIndexChange={this._handleIndexChange}
+                navigationState={this.state}
+                renderScene={this._renderScene}
+                renderHeader={this._renderHeader}
+                onIndexChange={this._handleIndexChange}
             />
         )
     }
@@ -46,12 +52,19 @@ class Profile extends React.Component {
 
 const styles = StyleSheet.create({
     tabBar: {
+        backgroundColor: '#FFFFFF',
+    },
+
+    indicator: {
         backgroundColor: PrimaryColor,
+    },
+
+    label: {
+        color: PrimaryColor,
     }
 });
 
 const layout = StyleSheet.create({
-
 });
 
 export default Profile;
