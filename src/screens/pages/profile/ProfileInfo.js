@@ -5,22 +5,25 @@ import LiteProfile from 'components/LiteProfile';
 
 class ProfileInfo extends React.Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
+        this.state = {
+
+        }
     }
 
-    render(){
-        return(
+    render() {
+        return (
             <View style={BaseStyles.container}>
-                <LiteProfile 
-                username={"username"} 
-                accountid={"account_id"} 
-                description={"description_test -- description_test -- description_test -- description_test -- description_test"} />
+                <LiteProfile
+                    username={"username"}
+                    accountid={"account_id"}
+                    description={"description_test -- description_test -- description_test -- description_test -- description_test"} />
                 <View style={layout.userInformation}>
-                <Text>join_date</Text>
-                <Text>birthday</Text>
-                <Text>post_count</Text>
-                <Text>topics_created</Text>
+                    <Text>join_date</Text>
+                    <Text>birthday</Text>
+                    <Text>post_count</Text>
+                    <Text>topics_created</Text>
                 </View>
             </View>
         )

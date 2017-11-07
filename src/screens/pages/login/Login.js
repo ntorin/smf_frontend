@@ -8,7 +8,7 @@ import { iconsMap, iconsLoaded } from 'helpers/icons-loader';
 import { Navigation } from 'react-native-navigation';
 import Background from 'components/Background';
 import BaseStyles, { PrimaryColor, PrimaryDimmed, NavMenu, ScreenBackgroundColor } from 'helpers/styles';
-import { AUTH_POST_SIGN_IN } from 'helpers/apicalls';
+import { AUTH_POST_SIGN_IN, AUTH_POST } from 'helpers/apicalls';
 import Button from 'components/Button';
 
 var tabs;
@@ -161,16 +161,19 @@ class Login extends React.Component {
                         iconColor={PrimaryColor}
                         iconSize={20}
                         secureTextEntry={true}
-                        onChangeText={(text) => this.setState({ password: text, })}
+                        onChangeText={(text) => this.setState({ password: text })}
                     />
+                </View>
+                <View>
+                    <Text>{this.state.email}</Text>
                 </View>
                 <View style={layout.buttons}>
                     <Button onPress={this.loginUser}>
                         Login
-                </Button>
+                    </Button>
                     <Button onPress={this.registerUser}>
                         Register
-                </Button>
+                    </Button>
                 </View>
             </ScrollView>
         )

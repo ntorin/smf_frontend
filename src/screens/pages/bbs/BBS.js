@@ -16,8 +16,14 @@ class BBS extends React.Component {
         this.viewTopic = this.viewTopic.bind(this);
     }
 
-    getTopics(page = 1, callback, options){
-        topics = ['test'];
+    getTopics(page = 1, callback, options) {
+        topics = [
+            {
+                title: "gee i sure do love anime",
+                op_name: "citron",
+                post_count: 500,
+            }
+        ];
         callback(topics, {
             allLoaded: true,
         })
@@ -31,7 +37,7 @@ class BBS extends React.Component {
         this.props.navigator.push({
             screen: 'smf_frontend.CreateTopic',
             title: 'Create Topic',
-            passProps: {  }
+            passProps: {}
         });
     }
 
@@ -66,11 +72,11 @@ class BBS extends React.Component {
                     </Button>
                 </View>
                 <View style={layout.topicList}>
-                    <PopulatableListView 
+                    <PopulatableListView
                         type={'topic'}
                         onFetch={this.getTopics}
                         onPress={this.viewTopic}
-                        />
+                    />
                 </View>
             </View>
         )
@@ -86,11 +92,11 @@ const layout = StyleSheet.create({
         flexDirection: 'row'
     },
     searchBar: {
-        flex: 7
+        flex: 5
     },
 
     advancedSearchButton: {
-        flex: 3
+        flex: 5
     },
 
     newTopicButton: {

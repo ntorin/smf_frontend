@@ -1,6 +1,9 @@
 let BASE_URL = "http://ec2-18-220-137-59.us-east-2.compute.amazonaws.com"
 let GET = "GET";
 let POST = "POST";
+let PUT = "PUT";
+let PATCH = "PATCH";
+let DELETE = "DELETE";
 let JSON_HEADERS = {
     'Accept': 'application/json',
     'Content-Type': 'application/json'
@@ -92,85 +95,63 @@ let AUTH_POST_SIGN_IN = (email, password, firstResponse) => {
     });
 }
 
-/**
- * 
- */
-let BLOCKS_URL = BASE_URL + "/blocks"
+let BLOCKS_URL = BASE_URL + "/blocks";
+
+let CONVERSATION_USERS_URL = BASE_URL + "/conversation_users";
+
+let CONVERSATIONS_URL = BASE_URL + "/conversations";
+
+let CREDIT_HISTORIES_URL = BASE_URL + "/credit_histories";
+
+let FEEDS_URL = BASE_URL + "/feeds";
+
+let FOLLOWS_URL = BASE_URL + "/follows";
+
+let FRIENDS_URL = BASE_URL + "/friends";
+
+let GROUP_TAGS_URL = BASE_URL + "/group_tags";
+
+let GROUPS_URL = BASE_URL + "/groups";
 
 /**
- * 
+ * Deletes a group.
+ * @param {*} firstResponse 
  */
-let CONVERSATION_USERS_URL = BASE_URL + "/conversation_users"
+let GROUPS_DELETE = (firstResponse) => {
 
-/**
- * 
- */
-let CONVERSATIONS_URL = BASE_URL + "/conversations"
+    if (firstResponse == null) {
+        firstResponse = () => { };
+    }
 
-/**
- * 
- */
-let CREDIT_HISTORIES_URL = BASE_URL + "/credit_histories"
+    return fetch(
+        GROUPS_URL + "/delete",
+        {
+            method: DELETE,
+            headers: JSON_HEADERS,
+        }
+    )
+        .then((response) => {
+            firstResponse();
+            return (response.json());
+        }
+        );
+}
 
-/**
- * 
- */
-let FEEDS_URL = BASE_URL + "/feeds"
+let NOTIFICATIONS_URL = BASE_URL + "/notifications";
 
-/**
- * 
- */
-let FOLLOWS_URL = BASE_URL + "/follows"
+let POST_LIKES_URL = BASE_URL + "/post_likes";
 
-/**
- * 
- */
-let FRIENDS_URL = BASE_URL + "/friends"
+let POSTS_URL = BASE_URL + "/posts";
 
-/**
- * 
- */
-let GROUP_TAGS_URL = BASE_URL + "/group_tags"
+let PRIVATE_MESSAGES_URL = BASE_URL + "/private_messages";
 
-/**
- * 
- */
-let GROUPS_URL = BASE_URL + "/groups"
+let REPORTS_URL = BASE_URL + "/reports";
 
-/**
- * 
- */
-let NOTIFICATIONS_URL = BASE_URL + "/notifications"
+let TOPIC_TAGS_URL = BASE_URL + "/topic_tags";
 
-/**
- * 
- */
-let POST_LIKES_URL = BASE_URL + "/post_likes"
+let TOPICS_URL = BASE_URL + "/topics";
 
-/**
- * 
- */
-let POSTS_URL = BASE_URL + "/posts"
-
-/**
- * 
- */
-let PRIVATE_MESSAGES_URL = BASE_URL + "/private_messages"
-
-/**
- * 
- */
-let REPORTS_URL = BASE_URL + "/reports"
-
-/**
- * 
- */
-let TOPIC_TAGS_URL = BASE_URL + "/topic_tags"
-
-/**
- * 
- */
-let TOPICS_URL = BASE_URL + "/topics"
+let USERS_URL = BASE_URL + "/users";
 
 
 export {

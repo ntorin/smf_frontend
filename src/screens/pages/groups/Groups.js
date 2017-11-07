@@ -72,11 +72,11 @@ const layout = StyleSheet.create({
         flexDirection: 'row'
     },
     searchBar: {
-        flex: 7
+        flex: 5
     },
 
     advancedSearchButton: {
-        flex: 3
+        flex: 5
     },
 
     groupList: {
