@@ -10,7 +10,7 @@ let topic = {
 }
 
 let post = {
-    //...
+    //i lov u lime
 }
 
 class ListItem extends React.Component {
