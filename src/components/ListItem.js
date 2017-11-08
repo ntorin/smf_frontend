@@ -5,12 +5,41 @@ import BaseStyles from 'helpers/styles.js';
 
 let topic = {
     title: 'title',
-    op_name: 'op_name',
+    name: 'op_name',
+    post_preview: 'gee i sure do love anime! gee i sure do love anime! gee i sure do love anime!',
     post_count: 50,
+    topic_tags: [
+        {
+            name: 'anime'
+        },
+        {
+            name: 'shoujo'
+        },
+        {
+            name: 'thinking'
+        }
+    ],
+    id: 5203
 }
 
 let post = {
-    //i lov u lime
+    name: 'user_name',
+    content: 'wow same wow same wow same wow same wow same wow same wow same wow same wow same wow same wow same wow same wow same',
+    id: 1023943
+}
+
+let user = {
+    name: 'user_name',
+    handle: 'handle',
+    post_count: 5523,
+    topic_count: 234,
+    follower_count: 49321,
+}
+
+let notification = {
+    title: 'notification_title',
+    message: 'message message message message message message message message',
+    is_seen: false
 }
 
 class ListItem extends React.Component {
@@ -20,7 +49,7 @@ class ListItem extends React.Component {
     }
 
     renderTopic() {
-        rd = this.props.rowData;
+        rd = topic;
         console.log(this.props.rowData);
 
         return (
@@ -32,7 +61,7 @@ class ListItem extends React.Component {
     }
 
     renderPost() {
-        rd = this.props.rowData;
+        rd = post;
 
         return (
             <View>
@@ -42,7 +71,7 @@ class ListItem extends React.Component {
     }
 
     renderNotification() {
-        rd = this.props.rowData;
+        rd = notification;
 
         return (
             <View>
@@ -52,7 +81,7 @@ class ListItem extends React.Component {
     }
 
     renderUser() {
-        rd = this.props.rowData;
+        rd = user;
 
         return (
             <View>
