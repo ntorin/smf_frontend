@@ -19,10 +19,41 @@ class BBS extends React.Component {
     getTopics(page = 1, callback, options) {
         topics = [
             {
-                title: "gee i sure do love anime",
-                op_name: "citron",
-                post_count: 500,
-            }
+                title: 'I Love Anime!',
+                name: 'pummelo',
+                post_preview: 'gee i sure do love anime! gee i sure do love anime! gee i sure do love anime! gee i sure do love anime! and i think there should be a 150 character li',
+                post_count: 74,
+                topic_tags: [
+                    {
+                        name: 'anime'
+                    },
+                    {
+                        name: 'weeb'
+                    },
+                    {
+                        name: 'thinking'
+                    }
+                ],
+                id: 5203
+            },
+            {
+                title: 'I Love Anime!',
+                name: 'pummelo',
+                post_preview: 'gee i sure do love anime! gee i sure do love anime! gee i sure do love anime! gee i sure do love anime! and i think there should be a 150 character li',
+                post_count: 74,
+                topic_tags: [
+                    {
+                        name: 'anime'
+                    },
+                    {
+                        name: 'weeb'
+                    },
+                    {
+                        name: 'thinking'
+                    }
+                ],
+                id: 5203
+            },
         ];
         callback(topics, {
             allLoaded: true,

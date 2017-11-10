@@ -49,7 +49,7 @@ class ListItem extends React.Component {
     }
 
     renderTopic() {
-        rd = topic;
+        rd = this.props.rowData;
         console.log(this.props.rowData);
 
         return (
