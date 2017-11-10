@@ -4,16 +4,16 @@ import Button from 'react-native-button';
 import BaseStyles from 'helpers/styles.js';
 
 let topic = {
-    title: 'title',
-    name: 'op_name',
-    post_preview: 'gee i sure do love anime! gee i sure do love anime! gee i sure do love anime!',
-    post_count: 50,
+    title: 'I Love Anime!',
+    name: 'pummelo',
+    post_preview: 'gee i sure do love anime! gee i sure do love anime! gee i sure do love anime! gee i sure do love anime! and i think there should be a 150 character li',
+    post_count: 74,
     topic_tags: [
         {
             name: 'anime'
         },
         {
-            name: 'shoujo'
+            name: 'weeb'
         },
         {
             name: 'thinking'
@@ -53,9 +53,16 @@ class ListItem extends React.Component {
         console.log(this.props.rowData);
 
         return (
-            <View>
-                <Text>{rd.title}</Text>
-                <Text>{rd.op_name}</Text>
+            <View style={styles.container}>
+                <View style={styles.textContainer}>
+                    <Text style={layout.title}>{rd.title}</Text>
+                    <View style={layout.nameCount}>
+                       <Text>by {rd.name}</Text>
+                       <Text style={layout.count}>{rd.post_count} posts</Text>
+                    </View>
+                    <Text>{rd.post_preview}...</Text>
+                    <Text>tags: {rd.topic_tags[0].name}, {rd.topic_tags[1].name}, {rd.topic_tags[2].name}</Text>
+                </View>
             </View>
         )
     }
@@ -112,7 +119,7 @@ class ListItem extends React.Component {
 
     render() {
         return (
-            <View style={BaseStyles.container}>
+            <View>
                 <Button onPress={() => this.props.onPress}>
                     {this.renderItem(this.props.type)}
                 </Button>
@@ -123,11 +130,30 @@ class ListItem extends React.Component {
 }
 
 const styles = StyleSheet.create({
-
+    container: {
+        borderRadius: 8,
+        backgroundColor: '#d3d3d3'
+    },
+    textContainer:  {
+        padding: 10
+    }
 });
 
 const layout = StyleSheet.create({
-
+    title: {
+        fontSize: 20
+    },
+    nameCount: {
+        flexDirection: 'row',
+        
+    },
+    name: {
+        flex: 1
+    },
+    count: {
+        textAlign: 'right',
+        flex: 1
+    }
 });
 
 export default ListItem;
