@@ -12,7 +12,7 @@ class Avatar extends React.Component {
     render(){
         return(
                 <Button containerStyle={[layout.containerStyle, {height: this.props.height, width: this.props.width}]}>
-                    <Image style={layout.avatar} source={this.props.image}/>
+                    <Image style={layout.avatar} source={this.props.image} resizeMode={'contain'} height={this.props.height} width={this.props.width}/>
                     <View style={layout.username}>
                         <Text style={[styles.username, layout.username]}>SMF</Text>
                     </View>
@@ -37,7 +37,6 @@ const layout = StyleSheet.create({
 
     containerStyle: {
         borderRadius: 4,
-        backgroundColor: '#73cfc9'
     },
 
     avatar: {

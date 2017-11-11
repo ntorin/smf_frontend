@@ -21,7 +21,7 @@ class BBS extends React.Component {
             {
                 title: 'I Love Anime!',
                 name: 'pummelo',
-                post_preview: 'gee i sure do love anime! gee i sure do love anime! gee i sure do love anime! gee i sure do love anime! and i think there should be a 150 character li',
+                post_preview: 'gee i sure do love anime! gee i sure do love anime! gee i sure do love anime! gee i sure do love anime! and i think there should be a 150 character li...',
                 post_count: 74,
                 topic_tags: [
                     {
@@ -37,25 +37,120 @@ class BBS extends React.Component {
                 id: 5203
             },
             {
-                title: 'I Love Anime!',
-                name: 'pummelo',
-                post_preview: 'gee i sure do love anime! gee i sure do love anime! gee i sure do love anime! gee i sure do love anime! and i think there should be a 150 character li',
-                post_count: 74,
+                title: 'Need help on 3rd boss of zone 2',
+                name: 'carrot',
+                post_preview: 'When I try to jump on his arm he shakes me off before I can do anything, and I did not unlock the stun bomb yet.',
+                post_count: 12,
                 topic_tags: [
                     {
-                        name: 'anime'
+                        name: 'help'
                     },
                     {
-                        name: 'weeb'
+                        name: 'meme'
                     },
                     {
-                        name: 'thinking'
+                        name: 'kek'
                     }
                 ],
+                id: 5204
+            },
+            {
+                title: 'kappa',
+                name: 'kreygasm',
+                post_preview: 'monkaS',
+                post_count: 69,
+                topic_tags: [
+                    {
+                        name: '1'
+                    },
+                    {
+                        name: '2'
+                    },
+                    {
+                        name: '3'
+                    }
+                ],
+                id: 5204
+            }
+        ];
+        callback(topics, {
+            allLoaded: true,
+        })
+
+    }
+
+    getPosts(page = 1, callback, options) {
+        posts = [
+            {
+                title: 'I Love Anime!',
+                op: true,
+                name: 'pummelo',
+                content: 'gee i sure do love anime! gee i sure do love anime! gee i sure do love anime! gee i sure do love anime! and i think there should be a 150 character limit for the preview so things dont get out of hand',
+                id: 5203
+            },
+            {
+                title: '',
+                op: false,
+                name: 'citron',
+                content: 'wow same wow same wow same wow same wow same wow same wow same wow same wow same',
+                id: 5203
+            },
+            {
+                title: '',
+                op: false,
+                name: 'salsa',
+                content: 'ew weeb',
                 id: 5203
             },
         ];
-        callback(topics, {
+        callback(posts, {
+            allLoaded: true,
+        })
+    }
+
+    getNotifications(page = 1, callback, options) {
+        notifications = [
+            {
+                title: 'Reply',
+                message: 'salsa replied to your topic I Love Anime!: ew weeb',
+                is_seen: false
+            },
+            {
+                title: 'Reply',
+                message: 'citron replied to your topic I Love Anime!: wow same wow same wow same wow same wow same wow sa... ',
+                is_seen: true
+            },
+        ];
+        callback(notifications, {
+            allLoaded: true,
+        })
+    }
+
+    getUsers(page = 1, callback, options) {
+        users = [
+            {
+                name: 'citationneeded',
+                blurb: 'contribute to my research',
+                post_count: 261,
+                topic_count: 12,
+                follower_count: 20,
+            },
+            {
+                name: 'citron',
+                blurb: 'im a weeb XD',
+                post_count: 2952,
+                topic_count: 324,
+                follower_count: 257,
+            },
+            {
+                name: 'citygirlXOXO',
+                blurb: 'follow me on instagram',
+                post_count: 5436,
+                topic_count: 532,
+                follower_count: 2657,
+            },
+        ];
+        callback(users, {
             allLoaded: true,
         })
     }
@@ -104,8 +199,8 @@ class BBS extends React.Component {
                 </View>
                 <View style={layout.topicList}>
                     <PopulatableListView
-                        type={'topic'}
-                        onFetch={this.getTopics}
+                        type={'user'}
+                        onFetch={this.getUsers}
                         onPress={this.viewTopic}
                     />
                 </View>
