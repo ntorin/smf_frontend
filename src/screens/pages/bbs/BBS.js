@@ -98,12 +98,59 @@ class BBS extends React.Component {
             {
                 title: '',
                 op: false,
-                name: 'citron',
+                name: 'salsa',
                 content: 'ew weeb',
                 id: 5203
             },
         ];
         callback(posts, {
+            allLoaded: true,
+        })
+    }
+
+    getNotifications(page = 1, callback, options) {
+        notifications = [
+            {
+                title: 'Reply',
+                message: 'salsa replied to your topic I Love Anime!: ew weeb',
+                is_seen: false
+            },
+            {
+                title: 'Reply',
+                message: 'citron replied to your topic I Love Anime!: wow same wow same wow same wow same wow same wow sa... ',
+                is_seen: true
+            },
+        ];
+        callback(notifications, {
+            allLoaded: true,
+        })
+    }
+
+    getUsers(page = 1, callback, options) {
+        users = [
+            {
+                name: 'citationneeded',
+                blurb: 'contribute to my research',
+                post_count: 261,
+                topic_count: 12,
+                follower_count: 20,
+            },
+            {
+                name: 'citron',
+                blurb: 'im a weeb XD',
+                post_count: 2952,
+                topic_count: 324,
+                follower_count: 257,
+            },
+            {
+                name: 'citygirlXOXO',
+                blurb: 'follow me on instagram',
+                post_count: 5436,
+                topic_count: 532,
+                follower_count: 2657,
+            },
+        ];
+        callback(users, {
             allLoaded: true,
         })
     }
@@ -152,8 +199,8 @@ class BBS extends React.Component {
                 </View>
                 <View style={layout.topicList}>
                     <PopulatableListView
-                        type={'post'}
-                        onFetch={this.getPosts}
+                        type={'user'}
+                        onFetch={this.getUsers}
                         onPress={this.viewTopic}
                     />
                 </View>
