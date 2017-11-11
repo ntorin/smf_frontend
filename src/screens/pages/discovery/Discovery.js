@@ -22,6 +22,19 @@ class Discovery extends React.Component {
                 { key: '3', title: 'Groups' },
             ],
         };
+        this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
+    }
+
+    onNavigatorEvent(event) { // this is the onPress handler for the two buttons together
+        if (event.type == 'NavBarButtonPress') { // this is the event type for button presses
+            
+            if (event.id == 'menu') { // this is the same id field from the static navigatorButtons definition
+                this.props.navigator.toggleDrawer({
+                    side: 'left',
+                    animated: true
+                })
+            }
+        }
     }
 
     _handleIndexChange = index => this.setState({ index });

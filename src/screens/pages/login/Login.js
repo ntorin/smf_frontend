@@ -72,6 +72,10 @@ iconsLoaded.then(() => {
                 leftButtons: [{
                     icon: iconsMap['menu'],
                     id: 'menu',
+                }],
+                rightButtons: [{
+                    icon: iconsMap['pencil'],
+                    id: 'edit',
                 }]
             }
         }

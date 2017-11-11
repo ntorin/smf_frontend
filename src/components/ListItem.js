@@ -4,47 +4,6 @@ import Button from 'react-native-button';
 import BaseStyles, {PrimaryColor} from 'helpers/styles.js';
 import Avatar from 'components/Avatar';
 
-let topic = {
-    title: 'I Love Anime!',
-    name: 'pummelo',
-    post_preview: 'gee i sure do love anime! gee i sure do love anime! gee i sure do love anime! gee i sure do love anime! and i think there should be a 150 character li',
-    post_count: 74,
-    topic_tags: [
-        {
-            name: 'anime'
-        },
-        {
-            name: 'weeb'
-        },
-        {
-            name: 'thinking'
-        }
-    ],
-    id: 5203
-}
-
-let post = {
-    title: 'title',
-    op: true,
-    name: 'user_name',
-    content: 'wow same wow same wow same wow same wow same wow same wow same wow same wow same wow same wow same wow same wow same',
-    id: 1023943
-}
-
-let user = {
-    name: 'user_name',
-    blurb: 'blerb',
-    post_count: 5523,
-    topic_count: 234,
-    follower_count: 49321,
-}
-
-let notification = {
-    title: 'notification_title',
-    message: 'message message message message message message message message',
-    is_seen: false
-}
-
 class ListItem extends React.Component {
 
     constructor(props) {

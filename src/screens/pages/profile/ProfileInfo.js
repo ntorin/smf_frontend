@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import BaseStyles from 'helpers/styles.js';
 import LiteProfile from 'components/LiteProfile';
+import Button from 'components/Button';
 
 class ProfileInfo extends React.Component {
 
@@ -10,6 +11,14 @@ class ProfileInfo extends React.Component {
         this.state = {
 
         }
+    }
+
+    addFriend(){
+
+    }
+
+    followUser(){
+
     }
 
     render() {
