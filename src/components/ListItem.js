@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import Button from 'react-native-button';
-import BaseStyles from 'helpers/styles.js';
+import BaseStyles, {PrimaryColor} from 'helpers/styles.js';
 
 let topic = {
     title: 'I Love Anime!',
@@ -23,6 +23,8 @@ let topic = {
 }
 
 let post = {
+    title: 'title',
+    op: true,
     name: 'user_name',
     content: 'wow same wow same wow same wow same wow same wow same wow same wow same wow same wow same wow same wow same wow same',
     id: 1023943
@@ -60,7 +62,7 @@ class ListItem extends React.Component {
                        <Text>by {rd.name}</Text>
                        <Text style={layout.count}>{rd.post_count} posts</Text>
                     </View>
-                    <Text>{rd.post_preview}...</Text>
+                    <Text>{rd.post_preview}</Text>
                     <Text>tags: {rd.topic_tags[0].name}, {rd.topic_tags[1].name}, {rd.topic_tags[2].name}</Text>
                 </View>
             </View>
@@ -69,12 +71,18 @@ class ListItem extends React.Component {
 
     renderPost() {
         rd = post;
-
-        return (
-            <View>
+        if (rd.post.op){
+            return (
+            <View style={styles.containerOP}>
                 <Text>list_item_post</Text>
             </View>
-        )
+            )
+        }
+        else{
+            <View style={styles.container}>
+                <Text>list_item_post</Text>
+            </View>
+        }
     }
 
     renderNotification() {
@@ -134,6 +142,14 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         backgroundColor: '#d3d3d3'
     },
+    containerUrgent: {
+        borderRadius: 8,
+        backgroundColor: '#ff0000'
+    },
+    containerOP: {
+        borderRadius: 8,
+        backgroundColor: PrimaryColor
+    },
     textContainer:  {
         padding: 10
     }
@@ -142,6 +158,9 @@ const styles = StyleSheet.create({
 const layout = StyleSheet.create({
     title: {
         fontSize: 20
+    },
+    poster: {
+        fontSize: 16
     },
     nameCount: {
         flexDirection: 'row',

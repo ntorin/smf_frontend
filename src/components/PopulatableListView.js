@@ -17,6 +17,12 @@ class PopulatableListView extends React.Component {
         )
     }
 
+    renderSeparator(){
+        return (
+            <View style={{padding: 5}}/>
+        )
+    }
+
     render() {
         return (
             <GiftedListView
@@ -26,6 +32,7 @@ class PopulatableListView extends React.Component {
                 pagination={false} // enable infinite scrolling using touch to load more
                 refreshable={true} // enable pull-to-refresh for iOS and touch-to-refresh for Android
                 withSections={false} // enable sections
+                renderSeparator={this.renderSeparator}
                 customStyles={{
                     paginationView: {
                         backgroundColor: '#eee',
