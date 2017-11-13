@@ -6,6 +6,7 @@ import Login from 'pages/login/Login';
 import Messages from 'pages/messages/Messages';
 import Chat from 'pages/chat/Chat';
 import UserDirectory from 'pages/directory/UserDirectory';
+import Notifications from 'pages/notifications/Noficiations';
 import Settings from 'pages/settings/Settings';
 import Help from 'pages/help/Help';
 import About from 'pages/about/About';
@@ -41,6 +42,7 @@ export default function () {
   Navigation.registerComponent('smf_frontend.Feed', () => Feed);
   Navigation.registerComponent('smf_frontend.Chat', () => Chat);
   Navigation.registerComponent('smf_frontend.UserDirectory', () => UserDirectory);
+  Navigation.registerComponent('smf_frontend.Notifications', () => Notifications);
   Navigation.registerComponent('smf_frontend.Settings', () => Settings);
   Navigation.registerComponent('smf_frontend.Help', () => Help);
   Navigation.registerComponent('smf_frontend.About', () => About);

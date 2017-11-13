@@ -168,9 +168,6 @@ class Login extends React.Component {
                         onChangeText={(text) => this.setState({ password: text })}
                     />
                 </View>
-                <View>
-                    <Text>{this.state.email}</Text>
-                </View>
                 <View style={layout.buttons}>
                     <Button onPress={this.loginUser}>
                         Login
