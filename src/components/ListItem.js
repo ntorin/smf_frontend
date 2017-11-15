@@ -172,6 +172,7 @@ const layout = StyleSheet.create({
     username: {
         fontSize: 24,
         textAlign: 'right',
+        fontWeight: 'bold',
         flex: 1,
     },
     blurb: {

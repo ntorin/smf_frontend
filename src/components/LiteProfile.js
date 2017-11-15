@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import BaseStyles from 'helpers/styles.js';
+import BaseStyles, {PrimaryColor} from 'helpers/styles.js';
 import Avatar from 'components/Avatar';
 
 class LiteProfile extends React.Component {
@@ -11,14 +11,17 @@ class LiteProfile extends React.Component {
 
     render(){
         return(
+            <View style={layout.containerBig}>
             <View style={layout.userDetails}>
-                {<Avatar image={require('assets/img/a.png')} height={100} width={100}/>}
-                
+                <View style={layout.container}>
+                    {<Avatar style={{flex: 1, padding: 3}}image={require('assets/img/a.png')} height={100} width={100}/>}
+                </View>
                 <View style={layout.userids}>
                     <Text style={styles.username}>{this.props.username}</Text>
                     <Text style={styles.accountid}>{this.props.accountid}</Text>
                     <Text style={styles.description}>{this.props.description}</Text>
                 </View>
+            </View>
             </View>
         )
     }
@@ -26,33 +29,46 @@ class LiteProfile extends React.Component {
 
 const styles = StyleSheet.create({
     username: {
-        fontSize: 20,
+        fontSize: 22,
         fontWeight: 'bold',
-        flexWrap: 'wrap'
+        flexWrap: 'wrap',
+        textAlign: 'right'
     },
 
     accountid: {
-        fontSize: 16,
-        flexWrap: 'wrap'
+        fontSize: 18,
+        flexWrap: 'wrap',
+        textAlign: 'right'
     },
 
     description: {
         fontSize: 12,
-        flexWrap: 'wrap'
+        flexWrap: 'wrap',
+        textAlign: 'right',
+        fontStyle: 'italic',
+        textAlignVertical: 'top'
     }
 });
 
 const layout = StyleSheet.create({
     container: {
-        flex: 1
+        borderRadius: 8,
+        backgroundColor: PrimaryColor
+    },
+
+    containerBig: {
+        borderRadius: 8,
+        backgroundColor: '#d3d3d3'
     },
     
     userDetails: {
-        flexDirection: 'row'
+        flexDirection: 'row',
     },
 
     userids: {
-        left: 5
+        left: 5,
+        flex: 1,
+        paddingRight: 8
     },
 });
 
