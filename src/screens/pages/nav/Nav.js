@@ -15,6 +15,11 @@ class Nav extends React.Component {
                 screen: 'smf_frontend.UserDirectory'
             },
             {
+                name: 'Notifications',
+                icon: require('assets/icons/notifications.png'),
+                screen: 'smf_frontend.Notifications'
+            },
+            {
                 name: 'Messages',
                 icon: require('assets/icons/messages.png'),
                 screen: 'smf_frontend.Messages'
@@ -48,25 +53,25 @@ class Nav extends React.Component {
         this.goToPage = this.goToPage.bind(this);
     }
 
-    
+
 
     renderRow(rowData) {
         return (
-            <NavItem rowData={rowData} onPress={this.goToPage} icon={rowData.icon} text={rowData.name}/>
+            <NavItem rowData={rowData} onPress={this.goToPage} icon={rowData.icon} text={rowData.name} />
         )
     }
 
-    goToPage(rowData){
-        this.props.navigator.push({
-            screen: 'smf_frontend.Feed',
-            title: 'rowData.name'
+    goToPage(rowData) {
+        this.props.navigator.handleDeepLink({
+            link: 'nav/' + rowData.screen,
+            payload: rowData.name
         });
     }
 
     render() {
         return (
             <View style={layout.container}>
-                <LiteProfile username={"username"} accountid={"account_id"}/>
+                <LiteProfile username={"username"} accountid={"account_id"} />
                 <ListView
                     style={layout.listView}
                     dataSource={this.state.menu}

@@ -125,7 +125,7 @@ class Login extends React.Component {
             animationType: Platform.OS === 'ios' ? 'slide-down' : 'fade',
             appStyle: {
                 tabBarBackgroundColor: '#FFFFFF',
-                navBarButtonColor: '#FFFFFF',
+                navBarButtonColor: PrimaryColor,
                 tabBarButtonColor: PrimaryDimmed,
                 navBarTextColor: PrimaryColor,
                 tabBarSelectedButtonColor: PrimaryColor,
@@ -167,9 +167,6 @@ class Login extends React.Component {
                         secureTextEntry={true}
                         onChangeText={(text) => this.setState({ password: text })}
                     />
-                </View>
-                <View>
-                    <Text>{this.state.email}</Text>
                 </View>
                 <View style={layout.buttons}>
                     <Button onPress={this.loginUser}>
