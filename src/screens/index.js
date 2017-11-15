@@ -6,7 +6,7 @@ import Login from 'pages/login/Login';
 import Messages from 'pages/messages/Messages';
 import Chat from 'pages/chat/Chat';
 import UserDirectory from 'pages/directory/UserDirectory';
-import Notifications from 'pages/notifications/Noficiations';
+import Notifications from 'pages/notifications/Notifications';
 import Settings from 'pages/settings/Settings';
 import Help from 'pages/help/Help';
 import About from 'pages/about/About';

@@ -125,7 +125,7 @@ class Login extends React.Component {
             animationType: Platform.OS === 'ios' ? 'slide-down' : 'fade',
             appStyle: {
                 tabBarBackgroundColor: '#FFFFFF',
-                navBarButtonColor: '#FFFFFF',
+                navBarButtonColor: PrimaryColor,
                 tabBarButtonColor: PrimaryDimmed,
                 navBarTextColor: PrimaryColor,
                 tabBarSelectedButtonColor: PrimaryColor,
