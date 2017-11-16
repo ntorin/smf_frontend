@@ -1,18 +1,21 @@
-import React, {Component} from 'react';
-import { StyleSheet, View, Text, TextInput} from 'react-native';
+import React, { Component } from 'react';
+import { StyleSheet, View, Text, TextInput } from 'react-native';
 import Button from 'components/Button';
 import BaseStyles, { PrimaryColor } from 'helpers/styles.js';
 import DatePicker from 'react-native-datepicker'
 
 class AdvancedSearch extends React.Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
-        this.state = {dateFrom:"",dateTo:""}
+        this.state = {
+            dateFrom: "",
+            dateTo: ""
+        }
     }
 
-    render(){
-        return(
+    render() {
+        return (
             <View style={BaseStyles.container}>
                 <View style={layout.textPanel}>
                     <TextInput style={layout.inputBar}
@@ -20,7 +23,7 @@ class AdvancedSearch extends React.Component {
                         selectionColor={PrimaryColor}
                         textAlign='center'
                         autoCorrect={false}
-                        autoCapitalize={'none'}/>
+                        autoCapitalize={'none'} />
                 </View>
                 <View style={layout.textPanel}>
                     <TextInput style={layout.inputBar}
@@ -28,7 +31,7 @@ class AdvancedSearch extends React.Component {
                         selectionColor={PrimaryColor}
                         textAlign='center'
                         autoCorrect={false}
-                        autoCapitalize={'none'}/>
+                        autoCapitalize={'none'} />
                 </View>
                 <View style={layout.textPanel}>
                     <TextInput style={layout.inputBar}
@@ -36,7 +39,7 @@ class AdvancedSearch extends React.Component {
                         selectionColor={PrimaryColor}
                         textAlign='center'
                         autoCorrect={false}
-                        autoCapitalize={'none'}/>
+                        autoCapitalize={'none'} />
                 </View>
                 <View style={layout.textPanel}>
                     <TextInput style={layout.inputBar}
@@ -44,7 +47,7 @@ class AdvancedSearch extends React.Component {
                         selectionColor={PrimaryColor}
                         textAlign='center'
                         autoCorrect={false}
-                        autoCapitalize={'none'}/>
+                        autoCapitalize={'none'} />
                 </View>
                 <View style={layout.textPanel}>
                     <DatePicker
@@ -57,7 +60,7 @@ class AdvancedSearch extends React.Component {
                         maxDate="12-30-2100"
                         confirmBtnText="Confirm"
                         cancelBtnText="Cancel"
-                        onDateChange={(date) => {this.setState({dateFrom: date})}}
+                        onDateChange={(date) => { this.setState({ dateFrom: date }) }}
                     />
                     <DatePicker
                         style={layout.inputBar}
@@ -69,10 +72,10 @@ class AdvancedSearch extends React.Component {
                         maxDate="12-30-2100"
                         confirmBtnText="Confirm"
                         cancelBtnText="Cancel"
-                        onDateChange={(date) => {this.setState({dateTo: date})}}
+                        onDateChange={(date) => { this.setState({ dateTo: date }) }}
                     />
                 </View>
-                <View style={{padding: 8}}>
+                <View style={{ padding: 8 }}>
                     <Button>Search</Button>
                 </View>
             </View>
@@ -91,7 +94,7 @@ const layout = StyleSheet.create({
     inputBar: {
         flex: 10
     },
-    text:   {
+    text: {
         fontSize: 20,
         flex: 4,
         textAlignVertical: 'center'
