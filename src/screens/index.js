@@ -13,7 +13,7 @@ import About from 'pages/about/About';
 import Discovery from 'pages/discovery/Discovery';
 import BBS from 'pages/bbs/BBS';
 import CreateTopic from 'pages/bbs/CreateTopic';
-import AdvancedSearch from 'pages/bbs/AdvancedSearch';
+import AdvancedSearch from 'components/AdvancedSearch';
 import ViewTopic from 'pages/bbs/ViewTopic';
 import ReplyTopic from 'pages/bbs/ReplyTopic';
 import Profile from 'pages/profile/Profile';

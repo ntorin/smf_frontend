@@ -53,7 +53,7 @@ iconsLoaded.then(() => {
         },
         {
             label: 'Discovery',
-            screen: 'smf_frontend.Discovery',
+            screen: 'smf_frontend.Messages',
             icon: iconsMap['compass'],
             title: 'Discover',
             navigatorButtons: {
