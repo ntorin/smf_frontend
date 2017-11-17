@@ -55,8 +55,8 @@ class CreateTopic extends React.Component {
     render() {
         return (
             <View style={BaseStyles.container}>
-                <TextField
-                    label={'Title'}
+                <TextInput
+                    placeholder={'Title'}
                     highlightColor={PrimaryColor}
                     onChangeText={(text) => this.setState({ title: text })} />
                 <View style={layout.tags}>

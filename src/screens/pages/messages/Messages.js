@@ -1,14 +1,20 @@
 import React from 'react';
 import { StyleSheet, View, Text, Dimensions, Image, TextInput, ListView, RefreshControl } from 'react-native';
 import Button from 'components/Button';
-import {BaseStyles, NavStyle} from 'helpers/styles.js';
+import {BaseStyles, NavStyle, PrimaryColor} from 'helpers/styles.js';
 
 var friendList = [
                 {
-                    friendName: 'FRIENDNAME',
-                    friendLastMessage: 'FRIENDLASTMESSAGE',
+                    friendName: 'salsa',
+                    friendLastMessage: 'i lov u',
                     friendMessageDate: new Date().toDateString(),
                     friendNumberUnread: 1,
+                },
+                {
+                    friendName: 'kappa',
+                    friendLastMessage: 'keepo',
+                    friendMessageDate: new Date().toDateString(),
+                    friendNumberUnread: 0,
                 },
             ]
 
@@ -41,20 +47,37 @@ class Messages extends React.Component {
     
 
     renderRow(rowData){
-        return(
-                <Button onPress={() => this.goToChat(rowData)} style={styles.listItem}>
-                    <Text>{rowData.friendName}</Text>
-                    <Text>{rowData.friendLastMessage}</Text>
-                    <Text>{rowData.friendMessageDate}</Text>
-                    <Text>{rowData.friendNumberUnread}</Text>
-                </Button>
-        )
+        if(rowData.friendNumberUnread>0){
+            return(
+                    <Button onPress={() => this.goToChat(rowData)} style={styles.listItem}>
+                        <View style={styles.containerMessage}>    
+                            <Text style={styles.username}>{rowData.friendName} - </Text>
+                            <Text style={styles.message}>{rowData.friendLastMessage} - </Text>
+                            <Text style={{textAlign: 'left'}}>Received {rowData.friendMessageDate} </Text>
+                        </View>
+                        <View style={styles.containerUnread}>
+                            <Text style={styles.unread}>{rowData.friendNumberUnread}</Text>
+                        </View>
+                    </Button>
+            )
+        }
+        else{
+            return(
+                    <Button onPress={() => this.goToChat(rowData)} style={styles.listItem}>
+                        <View style={styles.containerMessage}>    
+                            <Text style={styles.username}>{rowData.friendName} - </Text>
+                            <Text style={styles.message}>{rowData.friendLastMessage} - </Text>
+                            <Text style={{textAlign: 'left'}}>Received {rowData.friendMessageDate} </Text>
+                        </View>
+                    </Button>
+            )
+        }
     }
 
     goToChat(rowData){ 
         this.props.navigator.push({
             screen: 'smf_frontend.Chat',
-            title: 'Chat with RECIPIENT_USERNAME',
+            title: 'Chat with ' + rowData.friendName,
             passProps: {friend: rowData}
         });
     }
@@ -85,8 +108,35 @@ class Messages extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        paddingRight: 10,
+        paddingLeft: 10,
     },
-
+    containerUnread: {
+        flex: 1,
+        borderRadius: 8,
+        backgroundColor: '#FF0000',
+        alignContent: 'flex-start',
+        padding: 4
+    },
+    containerMessage:{
+        flex: 15,
+        paddingLeft: 8,
+        flexDirection: 'row',
+    },
+    unread:{
+        fontWeight: 'bold',
+        textAlign: 'center',
+        color: '#FFFFFF',
+        fontSize: 16
+    },
+    username:{
+        fontWeight: 'bold',
+        textAlign: 'left'
+    },
+    message:{
+        fontStyle: 'italic',
+        textAlign: 'left'
+    },
     backgroundImage: {
         flex: 1,
         resizeMode: 'cover'
@@ -97,7 +147,7 @@ const styles = StyleSheet.create({
     },
 
     listItem: {
-        borderWidth: 0
+        flexDirection: 'row'
     },
 });
 

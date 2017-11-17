@@ -14,7 +14,7 @@ class Chat extends React.Component {
             messages: [
                 {
                     _id: 1,
-                    text: 'Hello developer',
+                    text: 'i lov u lime',
                     createdAt: new Date(),
                     user: {
                         _id: 2,

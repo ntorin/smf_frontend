@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     style: {
         borderColor: PrimaryColor,
         backgroundColor: PrimaryColor,
-        borderWidth: 1
+        borderWidth: 8
     }
 });
 
