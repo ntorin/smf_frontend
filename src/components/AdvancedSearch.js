@@ -13,7 +13,8 @@ class AdvancedSearch extends React.Component {
             dateTo: ""
         }
     }
-
+    //users should have name, keywords, groups?
+    //groups should have name, owner, keywords...
     render() {
         return (
             <View style={BaseStyles.container}>

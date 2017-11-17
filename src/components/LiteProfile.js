@@ -12,16 +12,16 @@ class LiteProfile extends React.Component {
     render(){
         return(
             <View style={layout.containerBig}>
-            <View style={layout.userDetails}>
-                <View style={layout.container}>
-                    {<Avatar style={{flex: 1, padding: 3}}image={require('assets/img/a.png')} height={100} width={100}/>}
+                <View style={layout.userDetails}>
+                    <View style={layout.container}>
+                        {<Avatar style={{flex: 1, padding: 3}}image={require('assets/img/a.png')} height={100} width={100}/>}
+                    </View>
+                    <View style={layout.userids}>
+                        <Text style={styles.username}>{this.props.username}</Text>
+                        <Text style={styles.accountid}>{this.props.accountid}</Text>
+                        <Text style={styles.description}>{this.props.description}</Text>
+                    </View>
                 </View>
-                <View style={layout.userids}>
-                    <Text style={styles.username}>{this.props.username}</Text>
-                    <Text style={styles.accountid}>{this.props.accountid}</Text>
-                    <Text style={styles.description}>{this.props.description}</Text>
-                </View>
-            </View>
             </View>
         )
     }
