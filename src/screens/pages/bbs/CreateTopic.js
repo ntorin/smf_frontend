@@ -4,7 +4,7 @@ import TextField from 'react-native-md-textinput';
 import { GiftedForm, GiftedFormManager } from 'react-native-gifted-form';
 import { Fumi } from 'react-native-textinput-effects';
 import TagInput from 'react-native-tag-input';
-
+import { MarkdownEditor } from 'react-native-markdown-editor';
 import Button from 'components/Button';
 import BaseStyles, { PrimaryColor } from 'helpers/styles.js';
 
@@ -69,17 +69,8 @@ class CreateTopic extends React.Component {
                         onChangeText={this.onChangeText}
                     />
                 </View>
-                <View>
-                    <ScrollView>
-                        <TextInput
-                            placeholder={'Content'}
-                            placeholderTextColor={PrimaryColor}
-                            underlineColorAndroid={PrimaryColor}
-                            selectionColor={PrimaryColor}
-                            multiline={true}
-                            onChangeText={(text) => this.setState({ content: text })}
-                            autoCorrect={true} />
-                    </ScrollView>
+                <View style={layout.input}>
+                        <MarkdownEditor onMarkdownChange={this.onTextChange} />
                 </View>
 
                 <Button onPress={this.onSubmit}>
@@ -110,6 +101,12 @@ const layout = StyleSheet.create({
 
     tags: {
         flexDirection: 'row'
+    },
+
+    input:{
+        paddingTop: 10,
+        paddingBottom: 10,
+        height: 150,
     }
 });
 

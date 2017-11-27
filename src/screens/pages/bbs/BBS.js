@@ -48,7 +48,8 @@ class BBS extends React.Component {
                         name: 'thinking'
                     }
                 ],
-                id: 5203
+                id: 5203,
+                content: '**memes!** i love memes!'
             },
         ];
         callback(topics, {
@@ -104,7 +105,7 @@ class BBS extends React.Component {
                 </View>
                 <View style={layout.topicList}>
                     <PopulatableListView
-                        type={'topic'}
+                        type={'post'}
                         onFetch={this.getTopics}
                         onPress={this.viewTopic}
                     />

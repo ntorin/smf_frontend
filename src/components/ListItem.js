@@ -3,6 +3,7 @@ import { StyleSheet, View, Text } from 'react-native';
 import Button from 'react-native-button';
 import BaseStyles, {PrimaryColor} from 'helpers/styles.js';
 import Avatar from 'components/Avatar';
+import { MarkdownView } from 'react-native-markdown-view';
 
 class ListItem extends React.Component {
 
@@ -44,7 +45,7 @@ class ListItem extends React.Component {
                         </View>
                         {<Avatar image={require('assets/img/a.png')} style={layout.image} height={48} width={48}/>}
                     </View>
-                    <Text>{rd.content}</Text>
+                    <MarkdownView>{rd.content}</MarkdownView>
                 </View>
             </View>
             )
@@ -57,7 +58,7 @@ class ListItem extends React.Component {
                         <Text style={layout.poster}>{rd.name}</Text>
                         {<Avatar image={require('assets/img/a.png')} style={layout.image} height={48} width={48}/>}
                     </View>
-                    <Text>{rd.content}</Text>
+                    <MarkdownView>{rd.content}</MarkdownView>
                 </View>
             </View>
             )
