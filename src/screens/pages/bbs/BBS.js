@@ -74,6 +74,7 @@ class BBS extends React.Component {
     }
 
     viewTopic(rowData) {
+        console.log("te");
         this.props.navigator.push({
             screen: 'smf_frontend.ViewTopic',
             title: 'rowData.name',

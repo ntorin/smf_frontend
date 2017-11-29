@@ -139,7 +139,7 @@ class ListItem extends React.Component {
     render() {
         return (
             <View>
-                <Button onPress={() => this.props.onPress}>
+                <Button onPress={this.props.onPress}>
                     {this.renderItem(this.props.type)}
                 </Button>
             </View>
