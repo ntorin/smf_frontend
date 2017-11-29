@@ -69,9 +69,7 @@ class CreateTopic extends React.Component {
                         onChangeText={this.onChangeText}
                     />
                 </View>
-                <View style={layout.input}>
                         <MarkdownEditor onMarkdownChange={this.onTextChange} />
-                </View>
 
                 <Button onPress={this.onSubmit}>
                     Create New Topic
