@@ -74,7 +74,7 @@ class ListItem extends React.Component {
             <View style={styles.container}>
                 <View style={styles.textContainer}>
                     <Text style={layout.title}>{rd.title}</Text>
-                    <Text>{rd.message}</Text>
+                    <Text>{rd.description}</Text>
                 </View>
             </View>
             )
@@ -84,7 +84,7 @@ class ListItem extends React.Component {
                 <View style={styles.containerBlue}>
                     <View style={styles.textContainer}>
                         <Text style={layout.title}>{rd.title}</Text>
-                        <Text>{rd.message}</Text>
+                        <Text>{rd.description}</Text>
                     </View>
                 </View>
                 )
