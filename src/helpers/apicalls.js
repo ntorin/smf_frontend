@@ -25,12 +25,10 @@ let TEMPLATE = (params, firstResponse) => {
             headers: JSON_HEADERS,
             body: body
         }
-    )
-        .then((response) => {
-            firstResponse();
-            return (response.json());
-        }
-        );
+    ).then((response) => {
+        firstResponse();
+        return (response.json());
+    });
 }
 
 /**
@@ -48,7 +46,9 @@ let AUTH_URL = BASE_URL + "/auth"
  */
 let AUTH_POST = (email, password, password_confirmation, firstResponse) => {
     var body = JSON.stringify({
-
+        email: email,
+        password: password,
+        password_confirmation: password_confirmation
     });
 
     if (firstResponse == null) {
@@ -60,10 +60,11 @@ let AUTH_POST = (email, password, password_confirmation, firstResponse) => {
             method: POST,
             headers: JSON_HEADERS,
             body: body
-        }).then((response) => {
-            firstResponse();
-            return (response.json());
-        });
+        }
+    ).then((response) => {
+        firstResponse();
+        return (response.json());
+    });
 }
 
 /**
@@ -114,17 +115,293 @@ let GROUP_TAGS_URL = BASE_URL + "/group_tags";
 let GROUPS_URL = BASE_URL + "/groups";
 
 /**
- * Deletes a group.
+ * Gets all groups.
  * @param {*} firstResponse 
  */
-let GROUPS_DELETE = (firstResponse) => {
+let GROUPS_POST_FETCH = (sort_by, query, offset, limit, firstResponse) => {
+
+    var body = JSON.stringify({
+        sort_by: sort_by,
+        query: query,
+        offset: offset,
+        limit: limit,
+    });
 
     if (firstResponse == null) {
         firstResponse = () => { };
     }
 
     return fetch(
-        GROUPS_URL + "/delete",
+        GROUPS_URL,
+        {
+            method: POST,
+            headers: JSON_HEADERS,
+            body: body
+        }
+    ).then((response) => {
+        firstResponse();
+        return (response.json());
+    });
+}
+
+/**
+ * Gets a single group.
+ * @param {*} group_id 
+ * @param {*} firstResponse 
+ */
+let GROUPS_GET_SINGLE = (group_id, firstResponse) => {
+
+    if (firstResponse == null) {
+        firstResponse = () => { };
+    }
+
+    return fetch(
+        GROUPS_URL + "/" + group_id,
+        {
+            method: GET,
+            headers: JSON_HEADERS
+        }
+    ).then((response) => {
+        firstResponse();
+        return (response.json());
+    });
+}
+
+
+let GROUPS_POST = (params, firstResponse) => {
+    var body = JSON.stringify({
+        params: params,
+    });
+
+    if (firstResponse == null) {
+        firstResponse = () => { };
+    }
+
+    return fetch(
+        GROUPS_URL,
+        {
+            method: POST,
+            headers: JSON_HEADERS,
+            body: body
+        }
+    ).then((response) => {
+        firstResponse();
+        return (response.json());
+    });
+}
+
+/**
+ * Deletes a group.
+ * @param {number} group_id
+ * @param {*} firstResponse 
+ */
+let GROUPS_DELETE = (group_id, firstResponse) => {
+
+    if (firstResponse == null) {
+        firstResponse = () => { };
+    }
+
+    return fetch(
+        GROUPS_URL + "/" + group_id,
+        {
+            method: DELETE,
+            headers: JSON_HEADERS,
+        }
+    ).then((response) => {
+        firstResponse();
+        return (response.json());
+    });
+}
+
+let NOTIFICATIONS_URL = BASE_URL + "/notifications";
+
+let POST_LIKES_URL = BASE_URL + "/post_likes";
+
+let POSTS_URL = BASE_URL + "/posts";
+
+/**
+ * 
+ * @param {number} topic_id 
+ * @param {number} offset 
+ * @param {number} limit 
+ * @param {*} firstResponse 
+ */
+let POSTS_POST_FETCH = (topic_id, offset, limit, firstResponse) => {
+    var body = JSON.stringify({
+        topic_id: topic_id,
+        offset: offset,
+        limit: limit
+    });
+
+    if (firstResponse == null) {
+        firstResponse = () => { };
+    }
+
+    return fetch(
+        BASE_URL + "/fetch",
+        {
+            method: POST,
+            headers: JSON_HEADERS,
+            body: body
+        }
+    ).then((response) => {
+        firstResponse();
+        return (response.json());
+    });
+}
+
+let POSTS_POST = (firstResponse) => {
+    var body = JSON.stringify({
+        params: params,
+    });
+
+    if (firstResponse == null) {
+        firstResponse = () => { };
+    }
+
+    return fetch(
+        BASE_URL,
+        {
+            method: POST,
+            headers: JSON_HEADERS,
+            body: body
+        }
+    ).then((response) => {
+        firstResponse();
+        return (response.json());
+    });
+}
+
+/**
+ * Deletes a post.
+ * @param {*} post_id 
+ * @param {*} firstResponse 
+ */
+let POSTS_DELETE = (post_id, firstResponse) => {
+
+    if (firstResponse == null) {
+        firstResponse = () => { };
+    }
+
+    return fetch(
+        BASE_URL + "/" + post_id,
+        {
+            method: DELETE,
+            headers: JSON_HEADERS,
+        }
+    ).then((response) => {
+        firstResponse();
+        return (response.json());
+    });
+}
+
+let PRIVATE_MESSAGES_URL = BASE_URL + "/private_messages";
+
+let REPORTS_URL = BASE_URL + "/reports";
+
+let TOPIC_TAGS_URL = BASE_URL + "/topic_tags";
+
+let TOPICS_URL = BASE_URL + "/topics";
+
+/**
+ * Gets topics from a starting index.
+ * @param {number} group_id ID of the group that the topics are in
+ * @param {string} sort_by sort options: recent,
+ * @param {string} query search string; LIKE searches topic names
+ * @param {number} offset starting index to pull topics from
+ * @param {number} limit amount of topics you want to pull
+ * @param {*} firstResponse 
+ */
+let TOPICS_POST_FETCH = (group_id, sort_by, query, offset, limit, firstResponse) => {
+
+    var body = JSON.stringify({
+        group_id: group_id,
+        sort_by: sort_by,
+        query: query,
+        offset: offset,
+        limit: limit
+    });
+
+    if (firstResponse == null) {
+        firstResponse = () => { };
+    }
+
+    return fetch(
+        TOPICS_URL,
+        {
+            method: POST,
+            headers: JSON_HEADERS,
+            body: body
+        }
+    )
+        .then((response) => {
+            firstResponse();
+            return (response.json());
+        }
+        );
+}
+
+/**
+ * Gets a single topic.
+ * @param {number} topic_id ID of the topic
+ * @param {*} firstResponse 
+ */
+let TOPICS_GET_SINGLE = (topic_id, firstResponse) => {
+
+    if (firstResponse == null) {
+        firstResponse = () => { };
+    }
+
+    return fetch(
+        TOPICS_URL + "/" + topic_id,
+        {
+            method: GET,
+            headers: JSON_HEADERS
+        })
+        .then((response) => {
+            firstResponse();
+            return (response.json());
+        });
+}
+
+
+let TOPICS_POST = (params, firstResponse) => {
+    var body = JSON.stringify({
+        params: params,
+    });
+
+    if (firstResponse == null) {
+        firstResponse = () => { };
+    }
+
+    return fetch(
+        BASE_URL,
+        {
+            method: POST,
+            headers: JSON_HEADERS,
+            body: body
+        }
+    )
+        .then((response) => {
+            firstResponse();
+            return (response.json());
+        }
+        );
+}
+
+/**
+ * Deletes a topic.
+ * @param {number} topic_id
+ * @param {*} firstResponse 
+ */
+let TOPICS_DELETE = (topic_id, firstResponse) => {
+
+    if (firstResponse == null) {
+        firstResponse = () => { };
+    }
+
+    return fetch(
+        TOPICS_URL + "/" + topic_id,
         {
             method: DELETE,
             headers: JSON_HEADERS,
@@ -137,20 +414,6 @@ let GROUPS_DELETE = (firstResponse) => {
         );
 }
 
-let NOTIFICATIONS_URL = BASE_URL + "/notifications";
-
-let POST_LIKES_URL = BASE_URL + "/post_likes";
-
-let POSTS_URL = BASE_URL + "/posts";
-
-let PRIVATE_MESSAGES_URL = BASE_URL + "/private_messages";
-
-let REPORTS_URL = BASE_URL + "/reports";
-
-let TOPIC_TAGS_URL = BASE_URL + "/topic_tags";
-
-let TOPICS_URL = BASE_URL + "/topics";
-
 let USERS_URL = BASE_URL + "/users";
 
 
@@ -158,7 +421,6 @@ export {
     AUTH_URL,
     AUTH_POST,
     AUTH_POST_SIGN_IN,
-
     BLOCKS_URL,
     CONVERSATION_USERS_URL,
     CONVERSATIONS_URL,
