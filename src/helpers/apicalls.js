@@ -116,9 +116,12 @@ let GROUPS_URL = BASE_URL + "/groups";
 
 /**
  * Gets all groups.
- * @param {*} firstResponse 
+ * @param {string} sort_by 
+ * @param {string} query 
+ * @param {number} offset 
+ * @param {number} limit 
  */
-let GROUPS_POST_FETCH = (sort_by, query, offset, limit, firstResponse) => {
+let GROUPS_POST_FETCH = (sort_by, query, offset, limit) => {
 
     var body = JSON.stringify({
         sort_by: sort_by,
@@ -127,19 +130,14 @@ let GROUPS_POST_FETCH = (sort_by, query, offset, limit, firstResponse) => {
         limit: limit,
     });
 
-    if (firstResponse == null) {
-        firstResponse = () => { };
-    }
-
     return fetch(
-        GROUPS_URL,
+        GROUPS_URL + "/fetch",
         {
             method: POST,
             headers: JSON_HEADERS,
             body: body
         }
     ).then((response) => {
-        firstResponse();
         return (response.json());
     });
 }
@@ -238,7 +236,7 @@ let POSTS_POST_FETCH = (topic_id, offset, limit, firstResponse) => {
     }
 
     return fetch(
-        BASE_URL + "/fetch",
+        POSTS_URL + "/fetch",
         {
             method: POST,
             headers: JSON_HEADERS,
@@ -312,7 +310,7 @@ let TOPICS_URL = BASE_URL + "/topics";
  * @param {number} limit amount of topics you want to pull
  * @param {*} firstResponse 
  */
-let TOPICS_POST_FETCH = (group_id, sort_by, query, offset, limit, firstResponse) => {
+let TOPICS_POST_FETCH = (group_id, sort_by, query, offset, limit) => {
 
     var body = JSON.stringify({
         group_id: group_id,
@@ -322,20 +320,15 @@ let TOPICS_POST_FETCH = (group_id, sort_by, query, offset, limit, firstResponse)
         limit: limit
     });
 
-    if (firstResponse == null) {
-        firstResponse = () => { };
-    }
-
     return fetch(
-        TOPICS_URL,
+        TOPICS_URL + "/fetch",
         {
             method: POST,
             headers: JSON_HEADERS,
-            body: body
+            body: body,
         }
     )
         .then((response) => {
-            firstResponse();
             return (response.json());
         }
         );
@@ -430,11 +423,14 @@ export {
     FRIENDS_URL,
     GROUP_TAGS_URL,
     GROUPS_URL,
+    GROUPS_POST_FETCH,
     NOTIFICATIONS_URL,
     POST_LIKES_URL,
     POSTS_URL,
+    POSTS_POST_FETCH,
     PRIVATE_MESSAGES_URL,
     REPORTS_URL,
     TOPIC_TAGS_URL,
     TOPICS_URL,
+    TOPICS_POST_FETCH,
 }
