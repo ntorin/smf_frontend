@@ -1,9 +1,10 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import Button from 'react-native-button';
-import BaseStyles, {PrimaryColor} from 'helpers/styles.js';
+import BaseStyles, { PrimaryColor } from 'helpers/styles.js';
 import Avatar from 'components/Avatar';
 import { MarkdownView } from 'react-native-markdown-view';
+import Moment from 'moment';
 
 class ListItem extends React.Component {
 
@@ -20,66 +21,61 @@ class ListItem extends React.Component {
                 <View style={styles.textContainer}>
                     <Text style={layout.title}>{rd.title}</Text>
                     <View style={layout.row}>
-                       <Text>by {rd.name}</Text>
-                       <Text style={layout.count}>{rd.post_count} posts</Text>
+                        <Text>by {rd.name}</Text>
+                        <Text style={layout.count}>{rd.post_count} posts</Text>
                     </View>
+                    <Text> {Moment(rd.created_at).format('d MMM')} </Text>
                     <Text>{rd.post_preview}</Text>
-                    <Text>tags: {rd.topic_tags[0].name}, {rd.topic_tags[1].name}, {rd.topic_tags[2].name}</Text>
                 </View>
             </View>
         )
     }
 
+    renderGroup() {
+        rd = this.props.rowData;
+
+        return (
+            <View style={styles.container}>
+                <View style={styles.textContainer}>
+                    <Text style={layout.title}>{rd.name}</Text>
+                    <Text>Created On {Moment(rd.created_at).format('d MMM')} </Text>
+                    <Text>{rd.description}</Text>
+                </View>
+            </View>
+        );
+    }
+
     renderPost() {
         rd = this.props.rowData;
         console.log(this.props.rowData);
-
-        if (rd.op){
             return (
-            <View style={styles.containerOP}>
-                <View style={styles.textContainer}>
-                    <View style={layout.row}>
-                        <View style={layout.column}>
-                            <Text style={layout.title}>{rd.title}</Text>
+                <View style={styles.container}>
+                    <View style={styles.textContainer}>
+                        <View style={layout.row}>
                             <Text style={layout.poster}>{rd.name}</Text>
+                            {<Avatar image={require('assets/img/a.png')} style={layout.image} height={48} width={48} />}
                         </View>
-                        {<Avatar image={require('assets/img/a.png')} style={layout.image} height={48} width={48}/>}
+                        <MarkdownView>{rd.content}</MarkdownView>
                     </View>
-                    <MarkdownView>{rd.content}</MarkdownView>
                 </View>
-            </View>
             )
-        }
-        else{
-            return(
-            <View style={styles.container}>
-                <View style={styles.textContainer}>
-                    <View style={layout.row}>
-                        <Text style={layout.poster}>{rd.name}</Text>
-                        {<Avatar image={require('assets/img/a.png')} style={layout.image} height={48} width={48}/>}
-                    </View>
-                    <MarkdownView>{rd.content}</MarkdownView>
-                </View>
-            </View>
-            )
-        }
     }
 
     renderNotification() {
         rd = this.props.rowData;
         console.log(this.props.rowData);
 
-        if (rd.is_seen){
+        if (rd.is_seen) {
             return (
-            <View style={styles.container}>
-                <View style={styles.textContainer}>
-                    <Text style={layout.title}>{rd.title}</Text>
-                    <Text>{rd.description}</Text>
+                <View style={styles.container}>
+                    <View style={styles.textContainer}>
+                        <Text style={layout.title}>{rd.title}</Text>
+                        <Text>{rd.description}</Text>
+                    </View>
                 </View>
-            </View>
             )
         }
-        else{
+        else {
             return (
                 <View style={styles.containerBlue}>
                     <View style={styles.textContainer}>
@@ -87,7 +83,7 @@ class ListItem extends React.Component {
                         <Text>{rd.description}</Text>
                     </View>
                 </View>
-                )
+            )
         }
     }
 
@@ -96,20 +92,20 @@ class ListItem extends React.Component {
         console.log(this.props.rowData);
 
         return (
-                <View style={styles.containerBlue}>
-                    <View style={styles.textContainer}>
-                        <View style={layout.row}>
-                            {<Avatar image={require('assets/img/a.png')} style={layout.imageUser} height={128} width={128}/>}
-                            <View style={layout.columnEnd}>
-                                <Text style={layout.username}>{rd.name}</Text>
-                                <Text style={layout.blurb}>{rd.blurb}</Text>
-                                <Text style={layout.count}>{rd.post_count} posts</Text>
-                                <Text style={layout.count}>{rd.topic_count} topics</Text>
-                                <Text style={layout.count}>{rd.follower_count} followers</Text>
-                            </View>
+            <View style={styles.containerBlue}>
+                <View style={styles.textContainer}>
+                    <View style={layout.row}>
+                        {<Avatar image={require('assets/img/a.png')} style={layout.imageUser} height={128} width={128} />}
+                        <View style={layout.columnEnd}>
+                            <Text style={layout.username}>{rd.name}</Text>
+                            <Text style={layout.blurb}>{rd.blurb}</Text>
+                            <Text style={layout.count}>{rd.post_count} posts</Text>
+                            <Text style={layout.count}>{rd.topic_count} topics</Text>
+                            <Text style={layout.count}>{rd.follower_count} followers</Text>
                         </View>
                     </View>
                 </View>
+            </View>
         )
     }
 
@@ -119,6 +115,9 @@ class ListItem extends React.Component {
         switch (type) {
             case 'topic':
                 toRender = this.renderTopic();
+                break;
+            case 'group':
+                toRender = this.renderGroup();
                 break;
             case 'post':
                 toRender = this.renderPost();
@@ -139,7 +138,7 @@ class ListItem extends React.Component {
     render() {
         return (
             <View>
-                <Button onPress={this.props.onPress}>
+                <Button onPress={() => this.props.onPress(this.props.rowData)}>
                     {this.renderItem(this.props.type)}
                 </Button>
             </View>
@@ -161,7 +160,7 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         backgroundColor: PrimaryColor
     },
-    textContainer:  {
+    textContainer: {
         padding: 10
     }
 });
@@ -201,11 +200,11 @@ const layout = StyleSheet.create({
     name: {
         flex: 1
     },
-    image:{
+    image: {
         alignContent: 'flex-end',
         flex: 1
     },
-    imageUser:{
+    imageUser: {
         flex: 1
     },
     count: {

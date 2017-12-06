@@ -52,10 +52,10 @@ iconsLoaded.then(() => {
             }
         },
         {
-            label: 'Discovery',
+            label: 'Messages',
             screen: 'smf_frontend.Messages',
-            icon: iconsMap['compass'],
-            title: 'Discover',
+            icon: iconsMap['mail'],
+            title: 'Messages',
             navigatorButtons: {
                 leftButtons: [{
                     icon: iconsMap['menu'],

@@ -32,16 +32,27 @@ class Feed extends React.Component {
   }
 
   onNavigatorEvent(event) { // this is the onPress handler for the two buttons together
-    if (event.type == 'NavBarButtonPress') { // this is the event type for button presses
-        
+    switch (event.type) {
+      case 'NavBarButtonPress':
         if (event.id == 'menu') { // this is the same id field from the static navigatorButtons definition
-            this.props.navigator.toggleDrawer({
-                side: 'left',
-                animated: true
-            })
+          this.props.navigator.toggleDrawer({
+            side: 'left',
+            animated: true
+          })
         }
+        break;
+
+      case 'DeepLink':
+        const parts = event.link.split('/'); // Link parts
+        const payload = event.payload; // (optional) The payload
+
+        if (parts[0] == 'tab2') {
+          // handle the link somehow, usually run a this.props.navigator command
+        }
+        break;
+
     }
-}
+  }
 
   _handleIndexChange = index => this.setState({ index });
 

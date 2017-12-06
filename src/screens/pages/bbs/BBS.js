@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, TextInput } from 'react-native';
 import PopulatableListView from 'components/PopulatableListView';
 import Button from 'components/Button';
 import BaseStyles, { PrimaryColor } from 'helpers/styles.js';
+import { TOPICS_POST_FETCH } from 'helpers/apicalls.js';
 
 class BBS extends React.Component {
 
@@ -20,7 +21,7 @@ class BBS extends React.Component {
 
     onNavigatorEvent(event) { // this is the onPress handler for the two buttons together
         if (event.type == 'NavBarButtonPress') { // this is the event type for button presses
-            
+
             if (event.id == 'menu') { // this is the same id field from the static navigatorButtons definition
                 this.props.navigator.toggleDrawer({
                     side: 'left',
@@ -31,30 +32,13 @@ class BBS extends React.Component {
     }
 
     getTopics(page = 1, callback, options) {
-        topics = [
-            {
-                title: 'I Love Anime!',
-                name: 'pummelo',
-                post_preview: 'gee i sure do love anime! gee i sure do love anime! gee i sure do love anime! gee i sure do love anime! and i think there should be a 150 character li...',
-                post_count: 74,
-                topic_tags: [
-                    {
-                        name: 'anime'
-                    },
-                    {
-                        name: 'weeb'
-                    },
-                    {
-                        name: 'thinking'
-                    }
-                ],
-                id: 5203,
-                content: '**memes!** i love memes!'
-            },
-        ];
-        callback(topics, {
-            allLoaded: true,
-        })
+        TOPICS_POST_FETCH(0, 'recent', '', 0, 25, '', null)
+            .then((responseJSON) => {
+                callback(responseJSON, {
+                    allLoaded: true,
+                })
+            });
+        
     }
 
     advancedSearch() {
@@ -74,11 +58,10 @@ class BBS extends React.Component {
     }
 
     viewTopic(rowData) {
-        console.log("te");
         this.props.navigator.push({
             screen: 'smf_frontend.ViewTopic',
-            title: 'rowData.name',
-            passProps: {}
+            title: rowData.title,
+            passProps: {topic: rowData}
         });
     }
 
@@ -106,7 +89,7 @@ class BBS extends React.Component {
                 </View>
                 <View style={layout.topicList}>
                     <PopulatableListView
-                        type={'post'}
+                        type={'topic'}
                         onFetch={this.getTopics}
                         onPress={this.viewTopic}
                     />
