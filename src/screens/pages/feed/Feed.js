@@ -43,10 +43,15 @@ class Feed extends React.Component {
         break;
 
       case 'DeepLink':
+        console.log(event.link);
         const parts = event.link.split('/'); // Link parts
         const payload = event.payload; // (optional) The payload
-
-        if (parts[0] == 'tab2') {
+        if (parts[0] == 'nav') {
+          this.props.navigator.push({
+              screen: parts[1],
+              title: payload,
+              passProps: {}
+          });
           // handle the link somehow, usually run a this.props.navigator command
         }
         break;

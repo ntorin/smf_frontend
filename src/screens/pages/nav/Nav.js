@@ -66,6 +66,12 @@ class Nav extends React.Component {
             link: 'nav/' + rowData.screen,
             payload: rowData.name
         });
+
+        this.props.navigator.toggleDrawer({
+          side: 'left',
+          animated: true,
+          to: 'closed'
+        })
     }
 
     render() {
