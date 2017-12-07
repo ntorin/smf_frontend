@@ -1,4 +1,32 @@
-let BASE_URL = "http://ec2-18-220-137-59.us-east-2.compute.amazonaws.com"
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: apicalls.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: apicalls.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>let BASE_URL = "http://ec2-18-220-137-59.us-east-2.compute.amazonaws.com"
 let GET = "GET";
 let POST = "POST";
 let PUT = "PUT";
@@ -62,7 +90,7 @@ let AUTH_POST = (email, password, password_confirmation, firstResponse) => {
             body: body
         }
     ).then((response) => {
-        firstResponse(response);
+        firstResponse();
         return (response.json());
     });
 }
@@ -76,8 +104,7 @@ let AUTH_POST = (email, password, password_confirmation, firstResponse) => {
  */
 let AUTH_POST_SIGN_IN = (email, password, firstResponse) => {
     var body = JSON.stringify({
-      email: email,
-      password: password,
+
     });
 
     if (firstResponse == null) {
@@ -92,7 +119,7 @@ let AUTH_POST_SIGN_IN = (email, password, firstResponse) => {
             body: body
         }
     ).then((response) => {
-        firstResponse(response);
+        firstResponse();
         return (response.json());
     });
 }
@@ -148,6 +175,7 @@ let GROUPS_POST_FETCH = (sort_by, query, offset, limit) => {
  * @param {*} group_id
  * @param {*} firstResponse
  */
+
 let GROUPS_GET_SINGLE = (group_id, firstResponse) => {
 
     if (firstResponse == null) {
@@ -167,28 +195,9 @@ let GROUPS_GET_SINGLE = (group_id, firstResponse) => {
 }
 
 
-/**
- * Creates a group.
- *
- * @param {number} creator_id
- * @param {string} identifier
- * @param {string} name
- * @param {string} description
- * @param {string} tags
- * @param {*} firstResponse
- */
-let GROUPS_POST = (creator_id, identifier, name, description, tags, firstResponse) => {
+let GROUPS_POST = (params, firstResponse) => {
     var body = JSON.stringify({
-        creator_id: creator_id,
-        identifier: identifier,
-        name: name,
-        description: description,
-        tags: tags,
-        member_count: 0,
-        topic_count: 0,
-        post_count: 0,
-        lat: 0.0,
-        lng: 0.0
+        params: params,
     });
 
     if (firstResponse == null) {
@@ -268,25 +277,9 @@ let POSTS_POST_FETCH = (topic_id, offset, limit, firstResponse) => {
     });
 }
 
-
-
-/**
- * Creates a topic.
- * @param {number} topic_id
- * @param {number} creator_id
- * @param {string} number
- * @param {boolean} is_op
- * @param {boolean} is_anonymous
- */
-let POSTS_POST = (topic_id, creator_id, content, is_op, is_anonymous, firstResponse) => {
+let POSTS_POST = (firstResponse) => {
     var body = JSON.stringify({
-        topic_id: topic_id,
-        creator_id: creator_id,
-        content: content,
-        is_op: is_op,
-        is_anonymous: is_anonymous,
-        likes: 0,
-        dislikes: 0,
+        params: params,
     });
 
     if (firstResponse == null) {
@@ -394,22 +387,9 @@ let TOPICS_GET_SINGLE = (topic_id, firstResponse) => {
 }
 
 
-
-/**
- * Creates a topic.
- * @param {number} group_id
- * @param {number} creator_id
- * @param {string} title
- * @param {number} topic_type
- * @param {string} tags
- */
-let TOPICS_POST = (group_id, creator_id, title, topic_type, tags, firstResponse) => {
+let TOPICS_POST = (params, firstResponse) => {
     var body = JSON.stringify({
-        group_id: group_id,
-        creator_id,
-        title: title,
-        topic_type: topic_type,
-        tags: tags,
+        params: params,
     });
 
     if (firstResponse == null) {
@@ -483,3 +463,26 @@ export {
     TOPICS_URL,
     TOPICS_POST_FETCH,
 }
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AUTH_POST">AUTH_POST</a></li><li><a href="global.html#AUTH_POST_SIGN_IN">AUTH_POST_SIGN_IN</a></li><li><a href="global.html#AUTH_URL">AUTH_URL</a></li><li><a href="global.html#GROUPS_DELETE">GROUPS_DELETE</a></li><li><a href="global.html#GROUPS_GET_SINGLE">GROUPS_GET_SINGLE</a></li><li><a href="global.html#GROUPS_POST_FETCH">GROUPS_POST_FETCH</a></li><li><a href="global.html#POSTS_DELETE">POSTS_DELETE</a></li><li><a href="global.html#POSTS_POST_FETCH">POSTS_POST_FETCH</a></li><li><a href="global.html#TOPICS_DELETE">TOPICS_DELETE</a></li><li><a href="global.html#TOPICS_GET_SINGLE">TOPICS_GET_SINGLE</a></li><li><a href="global.html#TOPICS_POST_FETCH">TOPICS_POST_FETCH</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Dec 06 2017 16:35:18 GMT-0800 (Pacific Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

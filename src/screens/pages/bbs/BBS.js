@@ -38,7 +38,7 @@ class BBS extends React.Component {
                     allLoaded: true,
                 })
             });
-        
+
     }
 
     advancedSearch() {
@@ -119,7 +119,6 @@ const layout = StyleSheet.create({
     },
 
     topicList: {
-
     },
 });
 

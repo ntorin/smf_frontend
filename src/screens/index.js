@@ -21,11 +21,13 @@ import EditProfile from 'pages/profile/EditProfile';
 import Feed from 'pages/feed/Feed';
 import Groups from 'pages/groups/Groups';
 import CreateGroup from 'pages/groups/CreateGroup';
+import Welcome from 'pages/welcome/Welcome';
 
 
 export default function () {
   Navigation.registerComponent('smf_frontend.Nav', () => Nav);
   Navigation.registerComponent('smf_frontend.Login', () => Login);
+  Navigation.registerComponent('smf_frontend.Welcome', () => Welcome);
   Navigation.registerComponent('smf_frontend.Feed', () => Feed);
   Navigation.registerComponent('smf_frontend.Library', () => Library);
   Navigation.registerComponent('smf_frontend.Messages', () => Messages);
