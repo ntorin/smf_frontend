@@ -29,7 +29,7 @@ class PopulatableListView extends React.Component {
                 rowView={this.renderRowView}
                 onFetch={this.props.onFetch}
                 firstLoader={true} // display a loader for the first fetching
-                pagination={false} // enable infinite scrolling using touch to load more
+                pagination={this.props.pagination} // enable infinite scrolling using touch to load more
                 refreshable={true} // enable pull-to-refresh for iOS and touch-to-refresh for Android
                 withSections={false} // enable sections
                 renderSeparator={this.renderSeparator}

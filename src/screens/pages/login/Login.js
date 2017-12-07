@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, Dimensions, Image, TextInput, Platform, ScrollView } from 'react-native';
+import { StyleSheet, View, Text, Dimensions, Image, TextInput, Platform, ScrollView, Alert } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Foundation from 'react-native-vector-icons/Foundation';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
@@ -90,21 +90,28 @@ class Login extends React.Component {
         this.state = {
             email: '',
             password: '',
-            responseHeaders: '',
             user: {},
+            responseHeaders: '',
+            status: ''
         };
 
         this.loginUser = this.loginUser.bind(this);
         this.registerUser = this.registerUser.bind(this);
+        this.validateAuthentication = this.validateAuthentication.bind(this);
+    }
+
+    setFirstResponse = (response) => {
+      this.setState({ responseHeaders: response.headers.map, status: response.status })
+        console.log(this.state)
     }
 
     loginUser() {
         var email = this.state.email;
         var password = this.state.password;
 
-        AUTH_POST_SIGN_IN(email, password, null)
+        AUTH_POST_SIGN_IN(email, password, this.setFirstResponse)
             .then((responseJSON) => {
-                this.goToHome();
+              this.validateAuthentication(responseJSON);
             });
     }
 
@@ -113,13 +120,34 @@ class Login extends React.Component {
         var password = this.state.password;
         var password_confirmation = this.state.password;
 
-        AUTH_POST(email, password, password_confirmation, null)
+        AUTH_POST(email, password, password_confirmation, this.setFirstResponse)
             .then((responseJSON) => {
-                this.goToHome();
+              this.validateAuthentication(responseJSON);
             });
     }
 
-    goToHome() {
+    validateAuthentication(responseJSON){
+      console.log(responseJSON);
+      //errors = responseJSON.errors[0] ? responseJSON.errors : responseJSON.errors.full_messages
+      if (this.state.status == 200) {
+        this.setState({ user: responseJSON.data })
+        this.goToHome(this.state.responseHeaders['uid'], this.state.responseHeaders['client'], this.state.responseHeaders['access-token']);
+      } else {
+        Alert.alert('Login Error', "Please make sure your email and password are correct, and try again." + errors, [{ text: "OK", }])
+      }
+    }
+
+    goToHome(uid, client, access_token) {
+        var auth = {
+            uid: uid,
+            client: client,
+            access_token: access_token
+        }
+
+        var props = {
+            auth: auth,
+            user: this.state.user
+        }
         Navigation.startTabBasedApp({
             tabs,
             animationType: Platform.OS === 'ios' ? 'slide-down' : 'fade',

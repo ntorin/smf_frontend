@@ -119,7 +119,6 @@ const layout = StyleSheet.create({
     },
 
     topicList: {
-
     },
 });
 

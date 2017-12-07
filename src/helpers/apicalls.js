@@ -62,7 +62,7 @@ let AUTH_POST = (email, password, password_confirmation, firstResponse) => {
             body: body
         }
     ).then((response) => {
-        firstResponse();
+        firstResponse(response);
         return (response.json());
     });
 }
@@ -76,7 +76,8 @@ let AUTH_POST = (email, password, password_confirmation, firstResponse) => {
  */
 let AUTH_POST_SIGN_IN = (email, password, firstResponse) => {
     var body = JSON.stringify({
-
+      email: email,
+      password: password,
     });
 
     if (firstResponse == null) {
@@ -91,7 +92,7 @@ let AUTH_POST_SIGN_IN = (email, password, firstResponse) => {
             body: body
         }
     ).then((response) => {
-        firstResponse();
+        firstResponse(response);
         return (response.json());
     });
 }
