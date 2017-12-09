@@ -20,9 +20,9 @@ class Nav extends React.Component {
                 screen: 'smf_frontend.Notifications'
             },
             {
-                name: 'Messages',
-                icon: require('assets/icons/messages.png'),
-                screen: 'smf_frontend.Messages'
+                name: 'Friends',
+                icon: require('assets/icons/friends.png'),
+                screen: 'smf_frontend.Friends'
             },
             {
                 name: 'Settings',
@@ -77,7 +77,7 @@ class Nav extends React.Component {
     render() {
         return (
             <View style={layout.container}>
-                <LiteProfile username={"username"} accountid={"account_id"} />
+                <LiteProfile user={this.props.user} />
                 <ListView
                     style={layout.listView}
                     dataSource={this.state.menu}

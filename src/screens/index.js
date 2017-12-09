@@ -7,6 +7,7 @@ import Messages from 'pages/messages/Messages';
 import Chat from 'pages/chat/Chat';
 import UserDirectory from 'pages/directory/UserDirectory';
 import Notifications from 'pages/notifications/Notifications';
+import Friends from 'pages/friends/Friends';
 import Settings from 'pages/settings/Settings';
 import Help from 'pages/help/Help';
 import About from 'pages/about/About';
@@ -20,6 +21,7 @@ import Profile from 'pages/profile/Profile';
 import EditProfile from 'pages/profile/EditProfile';
 import Feed from 'pages/feed/Feed';
 import Groups from 'pages/groups/Groups';
+import ViewGroup from 'pages/groups/ViewGroup';
 import CreateGroup from 'pages/groups/CreateGroup';
 import Welcome from 'pages/welcome/Welcome';
 
@@ -32,6 +34,7 @@ export default function () {
   Navigation.registerComponent('smf_frontend.Library', () => Library);
   Navigation.registerComponent('smf_frontend.Messages', () => Messages);
   Navigation.registerComponent('smf_frontend.Discovery', () => Discovery);
+  Navigation.registerComponent('smf_frontend.Friends', () => Friends);
   Navigation.registerComponent('smf_frontend.BBS', () => BBS);
   Navigation.registerComponent('smf_frontend.CreateTopic', () => CreateTopic);
   Navigation.registerComponent('smf_frontend.AdvancedSearch', () => AdvancedSearch);
@@ -40,6 +43,7 @@ export default function () {
   Navigation.registerComponent('smf_frontend.Profile', () => Profile);
   Navigation.registerComponent('smf_frontend.EditProfile', () => EditProfile);
   Navigation.registerComponent('smf_frontend.Groups', () => Groups);
+  Navigation.registerComponent('smf_frontend.ViewGroup', () => ViewGroup);
   Navigation.registerComponent('smf_frontend.CreateGroup', () => CreateGroup);
   Navigation.registerComponent('smf_frontend.Feed', () => Feed);
   Navigation.registerComponent('smf_frontend.Chat', () => Chat);

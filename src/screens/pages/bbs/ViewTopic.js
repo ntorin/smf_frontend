@@ -16,21 +16,24 @@ class ViewTopic extends React.Component {
     }
 
     getPosts(page = 1, callback, options) {
-        POSTS_POST_FETCH(0, 0, 25, null)
+        POSTS_POST_FETCH(this.props.topic.id, 0, 25, null)
             .then((responseJSON) => {
                 console.log(responseJSON);
                 callback(responseJSON, {
                     allLoaded: true,
                 })
-            }); 
-        
+            });
+
     }
 
     replyTopic() {
         this.props.navigator.push({
             screen: 'smf_frontend.ReplyTopic',
-            title: 'Reply to rowData.name',
-            passProps: {}
+            title: 'Reply to ' + this.props.topic.title,
+            passProps: {
+              topic: this.props.topic,
+              user: this.props.user
+            }
         });
     }
 

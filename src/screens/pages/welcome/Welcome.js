@@ -1,8 +1,9 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import BaseStyles from 'helpers/styles.js';
+import BaseStyles from 'helpers/styles';
+import {gotoHome } from 'helpers/homepage';
 
-class Template extends React.Component {
+class Welcome extends React.Component {
 
     constructor(props){
         super(props);
@@ -28,4 +29,4 @@ const layout = StyleSheet.create({
 
 });
 
-export default Template;
+export default Welcome;

@@ -24,7 +24,8 @@ class ListItem extends React.Component {
                         <Text>by {rd.name}</Text>
                         <Text style={layout.count}>{rd.post_count} posts</Text>
                     </View>
-                    <Text> {Moment(rd.created_at).format('d MMM')} </Text>
+                    <Text>tags: {rd.tags} </Text>
+                    <Text>last activity on {Moment(rd.created_at).format('d MMM')}</Text>
                     <Text>{rd.post_preview}</Text>
                 </View>
             </View>
@@ -52,8 +53,8 @@ class ListItem extends React.Component {
                 <View style={styles.container}>
                     <View style={styles.textContainer}>
                         <View style={layout.row}>
-                            <Text style={layout.poster}>{rd.name}</Text>
-                            {<Avatar image={require('assets/img/a.png')} style={layout.image} height={48} width={48} />}
+                            <Text style={layout.poster}>NAME GOES HERE {rd.name}</Text>
+                            {/*<Avatar image={require('assets/img/a.png')} style={layout.image} height={48} width={48} /> */}
                         </View>
                         <MarkdownView>{rd.content}</MarkdownView>
                     </View>

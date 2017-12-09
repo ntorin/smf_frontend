@@ -99,6 +99,8 @@ let AUTH_POST_SIGN_IN = (email, password, firstResponse) => {
 
 let BLOCKS_URL = BASE_URL + "/blocks";
 
+let CONVERSATION_MESSAGES_URL = BASE_URL + "/conversation_messages";
+
 let CONVERSATION_USERS_URL = BASE_URL + "/conversation_users";
 
 let CONVERSATIONS_URL = BASE_URL + "/conversations";
@@ -109,9 +111,100 @@ let FEEDS_URL = BASE_URL + "/feeds";
 
 let FOLLOWS_URL = BASE_URL + "/follows";
 
+let FOLLOWS_POST = (following_id, follower_id, firstResponse) => {
+    var body = JSON.stringify({
+        following_id: following_id,
+        follower_id: follower_id
+    });
+
+    if (firstResponse == null) {
+        firstResponse = () => { };
+    }
+
+    return fetch(
+        FOLLOWS_URL,
+        {
+            method: POST,
+            headers: JSON_HEADERS,
+            body: body
+        }
+    ).then((response) => {
+        firstResponse();
+        return (response.json());
+    });
+}
+
 let FRIENDS_URL = BASE_URL + "/friends";
 
-let GROUP_TAGS_URL = BASE_URL + "/group_tags";
+let FRIENDS_FETCH = (user_id, fetch_type, offset, limit, firstResponse) => {
+    var body = JSON.stringify({
+      user_id: user_id,
+      fetch_type: fetch_type,
+      offset: offset,
+      limit: limit
+    });
+
+    if (firstResponse == null) {
+        firstResponse = () => { };
+    }
+
+    return fetch(
+        FRIENDS_URL + "/fetch",
+        {
+            method: POST,
+            headers: JSON_HEADERS,
+            body: body
+        }
+    ).then((response) => {
+        firstResponse();
+        return (response.json());
+    });
+}
+
+let FRIENDS_POST = (friend_one, friend_two, firstResponse) => {
+    var body = JSON.stringify({
+        friend_one: friend_one,
+        friend_two: friend_two
+    });
+
+    if (firstResponse == null) {
+        firstResponse = () => { };
+    }
+
+    return fetch(
+        FRIENDS_URL,
+        {
+            method: POST,
+            headers: JSON_HEADERS,
+            body: body
+        }
+    ).then((response) => {
+        firstResponse();
+        return (response.json());
+    });
+}
+
+let FRIENDS_POST_ACCEPT_REQUEST = (request_id, firstResponse) => {
+    var body = JSON.stringify({
+      request_id: request_id
+    });
+
+    if (firstResponse == null) {
+        firstResponse = () => { };
+    }
+
+    return fetch(
+        FRIENDS_URL + "/accept_request",
+        {
+            method: POST,
+            headers: JSON_HEADERS,
+            body: body
+        }
+    ).then((response) => {
+        firstResponse();
+        return (response.json());
+    });
+}
 
 let GROUPS_URL = BASE_URL + "/groups";
 
@@ -177,12 +270,13 @@ let GROUPS_GET_SINGLE = (group_id, firstResponse) => {
  * @param {string} tags
  * @param {*} firstResponse
  */
-let GROUPS_POST = (creator_id, identifier, name, description, tags, firstResponse) => {
+let GROUPS_POST = (creator_id, identifier, name, description, group_type, tags, firstResponse) => {
     var body = JSON.stringify({
         creator_id: creator_id,
         identifier: identifier,
         name: name,
         description: description,
+        group_type: group_type,
         tags: tags,
         member_count: 0,
         topic_count: 0,
@@ -231,6 +325,53 @@ let GROUPS_DELETE = (group_id, firstResponse) => {
     });
 }
 
+let GROUPS_POST_VALIDATE_IDENTIFIER = (identifier, firstResponse) => {
+    var body = JSON.stringify({
+        identifier: identifier,
+    });
+
+    if (firstResponse == null) {
+        firstResponse = () => { };
+    }
+
+    return fetch(
+        GROUPS_URL + "/validate_identifier",
+        {
+            method: POST,
+            headers: JSON_HEADERS,
+            body: body
+        }
+    ).then((response) => {
+        firstResponse();
+        return (response.json());
+    });
+}
+
+let GROUP_USERS_URL = BASE_URL + "/group_users";
+
+let GROUP_USERS_POST = (group_id, user_id, firstResponse) => {
+    var body = JSON.stringify({
+      group_id: group_id,
+      user_id: user_id
+    });
+
+    if (firstResponse == null) {
+        firstResponse = () => { };
+    }
+
+    return fetch(
+        GROUP_USERS_URL,
+        {
+            method: POST,
+            headers: JSON_HEADERS,
+            body: body
+        }
+    ).then((response) => {
+        firstResponse();
+        return (response.json());
+    });
+}
+
 let NOTIFICATIONS_URL = BASE_URL + "/notifications";
 
 let POST_LIKES_URL = BASE_URL + "/post_likes";
@@ -271,15 +412,17 @@ let POSTS_POST_FETCH = (topic_id, offset, limit, firstResponse) => {
 
 
 /**
- * Creates a topic.
+ * Creates a post.
  * @param {number} topic_id
  * @param {number} creator_id
  * @param {string} number
  * @param {boolean} is_op
  * @param {boolean} is_anonymous
  */
-let POSTS_POST = (topic_id, creator_id, content, is_op, is_anonymous, firstResponse) => {
+let POSTS_POST = (group_id, topic_id, creator_id, content, is_op, is_anonymous, firstResponse) => {
+    console.log("connecting to " + POSTS_URL);
     var body = JSON.stringify({
+        group_id: group_id,
         topic_id: topic_id,
         creator_id: creator_id,
         content: content,
@@ -294,7 +437,7 @@ let POSTS_POST = (topic_id, creator_id, content, is_op, is_anonymous, firstRespo
     }
 
     return fetch(
-        BASE_URL,
+        POSTS_URL,
         {
             method: POST,
             headers: JSON_HEADERS,
@@ -329,11 +472,7 @@ let POSTS_DELETE = (post_id, firstResponse) => {
     });
 }
 
-let PRIVATE_MESSAGES_URL = BASE_URL + "/private_messages";
-
 let REPORTS_URL = BASE_URL + "/reports";
-
-let TOPIC_TAGS_URL = BASE_URL + "/topic_tags";
 
 let TOPICS_URL = BASE_URL + "/topics";
 
@@ -393,8 +532,6 @@ let TOPICS_GET_SINGLE = (topic_id, firstResponse) => {
         });
 }
 
-
-
 /**
  * Creates a topic.
  * @param {number} group_id
@@ -417,7 +554,7 @@ let TOPICS_POST = (group_id, creator_id, title, topic_type, tags, firstResponse)
     }
 
     return fetch(
-        BASE_URL,
+        TOPICS_URL,
         {
             method: POST,
             headers: JSON_HEADERS,
@@ -458,28 +595,77 @@ let TOPICS_DELETE = (topic_id, firstResponse) => {
 
 let USERS_URL = BASE_URL + "/users";
 
+let USERS_POST_FETCH = (identifier, name, sort_by, offset, limit) => {
+    var body = JSON.stringify({
+        identifier: identifier,
+        name: name,
+        sort_by: sort_by,
+        offset: offset,
+        limit: limit
+    });
+
+    if (firstResponse == null) {
+        firstResponse = () => { };
+    }
+
+    return fetch(
+        USERS_URL + '/fetch',
+        {
+            method: POST,
+            headers: JSON_HEADERS,
+            body: body
+        }
+    ).then((response) => {
+        firstResponse();
+        return (response.json());
+    });
+}
+
+let USERS_POST_VALIDATE_IDENTIFIER = (identifier) => {
+    var body = JSON.stringify({
+        identifier: identifier,
+    });
+
+    if (firstResponse == null) {
+        firstResponse = () => { };
+    }
+
+    return fetch(
+        USERS_URL + "/validate_identifier",
+        {
+            method: POST,
+            headers: JSON_HEADERS,
+            body: body
+        }
+    ).then((response) => {
+        firstResponse();
+        return (response.json());
+    });
+}
+
 
 export {
-    AUTH_URL,
     AUTH_POST,
     AUTH_POST_SIGN_IN,
-    BLOCKS_URL,
-    CONVERSATION_USERS_URL,
-    CONVERSATIONS_URL,
-    CREDIT_HISTORIES_URL,
-    FEEDS_URL,
-    FOLLOWS_URL,
-    FRIENDS_URL,
-    GROUP_TAGS_URL,
-    GROUPS_URL,
+
+    FOLLOWS_POST,
+
+    FRIENDS_FETCH,
+    FRIENDS_POST,
+    FRIENDS_POST_ACCEPT_REQUEST,
+
+    GROUP_USERS_POST,
+
+    GROUPS_POST,
     GROUPS_POST_FETCH,
-    NOTIFICATIONS_URL,
-    POST_LIKES_URL,
-    POSTS_URL,
+    GROUPS_POST_VALIDATE_IDENTIFIER,
+
+    POSTS_POST,
     POSTS_POST_FETCH,
-    PRIVATE_MESSAGES_URL,
-    REPORTS_URL,
-    TOPIC_TAGS_URL,
-    TOPICS_URL,
+
+    TOPICS_POST,
     TOPICS_POST_FETCH,
+
+    USERS_POST_FETCH,
+    USERS_POST_VALIDATE_IDENTIFIER
 }

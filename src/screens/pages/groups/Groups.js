@@ -38,44 +38,13 @@ class Groups extends React.Component {
     }
 
     getGroups(page = 1, callback, options) {
-        groups =
-            [{
-                "id": 2,
-                "creator_id": 0,
-                "handle": "architecto",
-                "name": "Holiday Java",
-                "description": "Molestias ipsam occaecati doloremque accusamus officia.",
-                "member_count": 0,
-                "topic_count": 0,
-                "post_count": 0,
-                "lat": "0.0",
-                "lng": "0.0",
-                "created_at": "2017-12-05T03:16:40.341Z",
-                "updated_at": "2017-12-05T03:16:40.341Z"
-            },
-            {
-                "id": 3,
-                "creator_id": 1,
-                "handle": "reiciendis",
-                "name": "Wake-up Treat",
-                "description": "Minus qui ut tempore provident.",
-                "member_count": 0,
-                "topic_count": 0,
-                "post_count": 0,
-                "lat": "0.0",
-                "lng": "0.0",
-                "created_at": "2017-12-05T03:16:40.344Z",
-                "updated_at": "2017-12-05T03:16:40.344Z"
-            }]
-        /*GROUPS_POST_FETCH('recent', '', 0, 25)
+        GROUPS_POST_FETCH('recent', '', 0, 25)
             .then((responseJSON) => {
+                console.log("THE GROUPS: " + responseJSON)
                 callback(responseJSON, {
                     allLoaded: true,
                 })
-            }); */
-        callback(groups, {
-            allLoaded: true,
-        })
+            });
     }
 
     advancedSearch() {
@@ -86,15 +55,20 @@ class Groups extends React.Component {
         this.props.navigator.push({
             screen: 'smf_frontend.CreateGroup',
             title: 'Create Group',
-            passProps: {}
+            passProps: {
+              user: this.props.user
+            }
         });
     }
 
     viewGroup(rowData) {
         this.props.navigator.push({
-            screen: 'smf_frontend.BBS',
-            title: 'rowData.name',
-            passProps: {}
+            screen: 'smf_frontend.ViewGroup',
+            title: rowData.name,
+            passProps: {
+              group: rowData,
+              user: this.props.user
+            }
         });
     }
 
@@ -104,7 +78,7 @@ class Groups extends React.Component {
                 <Modal
                     onRequestClose={this._hideModal}
                     visible={this.state.isModalVisible}>
-                    
+
                     <View style={layout.searchPanel}>
                         <TextInput
                             style={{flex: 3}}
@@ -128,7 +102,7 @@ class Groups extends React.Component {
                     <Button onPress={this._hideModal}>
                         Confirm
                     </Button>
-                    
+
 
                 </Modal>
 
