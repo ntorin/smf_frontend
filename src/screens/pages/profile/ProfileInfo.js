@@ -39,13 +39,16 @@ class ProfileInfo extends React.Component {
 
                     </ScrollView>
                     </View>
-                    <View>
-                    <Button onPress={this.sendFriendRequest}>
-                    </Button>
+                </View>
 
-                    <Button onPress={this.followUser}>
-                    </Button>
-                    </View>
+                <View>
+                <Button onPress={this.sendFriendRequest}>
+                  Send Friend Request
+                </Button>
+
+                <Button onPress={this.followUser}>
+                  {"Follow " + this.props.user.name}
+                </Button>
                 </View>
             </View>
         )

@@ -595,7 +595,7 @@ let TOPICS_DELETE = (topic_id, firstResponse) => {
 
 let USERS_URL = BASE_URL + "/users";
 
-let USERS_POST_FETCH = (identifier, name, sort_by, offset, limit) => {
+let USERS_POST_FETCH = (identifier, name, sort_by, offset, limit, firstResponse) => {
     var body = JSON.stringify({
         identifier: identifier,
         name: name,
