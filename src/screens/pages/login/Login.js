@@ -10,78 +10,7 @@ import Background from 'components/Background';
 import BaseStyles, { PrimaryColor, PrimaryDimmed, NavMenu, ScreenBackgroundColor } from 'helpers/styles';
 import { AUTH_POST_SIGN_IN, AUTH_POST } from 'helpers/apicalls';
 import Button from 'components/Button';
-
-var tabs;
-
-iconsLoaded.then(() => {
-    tabs = [
-        {
-            label: 'Feed',
-            screen: 'smf_frontend.Feed',
-            icon: iconsMap['news'],
-            title: 'Feed',
-            navigatorButtons: {
-                leftButtons: [{
-                    icon: iconsMap['menu'],
-                    id: 'menu',
-                }]
-            },
-        },
-        {
-            label: 'BBS',
-            screen: 'smf_frontend.BBS',
-            icon: iconsMap['chat'],
-            title: 'BBS',
-            navigatorButtons: {
-                leftButtons: [{
-                    icon: iconsMap['menu'],
-                    id: 'menu',
-                }]
-            }
-        },
-        {
-            label: 'Groups',
-            screen: 'smf_frontend.Groups',
-            icon: iconsMap['group'],
-            title: 'BBS Groups',
-            navigatorButtons: {
-                leftButtons: [{
-                    icon: iconsMap['menu'],
-                    id: 'menu',
-                }]
-            }
-        },
-        {
-            label: 'Messages',
-            screen: 'smf_frontend.Messages',
-            icon: iconsMap['mail'],
-            title: 'Messages',
-            navigatorButtons: {
-                leftButtons: [{
-                    icon: iconsMap['menu'],
-                    id: 'menu',
-                }]
-            }
-        },
-        {
-            label: 'Profile',
-            screen: 'smf_frontend.Profile',
-            icon: iconsMap['person'],
-            title: 'Profile',
-            navigatorButtons: {
-                leftButtons: [{
-                    icon: iconsMap['menu'],
-                    id: 'menu',
-                }],
-                rightButtons: [{
-                    icon: iconsMap['pencil'],
-                    id: 'edit',
-                }]
-            }
-        }
-    ];
-});
-
+import { goToHome } from 'helpers/homepage';
 
 class Login extends React.Component {
 
@@ -109,7 +38,7 @@ class Login extends React.Component {
         var email = this.state.email;
         var password = this.state.password;
 
-        AUTH_POST_SIGN_IN(email, password, this.setFirstResponse)
+        AUTH_POST_SIGN_IN('user0@smf.com', '313Ghioio', this.setFirstResponse)
             .then((responseJSON) => {
               this.validateAuthentication(responseJSON);
             });
@@ -131,44 +60,10 @@ class Login extends React.Component {
       //errors = responseJSON.errors[0] ? responseJSON.errors : responseJSON.errors.full_messages
       if (this.state.status == 200) {
         this.setState({ user: responseJSON.data })
-        this.goToHome(this.state.responseHeaders['uid'], this.state.responseHeaders['client'], this.state.responseHeaders['access-token']);
+        goToHome(this.state.responseHeaders['uid'], this.state.responseHeaders['client'], this.state.responseHeaders['access-token'], this.state.user);
       } else {
-        Alert.alert('Login Error', "Please make sure your email and password are correct, and try again." + errors, [{ text: "OK", }])
+        Alert.alert('Login Error', "Please make sure your email and password are correct, and try again.", [{ text: "OK", }])
       }
-    }
-
-    goToHome(uid, client, access_token) {
-        var auth = {
-            uid: uid,
-            client: client,
-            access_token: access_token
-        }
-
-        var props = {
-            auth: auth,
-            user: this.state.user
-        }
-        Navigation.startTabBasedApp({
-            tabs,
-            animationType: Platform.OS === 'ios' ? 'slide-down' : 'fade',
-            appStyle: {
-                tabBarBackgroundColor: '#FFFFFF',
-                navBarButtonColor: PrimaryColor,
-                tabBarButtonColor: PrimaryDimmed,
-                navBarTextColor: PrimaryColor,
-                tabBarSelectedButtonColor: PrimaryColor,
-                navigationBarColor: '#000000',
-                navBarBackgroundColor: '#FFFFFF',
-                statusBarColor: '#000000',
-                tabFontFamily: 'BioRhyme-Bold',
-                screenBackgroundColor: ScreenBackgroundColor,
-            },
-            drawer: {
-                left: {
-                    screen: 'smf_frontend.Nav'
-                }
-            }
-        });
     }
 
     render() {

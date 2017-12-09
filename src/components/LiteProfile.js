@@ -14,12 +14,12 @@ class LiteProfile extends React.Component {
             <View style={layout.containerBig}>
                 <View style={layout.userDetails}>
                     <View style={layout.container}>
-                        {<Avatar style={{flex: 1, padding: 3}}image={require('assets/img/a.png')} height={100} width={100}/>}
+                        {/*<Avatar style={{flex: 1, padding: 3}}image={require('assets/img/a.png')} height={100} width={100}/>*/}
                     </View>
                     <View style={layout.userids}>
-                        <Text style={styles.username}>{this.props.username}</Text>
-                        <Text style={styles.accountid}>{this.props.accountid}</Text>
-                        <Text style={styles.description}>{this.props.description}</Text>
+                        <Text style={styles.username}>{this.props.user.name}</Text>
+                        <Text style={styles.accountid}>{this.props.user.identifier}</Text>
+                        <Text style={styles.description}>{this.props.user.blurb}</Text>
                     </View>
                 </View>
             </View>
@@ -60,7 +60,7 @@ const layout = StyleSheet.create({
         borderRadius: 8,
         backgroundColor: '#d3d3d3'
     },
-    
+
     userDetails: {
         flexDirection: 'row',
     },

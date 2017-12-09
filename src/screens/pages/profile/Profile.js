@@ -11,7 +11,7 @@ class Profile extends React.Component {
 
     static navigatorStyle = NavNoElevation;
 
-    Info = () => <ProfileInfo />;
+    Info = () => <ProfileInfo user={this.props.user} />;
     Activity = () => <PopulatableListView />;
 
     constructor(props) {
@@ -28,7 +28,7 @@ class Profile extends React.Component {
 
     onNavigatorEvent(event) { // this is the onPress handler for the two buttons together
         if (event.type == 'NavBarButtonPress') { // this is the event type for button presses
-            
+
             if (event.id == 'menu') { // this is the same id field from the static navigatorButtons definition
                 this.props.navigator.toggleDrawer({
                     side: 'left',
@@ -36,7 +36,7 @@ class Profile extends React.Component {
                 })
             }
 
-            if (event.id == 'edit') { 
+            if (event.id == 'edit') {
                 this.props.navigator.push({
                     screen: 'smf_frontend.EditProfile',
                     title: 'Edit Your Profile',

@@ -50,7 +50,7 @@ class Feed extends React.Component {
           this.props.navigator.push({
               screen: parts[1],
               title: payload,
-              passProps: {}
+              passProps: { user: this.props.user }
           });
           // handle the link somehow, usually run a this.props.navigator command
         }

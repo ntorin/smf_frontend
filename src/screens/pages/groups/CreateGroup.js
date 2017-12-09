@@ -4,6 +4,7 @@ import TextField from 'react-native-md-textinput';
 import { GiftedForm, GiftedFormManager } from 'react-native-gifted-form';
 import { Fumi } from 'react-native-textinput-effects';
 import TagInput from 'react-native-tag-input';
+import { GROUPS_POST, GROUPS_POST_VALIDATE_IDENTIFIER, GROUP_USERS_POST, } from 'helpers/apicalls';
 
 import Button from 'components/Button';
 import BaseStyles, { PrimaryColor } from 'helpers/styles.js';
@@ -14,12 +15,38 @@ class CreateGroup extends React.Component {
         super(props);
         this.state = {
             name: '',
+            identifier: '',
+            group_type: '',
+            description: '',
             tags: [],
             tagText: '',
-            description: '',
         }
-        this.onSubmit = this.onSubmit.bind(this);
+        this.createGroup = this.createGroup.bind(this);
         this.labelExtractor = this.labelExtractor.bind(this);
+        this.validateIdentifier = this.validateIdentifier.bind(this);
+    }
+
+    createGroup(){
+      var tags = this.state.tags.join();
+
+      GROUPS_POST(this.props.user.id, this.state.identifier, this.state.name, this.state.description, this.state.group_type, tags, null)
+        .then((responseJSON) => {
+          GROUP_USERS_POST(responseJSON.id, this.props.user.id)
+            .then((responseJSON) => {
+                this.props.navigator.pop({
+                    animated: true,
+                    animationType: 'fade'
+                });
+            })
+        })
+    }
+
+    validateIdentifier(){
+      GROUPS_POST_VALIDATE_IDENTIFIER(this.state.identifier, null)
+        .then((responseJSON) => {
+          console.log(responseJSON);
+          console.log(responseJSON.message + "; " + responseJSON.valid)
+        })
     }
 
     onChangeTags = (tags) => {
@@ -44,22 +71,37 @@ class CreateGroup extends React.Component {
         return tag;
     }
 
-
-    onSubmit() {
-        this.props.navigator.pop({
-            animated: true,
-            animationType: 'fade'
-        });
-    }
-
     render() {
         return (
             <View style={BaseStyles.container}>
+            <View style={layout.identifierRow}>
+                <TextInput
+                style={layout.identifier}
+                    placeholder={'Identifier'}
+                    placeholderTextColor={PrimaryColor}
+                    underlineColorAndroid={PrimaryColor}
+                    onChangeText={(text) => this.setState({ name: text })} />
+                    <Button onPress={this.validateIdentifier} style={layout.validateIdentifier}>
+                         Check
+                    </Button>
+                </View>
                 <TextInput
                     placeholder={'Name'}
                     placeholderTextColor={PrimaryColor}
                     underlineColorAndroid={PrimaryColor}
                     onChangeText={(text) => this.setState({ name: text })} />
+                    <View>
+                        <ScrollView>
+                            <TextInput
+                                placeholder={'Description'}
+                                placeholderTextColor={PrimaryColor}
+                                underlineColorAndroid={PrimaryColor}
+                                selectionColor={PrimaryColor}
+                                multiline={true}
+                                onChangeText={(text) => this.setState({ description: text })}
+                                autoCorrect={true} />
+                        </ScrollView>
+                    </View>
                 <View style={layout.tags}>
                     <Text style={styles.tagHeader}>Tags:</Text>
                     <TagInput
@@ -70,31 +112,19 @@ class CreateGroup extends React.Component {
                         onChangeText={this.onChangeText}
                     />
                 </View>
-                <View>
-                    <ScrollView>
-                        <TextInput
-                            placeholder={'Description'}
-                            placeholderTextColor={PrimaryColor}
-                            underlineColorAndroid={PrimaryColor}
-                            selectionColor={PrimaryColor}
-                            multiline={true}
-                            onChangeText={(text) => this.setState({ description: text })}
-                            autoCorrect={true} />
-                    </ScrollView>
-                </View>
                 <View style={{flexDirection: 'row'}}>
                     <Text style={styles.privacyText}>Privacy</Text>
                     <Picker
                         style={{flex: 3}}
-                        selectedValue={this.state.language}
-                        onValueChange={(itemValue, itemIndex) => this.setState({language: itemValue})}
-                        prompt={'Privacy'}>
-                        <Picker.Item label="Invite Only" value="private" />
-                        <Picker.Item label="Public" value="public" />
-                        <Picker.Item label="Apply Only" value="apply" />
+                        selectedValue={this.state.group_type}
+                        onValueChange={(itemValue, itemIndex) => this.setState({group_type: itemValue})}
+                        prompt={'Group Type'}>
+                        <Picker.Item label={"Invite Only"} value={"private"} />
+                        <Picker.Item label={"Public"} value={"public"} />
+                        <Picker.Item label={"Apply Only"} value={"apply"} />
                     </Picker>
                 </View>
-                <Button onPress={this.onSubmit}>
+                <Button onPress={this.createGroup}>
                     Create New Topic
             </Button>
             </View>
@@ -115,7 +145,7 @@ const layout = StyleSheet.create({
     },
 
     privacyText:{
-        flex:1, 
+        flex:1,
         textAlignVertical:'bottom'
     },
 
@@ -127,6 +157,18 @@ const layout = StyleSheet.create({
 
     tags: {
         flexDirection: 'row'
+    },
+
+    identifierRow: {
+      flexDirection: 'row'
+    },
+
+    identifier: {
+      flex: 7
+    },
+
+    validateIdentifier: {
+      flex: 3
     }
 });
 

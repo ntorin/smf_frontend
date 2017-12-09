@@ -17,6 +17,8 @@ class BBS extends React.Component {
         this.viewTopic = this.viewTopic.bind(this);
         this.advancedSearch = this.advancedSearch.bind(this);
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
+        this.getTopics = this.getTopics.bind(this);
+        this.createTopic = this.createTopic.bind(this);
     }
 
     onNavigatorEvent(event) { // this is the onPress handler for the two buttons together
@@ -32,8 +34,10 @@ class BBS extends React.Component {
     }
 
     getTopics(page = 1, callback, options) {
-        TOPICS_POST_FETCH(0, 'recent', '', 0, 25, '', null)
+      console.log("Propas: " + this.props.group.id);
+        TOPICS_POST_FETCH(this.props.group.id, 'recent', '', 0, 25, null)
             .then((responseJSON) => {
+              console.log(responseJSON)
                 callback(responseJSON, {
                     allLoaded: true,
                 })
@@ -53,7 +57,10 @@ class BBS extends React.Component {
         this.props.navigator.push({
             screen: 'smf_frontend.CreateTopic',
             title: 'Create Topic',
-            passProps: {}
+            passProps: {
+              group_id: this.props.group.id,
+              user: this.props.user
+            }
         });
     }
 
@@ -61,7 +68,10 @@ class BBS extends React.Component {
         this.props.navigator.push({
             screen: 'smf_frontend.ViewTopic',
             title: rowData.title,
-            passProps: {topic: rowData}
+            passProps: {
+              topic: rowData,
+              user: this.props.user
+            }
         });
     }
 
@@ -92,6 +102,7 @@ class BBS extends React.Component {
                         type={'topic'}
                         onFetch={this.getTopics}
                         onPress={this.viewTopic}
+                        pagination={false}
                     />
                 </View>
             </View>
