@@ -5,8 +5,6 @@ import PopulatableListView from 'components/PopulatableListView';
 import { PrimaryColor, NavNoElevation } from 'helpers/styles';
 
 
-
-
 class Feed extends React.Component {
 
   static navigatorStyle = NavNoElevation;

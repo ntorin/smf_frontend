@@ -35,14 +35,32 @@ class BBS extends React.Component {
 
     getTopics(page = 1, callback, options) {
       console.log("Propas: " + this.props.group.id);
-        TOPICS_POST_FETCH(this.props.group.id, 'recent', '', 0, 25, null)
+        /*TOPICS_POST_FETCH(this.props.group.id, 'recent', '', 0, 25, null)
             .then((responseJSON) => {
               console.log(responseJSON)
                 callback(responseJSON, {
                     allLoaded: true,
                 })
-            });
-
+            });*/
+            topics = [
+              {
+            "id": 6,
+            "group_id": 1,
+            "creator_id": 1,
+            "title": "hmm",
+            "topic_type": 0,
+            "name": "name (identifier)",
+            "post_preview": "ggggg",
+            "tags": "still,testing,shit",
+            "post_count": 555,
+            "last_post_date": "2017-12-12T05:42:02.950Z",
+            "created_at": "2017-12-12T05:42:02.950Z",
+            "updated_at": "2017-12-12T05:42:02.950Z"
+        },
+      ]
+            callback(topics, {
+                allLoaded: true,
+            })
     }
 
     advancedSearch() {

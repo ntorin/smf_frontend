@@ -3,6 +3,7 @@ import { StyleSheet, View, ScrollView, Text } from 'react-native';
 import BaseStyles, { PrimaryColor } from 'helpers/styles.js';
 import LiteProfile from 'components/LiteProfile';
 import Button from 'components/Button';
+import { FRIENDS_POST, FOLLOWS_POST } from 'helpers/apicalls';
 import Moment from 'moment';
 
 class ProfileInfo extends React.Component {
@@ -12,14 +13,23 @@ class ProfileInfo extends React.Component {
         this.state = {
 
         }
+
+        this.addFriend = this.addFriend.bind(this);
+        this.followUser = this.followUser.bind(this);
     }
 
     addFriend() {
-
+      FRIENDS_POST(this.props.myUser.id, this.props.user.id)
+        .then((responseJSON) => {
+          console.log(responseJSON)
+        })
     }
 
     followUser() {
-
+      FOLLOWS_POST(this.props.user.id, this.props.myUser.id)
+        .then((responseJSON) => {
+          console.log(responseJSON)
+        })
     }
 
     render() {

@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, ListView } from 'react-native';
 import Button from 'apsl-react-native-button';
 import NavItem from 'components/NavItem';
 import LiteProfile from 'components/LiteProfile';
+import BaseStyles from 'helpers/styles.js';
 
 class Nav extends React.Component {
 
@@ -76,7 +77,7 @@ class Nav extends React.Component {
 
     render() {
         return (
-            <View style={layout.container}>
+            <View style={BaseStyles.container}>
                 <LiteProfile user={this.props.user} />
                 <ListView
                     style={layout.listView}

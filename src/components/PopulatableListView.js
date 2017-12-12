@@ -19,7 +19,7 @@ class PopulatableListView extends React.Component {
 
     renderSeparator(){
         return (
-            <View style={{padding: 5}}/>
+            <View style={{backgroundColor: "#000000", height: StyleSheet.hairlineWidth}}/>
         )
     }
 

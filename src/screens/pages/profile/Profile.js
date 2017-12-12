@@ -11,7 +11,7 @@ class Profile extends React.Component {
 
     static navigatorStyle = NavNoElevation;
 
-    Info = () => <ProfileInfo user={this.props.user} />;
+    Info = () => <ProfileInfo user={this.props.user} myUser={this.props.myUser} />;
     Activity = () => <PopulatableListView />;
 
     constructor(props) {

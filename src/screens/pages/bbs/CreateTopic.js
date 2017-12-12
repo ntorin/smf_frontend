@@ -6,7 +6,7 @@ import { Fumi } from 'react-native-textinput-effects';
 import TagInput from 'react-native-tag-input';
 import { MarkdownEditor } from 'react-native-markdown-editor';
 import Button from 'components/Button';
-import BaseStyles, { PrimaryColor } from 'helpers/styles';
+import BaseStyles, { PrimaryColor, ScreenBackgroundColor } from 'helpers/styles';
 import { POSTS_POST, TOPICS_POST } from 'helpers/apicalls';
 
 class CreateTopic extends React.Component {
@@ -104,7 +104,7 @@ const layout = StyleSheet.create({
     contentContainer: {
         padding: 25,
         justifyContent: 'center',
-        backgroundColor: '#EDEDED'
+        backgroundColor: ScreenBackgroundColor
     },
 
     tags: {

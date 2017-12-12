@@ -89,6 +89,7 @@ let goToHome = (uid, client, access_token, user) => {
         var props = {
             auth: auth,
             user: user,
+            myUser: user,
             group: {
               id: 1
             }

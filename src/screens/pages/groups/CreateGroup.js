@@ -7,7 +7,7 @@ import TagInput from 'react-native-tag-input';
 import { GROUPS_POST, GROUPS_POST_VALIDATE_IDENTIFIER, GROUP_USERS_POST, } from 'helpers/apicalls';
 
 import Button from 'components/Button';
-import BaseStyles, { PrimaryColor } from 'helpers/styles.js';
+import BaseStyles, { PrimaryColor, ScreenBackgroundColor } from 'helpers/styles.js';
 
 class CreateGroup extends React.Component {
 
@@ -152,7 +152,7 @@ const layout = StyleSheet.create({
     descriptionContainer: {
         padding: 25,
         justifyContent: 'center',
-        backgroundColor: '#EDEDED'
+        backgroundColor: ScreenBackgroundColor
     },
 
     tags: {

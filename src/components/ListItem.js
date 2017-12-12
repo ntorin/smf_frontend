@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import Button from 'react-native-button';
-import BaseStyles, { PrimaryColor } from 'helpers/styles.js';
+import BaseStyles, { PrimaryColor, ScreenBackgroundColor } from 'helpers/styles.js';
 import Avatar from 'components/Avatar';
 import { MarkdownView } from 'react-native-markdown-view';
 import Moment from 'moment';
@@ -12,22 +12,31 @@ class ListItem extends React.Component {
         super(props);
     }
 
+    renderTags(tags){
+      var tagsArray = tags.split(",");
+
+      return(
+        <View style={layout.row}>
+          {tagsArray.map(function(name, index){
+            return <View style={layout.row}><View style={styles.tag}><Text style={styles.tagText}>{name}</Text></View><Text>{" "}</Text></View>
+          })}
+        </View>
+      )
+    }
+
     renderTopic() {
         rd = this.props.rowData;
         console.log(this.props.rowData);
 
         return (
             <View style={styles.container}>
-                <View style={styles.textContainer}>
-                    <Text style={layout.title}>{rd.title}</Text>
+                    <Text style={styles.title}>{rd.title}</Text>
                     <View style={layout.row}>
-                        <Text>by {rd.name}</Text>
-                        <Text style={layout.count}>{rd.post_count} posts</Text>
+                        <Text style={[layout.name, styles.name]}>by {rd.name}</Text>
+                        <Text style={[layout.postsDate, styles.postsDate]}>{rd.post_count} posts • {Moment(rd.last_post_date).fromNow()}</Text>
                     </View>
-                    <Text>tags: {rd.tags} </Text>
-                    <Text>last activity on {Moment(rd.created_at).format('d MMM')}</Text>
-                    <Text>{rd.post_preview}</Text>
-                </View>
+                    <Text style={styles.preview}>{rd.post_preview}</Text>
+                    {this.renderTags(rd.tags)}
             </View>
         )
     }
@@ -150,8 +159,8 @@ class ListItem extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        borderRadius: 8,
-        backgroundColor: '#d3d3d3'
+      padding: 5,
+      backgroundColor: ScreenBackgroundColor
     },
     containerBlue: {
         borderRadius: 8,
@@ -161,15 +170,56 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         backgroundColor: PrimaryColor
     },
-    textContainer: {
-        padding: 10
+
+    title: {
+        fontSize: 20,
+        fontWeight: 'bold',
+    },
+
+    name: {
+      fontSize: 12,
+      textAlign: 'left',
+    },
+
+    postsDate: {
+      fontSize: 12,
+      textAlign: 'right',
+    },
+
+    preview: {
+      color: '#8e8e8e'
+    },
+
+    tag: {
+        paddingLeft: 5,
+        paddingRight: 5,
+        borderRadius: 8,
+        backgroundColor: PrimaryColor
+    },
+
+    tagText: {
+      color: '#FFFFFF'
     }
 });
 
 const layout = StyleSheet.create({
-    title: {
-        fontSize: 20,
+    row: {
+      flexDirection: 'row',
     },
+
+    namePostsDate: {
+      flexDirection: 'row'
+    },
+
+    name: {
+        flex: 1,
+    },
+
+    postsDate: {
+        flex: 1,
+        alignContent: 'flex-end',
+    },
+
     username: {
         fontSize: 24,
         textAlign: 'right',
@@ -186,9 +236,6 @@ const layout = StyleSheet.create({
         fontSize: 16,
         textAlignVertical: 'bottom',
         flex: 1,
-    },
-    row: {
-        flexDirection: 'row',
     },
     column: {
         flexDirection: 'column',

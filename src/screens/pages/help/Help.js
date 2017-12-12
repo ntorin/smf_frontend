@@ -11,7 +11,7 @@ class Help extends React.Component {
     render(){
         return(
             <View style={BaseStyles.container}>
-            
+
             </View>
         )
     }

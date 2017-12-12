@@ -10,7 +10,7 @@ import Background from 'components/Background';
 import BaseStyles, { PrimaryColor, PrimaryDimmed, NavMenu, ScreenBackgroundColor } from 'helpers/styles';
 import { AUTH_POST_SIGN_IN, AUTH_POST } from 'helpers/apicalls';
 import Button from 'components/Button';
-import { goToHome } from 'helpers/homepage';
+import { goToHome } from 'helpers/functions';
 
 class Login extends React.Component {
 
@@ -118,7 +118,7 @@ const layout = StyleSheet.create({
     contentContainer: {
         padding: 25,
         justifyContent: 'center',
-        backgroundColor: '#EDEDED'
+        backgroundColor: '#F9F9F9'
     },
 
     credentials: {
