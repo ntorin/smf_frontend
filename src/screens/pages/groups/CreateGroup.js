@@ -7,7 +7,7 @@ import TagInput from 'react-native-tag-input';
 import { GROUPS_POST, GROUPS_POST_VALIDATE_IDENTIFIER, GROUP_USERS_POST, } from 'helpers/apicalls';
 
 import Button from 'components/Button';
-import BaseStyles, { PrimaryColor, ScreenBackgroundColor } from 'helpers/styles.js';
+import { BaseStyles,  PrimaryColor, ScreenBackgroundColor } from 'helpers/constants.js';
 
 class CreateGroup extends React.Component {
 

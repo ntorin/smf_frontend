@@ -1,35 +1,86 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { GiftedChat } from 'react-native-gifted-chat';
+import { CONVERSATION_MESSAGES_POST, CONVERSATION_MESSAGES_POST_FETCH } from 'helpers/apicalls';
+import ActionCable from 'react-native-actioncable';
+import { WEBSOCKET_URL } from 'helpers/constants';
 
+const cable = ActionCable.createConsumer(WEBSOCKET_URL);
 
 class Chat extends React.Component {
 
-    state = {
-        messages: [],
-    };
+  constructor(props) {
+      super(props);
+      this.state = {
+          messages: [],
+          messageData: [{}],
+      };
 
-    componentWillMount() {
-        this.setState({
-            messages: [
-                {
-                    _id: 1,
-                    text: 'i lov u lime',
-                    createdAt: new Date(),
-                    user: {
-                        _id: 2,
-                        name: 'React Native',
-                        avatar: 'https://facebook.github.io/react/img/logo_og.png',
-                    },
-                },
-            ],
-        });
-    }
+      console.log("CONVERSATION_ID: " + this.props.conversation.id);
+      console.log("USER_ID: " + this.props.user.id);
+
+      var t = this;
+      cable.subscriptions.create(
+          { channel: "ConversationChannel", room: this.props.conversation.id },
+          {
+              received(msg) {
+                  console.log(msg)
+
+                  if (msg.sender_id != t.props.user.id) {
+                      var message = {
+                          _id: msg.id,
+                          text: msg.message,
+                          createdAt: new Date(msg.created_at),
+                          user: {
+                              _id: msg.user_id,
+                              name: msg.user.name,
+                              avatar: ''
+                          }
+                      }
+
+                      t.setState((previousState) => ({
+                          messages: GiftedChat.append(previousState.messages, message),
+                      }));
+                  }
+              }
+          }
+      );
+
+      this.getConversationMessages();
+  }
+
+  getConversationMessages(page){
+    CONVERSATION_MESSAGES_POST_FETCH(this.props.conversation.id, page)
+      .then((responseJSON) => {
+        console.log(responseJSON)
+                var currMessages = [];
+                responseJSON.forEach(function (msg) {
+                    var message = {
+                        _id: msg.id,
+                        text: msg.message,
+                        createdAt: new Date(msg.created_at),
+                        user: {
+                            _id: msg.user_id,
+                            name: msg.user.name,
+                            avatar: ''
+                        }
+                    }
+                    currMessages.push(message);
+                }, this);
+                this.setState((previousState) => ({ messages: GiftedChat.append(previousState.messages, currMessages) }))
+                console.log(currMessages)
+      })
+  }
 
     onSend(messages = []) {
         this.setState((previousState) => ({
             messages: GiftedChat.append(previousState.messages, messages),
         }));
+        var input = messages[0].text;
+        CONVERSATION_MESSAGES_POST(this.props.user.id, this.props.conversation.id, input)
+          .then((responseJSON) => {
+            console.log(responseJSON);
+          })
     }
 
     render() {
@@ -38,7 +89,7 @@ class Chat extends React.Component {
                 messages={this.state.messages}
                 onSend={(messages) => this.onSend(messages)}
                 user={{
-                    _id: 1,
+                    _id: this.props.user.id,
                 }}
             />
         );

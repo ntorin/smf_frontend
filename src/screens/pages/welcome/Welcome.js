@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import BaseStyles from 'helpers/styles';
-import { gotoHome } from 'helpers/functions';
+import { BaseStyles } from 'helpers/constants';
+import { gotoHome } from 'helpers/constants';
 
 class Welcome extends React.Component {
 

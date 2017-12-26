@@ -2,7 +2,7 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { TabViewAnimated, TabBar, SceneMap } from 'react-native-tab-view';
 import PopulatableListView from 'components/PopulatableListView';
-import { PrimaryColor, NavNoElevation } from 'helpers/styles';
+import { PrimaryColor, NavNoElevation } from 'helpers/constants';
 
 
 class Feed extends React.Component {

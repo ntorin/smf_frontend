@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, ListView } from 'react-native';
 import Button from 'apsl-react-native-button';
 import NavItem from 'components/NavItem';
 import LiteProfile from 'components/LiteProfile';
-import BaseStyles from 'helpers/styles.js';
+import { BaseStyles } from 'helpers/constants.js';
 
 class Nav extends React.Component {
 

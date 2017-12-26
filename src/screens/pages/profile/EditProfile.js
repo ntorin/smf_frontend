@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Text, TextInput} from 'react-native';
 import Button from 'components/Button';
-import BaseStyles, { PrimaryColor } from 'helpers/styles.js';
+import { BaseStyles,  PrimaryColor } from 'helpers/constants.js';
 
 class EditProfile extends React.Component {
 

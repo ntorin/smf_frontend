@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import LongTextInput from 'components/LongTextInput';
 import Button from 'components/Button';
-import BaseStyles from 'helpers/styles.js';
+import { BaseStyles } from 'helpers/constants.js';
 import { MarkdownEditor } from 'react-native-markdown-editor';
 import { POSTS_POST } from 'helpers/apicalls';
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import BaseStyles from 'helpers/styles.js';
+import { BaseStyles } from 'helpers/constants.js';
 import Button from 'components/Button';
 import { GROUP_USERS_POST } from 'helpers/apicalls';
 
@@ -16,7 +16,7 @@ class ViewGroup extends React.Component {
     goToBBS(){
         this.props.navigator.push({
             screen: 'smf_frontend.BBS',
-            title: rowData.name,
+            title: this.props.group.name,
             passProps: {
               group: this.props.group,
               user: this.props.user

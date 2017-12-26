@@ -1,10 +1,10 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import BaseStyles from 'helpers/styles.js';
-import { PrimaryColor, NavNoElevation } from 'helpers/styles';
+import { BaseStyles } from 'helpers/constants.js';
+import { PrimaryColor, NavNoElevation } from 'helpers/constants';
 import { TabViewAnimated, TabBar, SceneMap } from 'react-native-tab-view';
 import PopulatableListView from 'components/PopulatableListView';
-import { FRIENDS_FETCH, FRIENDS_POST, FRIENDS_POST_ACCEPT_REQUEST } from 'helpers/apicalls';
+import { FRIENDS_POST_FETCH, FRIENDS_POST, FRIENDS_POST_ACCEPT_REQUEST } from 'helpers/apicalls';
 
 class Friends extends React.Component {
 
@@ -14,17 +14,20 @@ class Friends extends React.Component {
   Friends = () => <PopulatableListView
                     type={'user'}
                     onFetch={this.getFriends}
-                    onPress={this.viewProfile} />;
+                    onPress={this.viewProfile}
+                    pagination={true} />;
 
   Incoming = () => <PopulatableListView
                     type={'user'}
                     onFetch={this.getIncoming}
-                    onPress={this.viewProfile} />;
+                    onPress={this.viewProfile}
+                    pagination={true} />;
 
   Outgoing = () => <PopulatableListView
                     type={'user'}
                     onFetch={this.getOutgoing}
-                    onPress={this.viewProfile} />;
+                    onPress={this.viewProfile}
+                    pagination={true} />;
 
     constructor(props){
         super(props);
@@ -43,8 +46,9 @@ class Friends extends React.Component {
         this.viewProfile = this.viewProfile.bind(this);
     }
 
-    getFriends(page = 1, callback, options){
-      FRIENDS_FETCH(this.props.user.id, 'all', 0, 100, null)
+    getFriends(page, callback, options){
+      console.log("running getFriends()");
+      FRIENDS_POST_FETCH(this.props.user.id, 'all', page)
         .then((responseJSON) => {
           callback(responseJSON, {
               allLoaded: true,
@@ -52,8 +56,8 @@ class Friends extends React.Component {
         })
     }
 
-    getIncoming(page = 1, callback, options){
-      FRIENDS_FETCH(this.props.user.id, 'incoming', 0, 100, null)
+    getIncoming(page, callback, options){
+      FRIENDS_POST_FETCH(this.props.user.id, 'incoming', page)
         .then((responseJSON) => {
           callback(responseJSON, {
               allLoaded: true,
@@ -61,8 +65,8 @@ class Friends extends React.Component {
         })
     }
 
-    getOutgoing(page = 1, callback, options){
-      FRIENDS_FETCH(this.props.user.id, 'outgoing', 0, 100, null)
+    getOutgoing(page, callback, options){
+      FRIENDS_POST_FETCH(this.props.user.id, 'outgoing', page)
         .then((responseJSON) => {
           callback(responseJSON, {
               allLoaded: true,
@@ -74,7 +78,7 @@ class Friends extends React.Component {
       this.props.navigator.push({
           screen: 'smf_frontend.Profile',
           title: rowData.name + '\'s Profile',
-          passProps: { user: rowData, myUser: this.props.user }
+          passProps: { user: rowData.friend, myUser: this.props.user }
       });
     }
 

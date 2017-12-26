@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, Text, Dimensions, Image, TextInput } from 'react-native';
-import BaseStyles from 'helpers/styles.js';
+import { BaseStyles } from 'helpers/constants.js';
 
 class Settings extends React.Component {
 

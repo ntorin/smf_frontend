@@ -101,9 +101,122 @@ let BLOCKS_URL = BASE_URL + "/blocks";
 
 let CONVERSATION_MESSAGES_URL = BASE_URL + "/conversation_messages";
 
+let CONVERSATION_MESSAGES_POST = (user_id, conversation_id, message) => {
+  var body = JSON.stringify({
+    user_id: user_id,
+    conversation_id: conversation_id,
+    message: message
+  })
+
+  return fetch(
+      CONVERSATION_MESSAGES_URL,
+      {
+          method: POST,
+          headers: JSON_HEADERS,
+          body: body
+      }
+  ).then((response) => {
+      return (response.json());
+  });
+}
+
+let CONVERSATION_MESSAGES_POST_FETCH = (conversation_id, page) => {
+  var body = JSON.stringify({
+    conversation_id: conversation_id,
+    page: page
+  })
+
+  return fetch(
+      CONVERSATION_MESSAGES_URL + "/fetch",
+      {
+          method: POST,
+          headers: JSON_HEADERS,
+          body: body
+      }
+  ).then((response) => {
+      return (response.json());
+  });
+}
+
 let CONVERSATION_USERS_URL = BASE_URL + "/conversation_users";
 
+let CONVERSATION_USERS_POST = (user_id, conversation_id) => {
+  var body = JSON.stringify({
+    user_id: user_id,
+    conversation_id: conversation_id
+  })
+
+  return fetch(
+      CONVERSATION_USERS_URL,
+      {
+          method: POST,
+          headers: JSON_HEADERS,
+          body: body
+      }
+  ).then((response) => {
+      return (response.json());
+  });
+}
+
+let CONVERSATION_USERS_POST_FETCH = (conversation_id, page) => {
+  var body = JSON.stringify({
+    conversation_id: conversation_id,
+    page: page
+  })
+
+  return fetch(
+      CONVERSATION_USERS_URL,
+      {
+          method: POST,
+          headers: JSON_HEADERS,
+          body: body
+      }
+  ).then((response) => {
+      return (response.json());
+  });
+}
+
 let CONVERSATIONS_URL = BASE_URL + "/conversations";
+
+let CONVERSATIONS_POST = (name, description, is_group) => {
+  var body = JSON.stringify({
+    name: name,
+    description: description,
+    is_group: is_group,
+  })
+
+  return fetch(
+      CONVERSATIONS_URL,
+      {
+          method: POST,
+          headers: JSON_HEADERS,
+          body: body
+      }
+  ).then((response) => {
+      return (response.json());
+  });
+}
+
+let CONVERSATIONS_POST_FETCH = (user_id, sort_by, query, page) => {
+  console.log(user_id)
+  var body = JSON.stringify({
+    user_id, user_id,
+    sort_by: sort_by,
+    query: query,
+    page: page
+  })
+
+  return fetch(
+      CONVERSATIONS_URL + "/fetch",
+      {
+          method: POST,
+          headers: JSON_HEADERS,
+          body: body
+      }
+  ).then((response) => {
+      return (response.json());
+  });
+}
 
 let CREDIT_HISTORIES_URL = BASE_URL + "/credit_histories";
 
@@ -111,15 +224,11 @@ let FEEDS_URL = BASE_URL + "/feeds";
 
 let FOLLOWS_URL = BASE_URL + "/follows";
 
-let FOLLOWS_POST = (following_id, follower_id, firstResponse) => {
+let FOLLOWS_POST = (following_id, follower_id) => {
     var body = JSON.stringify({
         following_id: following_id,
         follower_id: follower_id
     });
-
-    if (firstResponse == null) {
-        firstResponse = () => { };
-    }
 
     return fetch(
         FOLLOWS_URL,
@@ -129,24 +238,36 @@ let FOLLOWS_POST = (following_id, follower_id, firstResponse) => {
             body: body
         }
     ).then((response) => {
-        firstResponse();
         return (response.json());
     });
 }
 
+let FOLLOWS_POST_CHECK_REQUEST = (user_id, following_id) => {
+  var body = JSON.stringify({
+    user_id: user_id,
+    following_id: following_id
+  })
+
+  return fetch(
+      FOLLOWS_URL + '/check_request',
+      {
+          method: POST,
+          headers: JSON_HEADERS,
+          body: body
+      }
+  ).then((response) => {
+      return (response.json());
+  });
+}
+
 let FRIENDS_URL = BASE_URL + "/friends";
 
-let FRIENDS_FETCH = (user_id, fetch_type, offset, limit, firstResponse) => {
+let FRIENDS_POST_FETCH = (user_id, fetch_type, page) => {
     var body = JSON.stringify({
       user_id: user_id,
       fetch_type: fetch_type,
-      offset: offset,
-      limit: limit
+      page: page
     });
-
-    if (firstResponse == null) {
-        firstResponse = () => { };
-    }
 
     return fetch(
         FRIENDS_URL + "/fetch",
@@ -156,20 +277,16 @@ let FRIENDS_FETCH = (user_id, fetch_type, offset, limit, firstResponse) => {
             body: body
         }
     ).then((response) => {
-        firstResponse();
         return (response.json());
     });
 }
 
-let FRIENDS_POST = (friend_one, friend_two, firstResponse) => {
+let FRIENDS_POST = (friend_one, friend_two) => {
     var body = JSON.stringify({
         friend_one: friend_one,
-        friend_two: friend_two
+        friend_two: friend_two,
+        is_accepted: false
     });
-
-    if (firstResponse == null) {
-        firstResponse = () => { };
-    }
 
     return fetch(
         FRIENDS_URL,
@@ -179,20 +296,14 @@ let FRIENDS_POST = (friend_one, friend_two, firstResponse) => {
             body: body
         }
     ).then((response) => {
-        firstResponse();
         return (response.json());
     });
 }
 
-let FRIENDS_POST_ACCEPT_REQUEST = (request_id, firstResponse) => {
+let FRIENDS_POST_ACCEPT_REQUEST = (request_id) => {
     var body = JSON.stringify({
       request_id: request_id
     });
-
-    if (firstResponse == null) {
-        firstResponse = () => { };
-    }
-
     return fetch(
         FRIENDS_URL + "/accept_request",
         {
@@ -201,9 +312,26 @@ let FRIENDS_POST_ACCEPT_REQUEST = (request_id, firstResponse) => {
             body: body
         }
     ).then((response) => {
-        firstResponse();
         return (response.json());
     });
+}
+
+let FRIENDS_POST_CHECK_REQUEST = (user_id, friend_id) => {
+  var body = JSON.stringify({
+    user_id: user_id,
+    friend_id: friend_id
+  })
+
+  return fetch(
+      FRIENDS_URL + "/check_request",
+      {
+          method: POST,
+          headers: JSON_HEADERS,
+          body: body
+      }
+  ).then((response) => {
+      return (response.json());
+  });
 }
 
 let GROUPS_URL = BASE_URL + "/groups";
@@ -212,16 +340,14 @@ let GROUPS_URL = BASE_URL + "/groups";
  * Gets all groups.
  * @param {string} sort_by
  * @param {string} query
- * @param {number} offset
- * @param {number} limit
+ * @param {number} page
  */
-let GROUPS_POST_FETCH = (sort_by, query, offset, limit) => {
+let GROUPS_POST_FETCH = (sort_by, query, page) => {
 
     var body = JSON.stringify({
         sort_by: sort_by,
         query: query,
-        offset: offset,
-        limit: limit,
+        page: page
     });
 
     return fetch(
@@ -239,13 +365,8 @@ let GROUPS_POST_FETCH = (sort_by, query, offset, limit) => {
 /**
  * Gets a single group.
  * @param {*} group_id
- * @param {*} firstResponse
  */
-let GROUPS_GET_SINGLE = (group_id, firstResponse) => {
-
-    if (firstResponse == null) {
-        firstResponse = () => { };
-    }
+let GROUPS_GET_SINGLE = (group_id) => {
 
     return fetch(
         GROUPS_URL + "/" + group_id,
@@ -254,7 +375,6 @@ let GROUPS_GET_SINGLE = (group_id, firstResponse) => {
             headers: JSON_HEADERS
         }
     ).then((response) => {
-        firstResponse();
         return (response.json());
     });
 }
@@ -263,16 +383,15 @@ let GROUPS_GET_SINGLE = (group_id, firstResponse) => {
 /**
  * Creates a group.
  *
- * @param {number} creator_id
+ * @param {number} user_id
  * @param {string} identifier
  * @param {string} name
  * @param {string} description
  * @param {string} tags
- * @param {*} firstResponse
  */
-let GROUPS_POST = (creator_id, identifier, name, description, group_type, tags, firstResponse) => {
+let GROUPS_POST = (user_id, identifier, name, description, group_type, tags) => {
     var body = JSON.stringify({
-        creator_id: creator_id,
+        user_id: user_id,
         identifier: identifier,
         name: name,
         description: description,
@@ -285,10 +404,6 @@ let GROUPS_POST = (creator_id, identifier, name, description, group_type, tags, 
         lng: 0.0
     });
 
-    if (firstResponse == null) {
-        firstResponse = () => { };
-    }
-
     return fetch(
         GROUPS_URL,
         {
@@ -297,7 +412,6 @@ let GROUPS_POST = (creator_id, identifier, name, description, group_type, tags, 
             body: body
         }
     ).then((response) => {
-        firstResponse();
         return (response.json());
     });
 }
@@ -305,13 +419,8 @@ let GROUPS_POST = (creator_id, identifier, name, description, group_type, tags, 
 /**
  * Deletes a group.
  * @param {number} group_id
- * @param {*} firstResponse
  */
-let GROUPS_DELETE = (group_id, firstResponse) => {
-
-    if (firstResponse == null) {
-        firstResponse = () => { };
-    }
+let GROUPS_DELETE = (group_id) => {
 
     return fetch(
         GROUPS_URL + "/" + group_id,
@@ -320,19 +429,14 @@ let GROUPS_DELETE = (group_id, firstResponse) => {
             headers: JSON_HEADERS,
         }
     ).then((response) => {
-        firstResponse();
         return (response.json());
     });
 }
 
-let GROUPS_POST_VALIDATE_IDENTIFIER = (identifier, firstResponse) => {
+let GROUPS_POST_VALIDATE_IDENTIFIER = (identifier) => {
     var body = JSON.stringify({
         identifier: identifier,
     });
-
-    if (firstResponse == null) {
-        firstResponse = () => { };
-    }
 
     return fetch(
         GROUPS_URL + "/validate_identifier",
@@ -342,22 +446,17 @@ let GROUPS_POST_VALIDATE_IDENTIFIER = (identifier, firstResponse) => {
             body: body
         }
     ).then((response) => {
-        firstResponse();
         return (response.json());
     });
 }
 
 let GROUP_USERS_URL = BASE_URL + "/group_users";
 
-let GROUP_USERS_POST = (group_id, user_id, firstResponse) => {
+let GROUP_USERS_POST = (group_id, user_id) => {
     var body = JSON.stringify({
       group_id: group_id,
       user_id: user_id
     });
-
-    if (firstResponse == null) {
-        firstResponse = () => { };
-    }
 
     return fetch(
         GROUP_USERS_URL,
@@ -367,9 +466,26 @@ let GROUP_USERS_POST = (group_id, user_id, firstResponse) => {
             body: body
         }
     ).then((response) => {
-        firstResponse();
         return (response.json());
     });
+}
+
+let GROUP_USERS_POST_CHECK_REQUEST = (user_id, group_id) => {
+  var body = JSON.stringify({
+    user_id: user_id,
+    group_id: group_id
+  })
+
+  return fetch(
+      GROUP_USERS_URL + "/check_request",
+      {
+          method: POST,
+          headers: JSON_HEADERS,
+          body: body
+      }
+  ).then((response) => {
+      return (response.json());
+  });
 }
 
 let NOTIFICATIONS_URL = BASE_URL + "/notifications";
@@ -381,20 +497,13 @@ let POSTS_URL = BASE_URL + "/posts";
 /**
  *
  * @param {number} topic_id
- * @param {number} offset
- * @param {number} limit
- * @param {*} firstResponse
+ * @param {number} page
  */
-let POSTS_POST_FETCH = (topic_id, offset, limit, firstResponse) => {
+let POSTS_POST_FETCH = (topic_id, page) => {
     var body = JSON.stringify({
         topic_id: topic_id,
-        offset: offset,
-        limit: limit
+        page: page
     });
-
-    if (firstResponse == null) {
-        firstResponse = () => { };
-    }
 
     return fetch(
         POSTS_URL + "/fetch",
@@ -404,7 +513,6 @@ let POSTS_POST_FETCH = (topic_id, offset, limit, firstResponse) => {
             body: body
         }
     ).then((response) => {
-        firstResponse();
         return (response.json());
     });
 }
@@ -414,27 +522,22 @@ let POSTS_POST_FETCH = (topic_id, offset, limit, firstResponse) => {
 /**
  * Creates a post.
  * @param {number} topic_id
- * @param {number} creator_id
+ * @param {number} user_id
  * @param {string} number
  * @param {boolean} is_op
  * @param {boolean} is_anonymous
  */
-let POSTS_POST = (group_id, topic_id, creator_id, content, is_op, is_anonymous, firstResponse) => {
-    console.log("connecting to " + POSTS_URL);
+let POSTS_POST = (group_id, topic_id, user_id, content, is_op, is_anonymous) => {
     var body = JSON.stringify({
         group_id: group_id,
         topic_id: topic_id,
-        creator_id: creator_id,
+        user_id: user_id,
         content: content,
         is_op: is_op,
         is_anonymous: is_anonymous,
         likes: 0,
         dislikes: 0,
     });
-
-    if (firstResponse == null) {
-        firstResponse = () => { };
-    }
 
     return fetch(
         POSTS_URL,
@@ -444,7 +547,6 @@ let POSTS_POST = (group_id, topic_id, creator_id, content, is_op, is_anonymous, 
             body: body
         }
     ).then((response) => {
-        firstResponse();
         return (response.json());
     });
 }
@@ -452,13 +554,8 @@ let POSTS_POST = (group_id, topic_id, creator_id, content, is_op, is_anonymous, 
 /**
  * Deletes a post.
  * @param {*} post_id
- * @param {*} firstResponse
  */
-let POSTS_DELETE = (post_id, firstResponse) => {
-
-    if (firstResponse == null) {
-        firstResponse = () => { };
-    }
+let POSTS_DELETE = (post_id) => {
 
     return fetch(
         BASE_URL + "/" + post_id,
@@ -467,7 +564,6 @@ let POSTS_DELETE = (post_id, firstResponse) => {
             headers: JSON_HEADERS,
         }
     ).then((response) => {
-        firstResponse();
         return (response.json());
     });
 }
@@ -481,18 +577,15 @@ let TOPICS_URL = BASE_URL + "/topics";
  * @param {number} group_id ID of the group that the topics are in
  * @param {string} sort_by sort options: recent,
  * @param {string} query search string; LIKE searches topic names
- * @param {number} offset starting index to pull topics from
- * @param {number} limit amount of topics you want to pull
- * @param {*} firstResponse
+ * @param {number} page
  */
-let TOPICS_POST_FETCH = (group_id, sort_by, query, offset, limit) => {
+let TOPICS_POST_FETCH = (group_id, sort_by, query, page) => {
 
     var body = JSON.stringify({
         group_id: group_id,
         sort_by: sort_by,
         query: query,
-        offset: offset,
-        limit: limit
+        page: page
     });
 
     return fetch(
@@ -512,13 +605,8 @@ let TOPICS_POST_FETCH = (group_id, sort_by, query, offset, limit) => {
 /**
  * Gets a single topic.
  * @param {number} topic_id ID of the topic
- * @param {*} firstResponse
  */
-let TOPICS_GET_SINGLE = (topic_id, firstResponse) => {
-
-    if (firstResponse == null) {
-        firstResponse = () => { };
-    }
+let TOPICS_GET_SINGLE = (topic_id) => {
 
     return fetch(
         TOPICS_URL + "/" + topic_id,
@@ -527,7 +615,6 @@ let TOPICS_GET_SINGLE = (topic_id, firstResponse) => {
             headers: JSON_HEADERS
         })
         .then((response) => {
-            firstResponse();
             return (response.json());
         });
 }
@@ -535,23 +622,19 @@ let TOPICS_GET_SINGLE = (topic_id, firstResponse) => {
 /**
  * Creates a topic.
  * @param {number} group_id
- * @param {number} creator_id
+ * @param {number} user_id
  * @param {string} title
  * @param {number} topic_type
  * @param {string} tags
  */
-let TOPICS_POST = (group_id, creator_id, title, topic_type, tags, firstResponse) => {
+let TOPICS_POST = (group_id, user_id, title, topic_type, tags) => {
     var body = JSON.stringify({
         group_id: group_id,
-        creator_id,
+        user_id,
         title: title,
         topic_type: topic_type,
         tags: tags,
     });
-
-    if (firstResponse == null) {
-        firstResponse = () => { };
-    }
 
     return fetch(
         TOPICS_URL,
@@ -562,22 +645,15 @@ let TOPICS_POST = (group_id, creator_id, title, topic_type, tags, firstResponse)
         }
     )
         .then((response) => {
-            firstResponse();
             return (response.json());
-        }
-        );
+        });
 }
 
 /**
  * Deletes a topic.
  * @param {number} topic_id
- * @param {*} firstResponse
  */
-let TOPICS_DELETE = (topic_id, firstResponse) => {
-
-    if (firstResponse == null) {
-        firstResponse = () => { };
-    }
+let TOPICS_DELETE = (topic_id) => {
 
     return fetch(
         TOPICS_URL + "/" + topic_id,
@@ -587,26 +663,19 @@ let TOPICS_DELETE = (topic_id, firstResponse) => {
         }
     )
         .then((response) => {
-            firstResponse();
             return (response.json());
-        }
-        );
+        });
 }
 
 let USERS_URL = BASE_URL + "/users";
 
-let USERS_POST_FETCH = (identifier, name, sort_by, offset, limit, firstResponse) => {
+let USERS_POST_FETCH = (identifier, name, sort_by, page) => {
     var body = JSON.stringify({
         identifier: identifier,
         name: name,
         sort_by: sort_by,
-        offset: offset,
-        limit: limit
+        page: page
     });
-
-    if (firstResponse == null) {
-        firstResponse = () => { };
-    }
 
     return fetch(
         USERS_URL + '/fetch',
@@ -616,7 +685,6 @@ let USERS_POST_FETCH = (identifier, name, sort_by, offset, limit, firstResponse)
             body: body
         }
     ).then((response) => {
-        firstResponse();
         return (response.json());
     });
 }
@@ -626,10 +694,6 @@ let USERS_POST_VALIDATE_IDENTIFIER = (identifier) => {
         identifier: identifier,
     });
 
-    if (firstResponse == null) {
-        firstResponse = () => { };
-    }
-
     return fetch(
         USERS_URL + "/validate_identifier",
         {
@@ -638,7 +702,6 @@ let USERS_POST_VALIDATE_IDENTIFIER = (identifier) => {
             body: body
         }
     ).then((response) => {
-        firstResponse();
         return (response.json());
     });
 }
@@ -648,13 +711,25 @@ export {
     AUTH_POST,
     AUTH_POST_SIGN_IN,
 
-    FOLLOWS_POST,
+    CONVERSATION_MESSAGES_POST,
+    CONVERSATION_MESSAGES_POST_FETCH,
 
-    FRIENDS_FETCH,
+    CONVERSATION_USERS_POST,
+    CONVERSATION_USERS_POST_FETCH,
+
+    CONVERSATIONS_POST,
+    CONVERSATIONS_POST_FETCH,
+
+    FOLLOWS_POST,
+    FOLLOWS_POST_CHECK_REQUEST,
+
+    FRIENDS_POST_FETCH,
     FRIENDS_POST,
     FRIENDS_POST_ACCEPT_REQUEST,
+    FRIENDS_POST_CHECK_REQUEST,
 
     GROUP_USERS_POST,
+    GROUP_USERS_POST_CHECK_REQUEST,
 
     GROUPS_POST,
     GROUPS_POST_FETCH,

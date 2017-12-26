@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, ScrollView, Text } from 'react-native';
-import BaseStyles, { PrimaryColor } from 'helpers/styles.js';
+import { BaseStyles,  PrimaryColor } from 'helpers/constants.js';
 import LiteProfile from 'components/LiteProfile';
 import Button from 'components/Button';
 import { FRIENDS_POST, FOLLOWS_POST } from 'helpers/apicalls';
@@ -11,7 +11,10 @@ class ProfileInfo extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-
+          friendLoading: false,
+          friendDisabled: false,
+          followLoading: false,
+          followDisabled: false
         }
 
         this.addFriend = this.addFriend.bind(this);
@@ -19,16 +22,20 @@ class ProfileInfo extends React.Component {
     }
 
     addFriend() {
+      this.setState({friendLoading: true, followDisabled: true})
       FRIENDS_POST(this.props.myUser.id, this.props.user.id)
         .then((responseJSON) => {
           console.log(responseJSON)
+            this.setState({friendLoading: false, followDisabled: false})
         })
     }
 
     followUser() {
+      this.setState({followLoading: true, friendDisabled: true})
       FOLLOWS_POST(this.props.user.id, this.props.myUser.id)
         .then((responseJSON) => {
           console.log(responseJSON)
+            this.setState({followLoading: false, friendDisabled: false})
         })
     }
 
@@ -44,20 +51,14 @@ class ProfileInfo extends React.Component {
                         <Text style={layout.counts}>Posts: {this.props.user.post_count}</Text>
                         <Text style={layout.counts}>Topics: {this.props.user.topic_count}</Text>
                     </View>
-                    <View style={layout.containerBadges}>
-                    <ScrollView style={styles.containerBadges}>
-
-                    </ScrollView>
-                    </View>
                 </View>
 
-                <View>
-                <Button onPress={this.sendFriendRequest}>
-                  Send Friend Request
-                </Button>
-
-                <Button onPress={this.followUser}>
+                <View style={layout.row}>
+                <Button style={layout.button} onPress={this.followUser} isLoading={this.state.followLoading} isDisabled={this.state.followDisabled}>
                   {"Follow " + this.props.user.name}
+                </Button>
+                <Button style={layout.button} onPress={this.addFriend} isLoading={this.state.friendLoading} isDisabled={this.state.friendDisabled}>
+                  Send Friend Request
                 </Button>
                 </View>
             </View>
@@ -85,6 +86,14 @@ const layout = StyleSheet.create({
     },
     containerBadges: {
         flex: 3
+    },
+
+    row: {
+      flexDirection: 'row'
+    },
+
+    button: {
+      flex: 1
     }
 });
 
