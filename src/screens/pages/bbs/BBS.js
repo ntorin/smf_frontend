@@ -39,7 +39,7 @@ class BBS extends React.Component {
           break;
 
         case 'DeepLink':
-          console.log(event.link);
+          if(this.isVisible){
           const parts = event.link.split('/'); // Link parts
           const payload = event.payload; // (optional) The payload
           if (parts[0] == 'nav') {
@@ -50,13 +50,23 @@ class BBS extends React.Component {
             });
             // handle the link somehow, usually run a this.props.navigator command
           }
+        }
           break;
+      }
 
+      switch(event.id){
+        case 'didAppear':
+        console.log('appeared');
+        this.isVisible = this.props.navigator.screenIsCurrentlyVisible();
+        break;
+        case 'didDisappear':
+        console.log('disappeared');
+        this.isVisible = this.props.navigator.screenIsCurrentlyVisible();
+        break;
       }
     }
 
     getTopics(page, callback, options) {
-      console.log("running gettopics");
         TOPICS_POST_FETCH(this.props.group.id, this.state.sort_by, this.state.query, page)
             .then((responseJSON) => {
                 callback(responseJSON, {
@@ -150,6 +160,7 @@ const layout = StyleSheet.create({
     },
 
     topicList: {
+      flex: 1
     },
 });
 

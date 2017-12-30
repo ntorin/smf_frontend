@@ -48,7 +48,6 @@ class Groups extends React.Component {
     getGroups(page, callback, options) {
         GROUPS_POST_FETCH(this.state.sort_by, this.state.query, page)
             .then((responseJSON) => {
-                console.log("THE GROUPS: " + responseJSON[0])
                 callback(responseJSON, {
                     allLoaded: true,
                 })

@@ -44,8 +44,6 @@ class CreateGroup extends React.Component {
     validateIdentifier(){
       GROUPS_POST_VALIDATE_IDENTIFIER(this.state.identifier, null)
         .then((responseJSON) => {
-          console.log(responseJSON);
-          console.log(responseJSON.message + "; " + responseJSON.valid)
         })
     }
 

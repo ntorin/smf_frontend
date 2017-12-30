@@ -36,7 +36,6 @@ class Login extends React.Component {
 
     setFirstResponse = (response) => {
       this.setState({ responseHeaders: response.headers.map, status: response.status })
-        console.log(this.state)
     }
 
     loginUser() {
@@ -65,11 +64,13 @@ class Login extends React.Component {
     }
 
     validateAuthentication(responseJSON){
-      console.log(responseJSON);
-      //errors = responseJSON.errors[0] ? responseJSON.errors : responseJSON.errors.full_messages
       if (this.state.status == 200) {
         this.setState({ user: responseJSON.data })
-        goToHome(this.state.responseHeaders['uid'], this.state.responseHeaders['client'], this.state.responseHeaders['access-token'], this.state.user);
+        goToHome(this.state.responseHeaders['uid'][0],
+        this.state.responseHeaders['client'][0],
+        this.state.responseHeaders['access-token'][0],
+        this.state.responseHeaders['token-type'][0],
+        this.state.responseHeaders['expiry'][0], this.state.user);
       } else {
         Alert.alert('Login Error', "Please make sure your email and password are correct, and try again.", [{ text: "OK", }])
         this.setState({loginLoading: false, loginDisabled: false, registerLoading: false, registerDisabled: false})

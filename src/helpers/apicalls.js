@@ -4,9 +4,14 @@ let POST = "POST";
 let PUT = "PUT";
 let PATCH = "PATCH";
 let DELETE = "DELETE";
-let JSON_HEADERS = {
+var JSON_HEADERS = {
     'Accept': 'application/json',
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
+    'access-token': '',
+    'token-type': '',
+    'client': '',
+    'expiry': '',
+    'uid': '',
 }
 
 let TEMPLATE = (params, firstResponse) => {
@@ -198,7 +203,6 @@ let CONVERSATIONS_POST = (name, description, is_group) => {
 }
 
 let CONVERSATIONS_POST_FETCH = (user_id, sort_by, query, page) => {
-  console.log(user_id)
   var body = JSON.stringify({
     user_id, user_id,
     sort_by: sort_by,
@@ -222,12 +226,31 @@ let CREDIT_HISTORIES_URL = BASE_URL + "/credit_histories";
 
 let FEEDS_URL = BASE_URL + "/feeds";
 
+let FEEDS_POST_FETCH = (user_id, feed_type, page) => {
+  var body = JSON.stringify({
+    user_id: user_id,
+    feed_type: feed_type,
+    page: page
+  })
+
+  return fetch(
+      FEEDS_URL,
+      {
+          method: POST,
+          headers: JSON_HEADERS,
+          body: body
+      }
+  ).then((response) => {
+      return (response.json());
+  });
+}
+
 let FOLLOWS_URL = BASE_URL + "/follows";
 
-let FOLLOWS_POST = (following_id, follower_id) => {
+let FOLLOWS_POST = (user_id, following_id) => {
     var body = JSON.stringify({
         following_id: following_id,
-        follower_id: follower_id
+        follower_id: user_id
     });
 
     return fetch(
@@ -258,6 +281,16 @@ let FOLLOWS_POST_CHECK_REQUEST = (user_id, following_id) => {
   ).then((response) => {
       return (response.json());
   });
+}
+
+let FOLLOWS_DELETE = (follow_id) => {
+  return fetch(
+      FOLLOWS_URL + '/' + follow_id,
+      {
+          method: DELETE,
+          headers: JSON_HEADERS
+      }
+  )
 }
 
 let FRIENDS_URL = BASE_URL + "/friends";
@@ -332,6 +365,16 @@ let FRIENDS_POST_CHECK_REQUEST = (user_id, friend_id) => {
   ).then((response) => {
       return (response.json());
   });
+}
+
+let FRIENDS_DELETE = (friend_id) => {
+  return fetch(
+      FRIENDS_URL + '/' + friend_id,
+      {
+          method: DELETE,
+          headers: JSON_HEADERS
+      }
+  )
 }
 
 let GROUPS_URL = BASE_URL + "/groups";
@@ -428,9 +471,7 @@ let GROUPS_DELETE = (group_id) => {
             method: DELETE,
             headers: JSON_HEADERS,
         }
-    ).then((response) => {
-        return (response.json());
-    });
+    )
 }
 
 let GROUPS_POST_VALIDATE_IDENTIFIER = (identifier) => {
@@ -452,7 +493,7 @@ let GROUPS_POST_VALIDATE_IDENTIFIER = (identifier) => {
 
 let GROUP_USERS_URL = BASE_URL + "/group_users";
 
-let GROUP_USERS_POST = (group_id, user_id) => {
+let GROUP_USERS_POST =  (user_id, group_id) => {
     var body = JSON.stringify({
       group_id: group_id,
       user_id: user_id
@@ -486,6 +527,16 @@ let GROUP_USERS_POST_CHECK_REQUEST = (user_id, group_id) => {
   ).then((response) => {
       return (response.json());
   });
+}
+
+let GROUP_USERS_DELETE = (group_user_id) => {
+  return fetch(
+      GROUP_USERS_URL + "/" + group_user_id,
+      {
+          method: DELETE,
+          headers: JSON_HEADERS,
+      }
+  )
 }
 
 let NOTIFICATIONS_URL = BASE_URL + "/notifications";
@@ -563,9 +614,7 @@ let POSTS_DELETE = (post_id) => {
             method: DELETE,
             headers: JSON_HEADERS,
         }
-    ).then((response) => {
-        return (response.json());
-    });
+    )
 }
 
 let REPORTS_URL = BASE_URL + "/reports";
@@ -662,9 +711,6 @@ let TOPICS_DELETE = (topic_id) => {
             headers: JSON_HEADERS,
         }
     )
-        .then((response) => {
-            return (response.json());
-        });
 }
 
 let USERS_URL = BASE_URL + "/users";
@@ -706,8 +752,14 @@ let USERS_POST_VALIDATE_IDENTIFIER = (identifier) => {
     });
 }
 
+let USERS_PUT_UPDATE = () => {
+
+}
+
 
 export {
+    JSON_HEADERS,
+
     AUTH_POST,
     AUTH_POST_SIGN_IN,
 
@@ -720,16 +772,21 @@ export {
     CONVERSATIONS_POST,
     CONVERSATIONS_POST_FETCH,
 
+    FEEDS_POST_FETCH,
+
     FOLLOWS_POST,
     FOLLOWS_POST_CHECK_REQUEST,
+    FOLLOWS_DELETE,
 
     FRIENDS_POST_FETCH,
     FRIENDS_POST,
     FRIENDS_POST_ACCEPT_REQUEST,
     FRIENDS_POST_CHECK_REQUEST,
+    FRIENDS_DELETE,
 
     GROUP_USERS_POST,
     GROUP_USERS_POST_CHECK_REQUEST,
+    GROUP_USERS_DELETE,
 
     GROUPS_POST,
     GROUPS_POST_FETCH,
@@ -742,5 +799,6 @@ export {
     TOPICS_POST_FETCH,
 
     USERS_POST_FETCH,
-    USERS_POST_VALIDATE_IDENTIFIER
+    USERS_POST_VALIDATE_IDENTIFIER,
+    USERS_PUT_UPDATE
 }

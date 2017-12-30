@@ -27,6 +27,10 @@ class ListItem extends React.Component {
       )
     }
 
+    renderPreview(preview){
+      return preview && preview.length >= 50 ? <Text style={styles.dimmedFont}>{preview}...</Text> : <Text style={styles.dimmedFont}>{preview}</Text>;
+    }
+
     renderTopic() {
         rd = this.props.rowData;
 
@@ -37,7 +41,7 @@ class ListItem extends React.Component {
                         <Text style={[layout.name, styles.smallFont, styles.alignLeft]}>by {rd.user.name}</Text>
                         <Text style={[layout.flexEnd, styles.smallFont, styles.alignRight]}>{rd.post_count} posts • {Moment(rd.last_post_date).fromNow()}</Text>
                     </View>
-                    <Text style={styles.dimmedFont}>{rd.post_preview}</Text>
+                    {this.renderPreview(rd.post_preview)}
                     <View style={layout.row}>
                     {this.renderTags(rd.tags)}
                     <View style={[layout.row, layout.flexEnd, layout.stats]}>
@@ -77,7 +81,6 @@ class ListItem extends React.Component {
 
     renderPost() {
         rd = this.props.rowData;
-        console.log(this.props.rowData);
             return (
                 <View style={styles.container}>
                         <View>
@@ -97,7 +100,6 @@ class ListItem extends React.Component {
 
     renderNotification() {
         rd = this.props.rowData;
-        console.log(this.props.rowData);
 
         if (rd.is_seen) {
             return (
@@ -150,7 +152,6 @@ class ListItem extends React.Component {
 
     renderConversation(){
       rd = this.props.rowData;
-      console.log("convo: " + rd);
 
       return(
         <View style={styles.container}>
@@ -158,7 +159,7 @@ class ListItem extends React.Component {
                 <View style={layout.row}>
                 <Text style={[styles.smallFont, layout.flexEnd, styles.alignRight]}>last activity {Moment(rd.updated_at).fromNow()}</Text>
                 </View>
-                <Text style={styles.dimmedFont}>{rd.last_message}</Text>
+                {this.renderPreview(rd.last_message)}
                 <View style={layout.row}>
                 <View style={[layout.row, layout.flexEnd, layout.stats]}>
                 <Image source={require('assets/icons/membersmall.png')}/>

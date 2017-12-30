@@ -3,7 +3,7 @@ import { StyleSheet, View, ScrollView, Text } from 'react-native';
 import { BaseStyles,  PrimaryColor } from 'helpers/constants.js';
 import LiteProfile from 'components/LiteProfile';
 import Button from 'components/Button';
-import { FRIENDS_POST, FOLLOWS_POST } from 'helpers/apicalls';
+import { FRIENDS_POST, FRIENDS_POST_CHECK_REQUEST, FRIENDS_DELETE, FOLLOWS_POST, FOLLOWS_POST_CHECK_REQUEST, FOLLOWS_DELETE } from 'helpers/apicalls';
 import Moment from 'moment';
 
 class ProfileInfo extends React.Component {
@@ -11,32 +11,137 @@ class ProfileInfo extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-          friendLoading: false,
+          friendStatus: '',
+          friendLoading: true,
           friendDisabled: false,
-          followLoading: false,
+
+          followStatus: '',
+          followLoading: true,
           followDisabled: false
         }
 
         this.addFriend = this.addFriend.bind(this);
+        this.deleteFriend = this.deleteFriend.bind(this);
         this.followUser = this.followUser.bind(this);
+        this.unfollowUser = this.unfollowUser.bind(this);
+        this.checkFriend = this.checkFriend.bind(this);
+        this.checkFollow = this.checkFollow.bind(this);
+        this.renderFriendButton = this.renderFriendButton.bind(this);
+        this.renderFollowButton = this.renderFollowButton.bind(this);
+
+        this.checkFriend();
+        this.checkFollow();
+    }
+
+    checkFriend(){
+      FRIENDS_POST_CHECK_REQUEST(this.props.myUser.id, this.props.user.id)
+        .then((responseJSON) => {
+          this.setState({friend: responseJSON.friend,
+            friendStatus: responseJSON.status, friendLoading: false, followDisabled: false})
+        })
     }
 
     addFriend() {
       this.setState({friendLoading: true, followDisabled: true})
       FRIENDS_POST(this.props.myUser.id, this.props.user.id)
         .then((responseJSON) => {
-          console.log(responseJSON)
-            this.setState({friendLoading: false, followDisabled: false})
+          checkFriend();
+        })
+    }
+
+    deleteFriend(){
+      this.setState({friendLoading: true, followDisabled: true})
+      FRIENDS_DELETE(this.state.friend.id)
+        .then((responseJSON) => {
+          this.checkFriend();
+        })
+    }
+
+    checkFollow(){
+      FOLLOWS_POST_CHECK_REQUEST(this.props.myUser.id, this.props.user.id)
+        .then((responseJSON) => {
+          this.setState({follow: responseJSON.follow,
+            followStatus: responseJSON.status, followLoading: false,
+            friendDisabled: false})
         })
     }
 
     followUser() {
       this.setState({followLoading: true, friendDisabled: true})
-      FOLLOWS_POST(this.props.user.id, this.props.myUser.id)
+      FOLLOWS_POST(this.props.myUser.id, this.props.user.id)
         .then((responseJSON) => {
-          console.log(responseJSON)
-            this.setState({followLoading: false, friendDisabled: false})
+          this.checkFollow();
         })
+    }
+
+    unfollowUser(){
+      this.setState({followLoading: true, friendDisabled: true})
+      FOLLOWS_DELETE(this.state.follow.id)
+        .then((responseJSON) => {
+          this.checkFollow();
+        })
+    }
+
+    renderFriendButton(){
+      if(this.props.myUser.id != this.props.user.id){
+      switch(this.state.friendStatus){
+        case 'friends':
+        return(
+          <Button style={layout.button} onPress={this.deleteFriend} isLoading={this.state.friendLoading} isDisabled={this.state.friendDisabled}>
+            {"Unfriend " + this.props.user.name}
+          </Button>
+        )
+        break;
+
+        case 'awaiting response':
+        return(
+          <Button style={layout.button} onPress={this.deleteFriend} isLoading={this.state.friendLoading} isDisabled={this.state.friendDisabled}>
+            Cancel Friend Request
+          </Button>
+        )
+        break;
+
+        case 'accept request':
+        return(
+          <Button style={layout.button} onPress={this.addFriend} isLoading={this.state.friendLoading} isDisabled={this.state.friendDisabled}>
+            Accept Friend Request
+          </Button>
+        )
+        break;
+
+        case 'none':
+        return(
+          <Button style={layout.button} onPress={this.addFriend} isLoading={this.state.friendLoading} isDisabled={this.state.friendDisabled}>
+            Send Friend Request
+          </Button>
+        )
+        break;
+      }
+    }
+
+    }
+
+    renderFollowButton(){
+      if(this.props.myUser.id != this.props.user.id){
+      switch(this.state.followStatus){
+        case 'followed':
+        return(
+          <Button style={layout.button} onPress={this.unfollowUser} isLoading={this.state.followLoading} isDisabled={this.state.followDisabled}>
+            {"Unfollow " + this.props.user.name}
+          </Button>
+        )
+        break;
+
+        case 'none':
+        return(
+          <Button style={layout.button} onPress={this.followUser} isLoading={this.state.followLoading} isDisabled={this.state.followDisabled}>
+            {"Follow " + this.props.user.name}
+          </Button>
+        )
+        break;
+      }
+    }
+
     }
 
     render() {
@@ -52,14 +157,9 @@ class ProfileInfo extends React.Component {
                         <Text style={layout.counts}>Topics: {this.props.user.topic_count}</Text>
                     </View>
                 </View>
-
                 <View style={layout.row}>
-                <Button style={layout.button} onPress={this.followUser} isLoading={this.state.followLoading} isDisabled={this.state.followDisabled}>
-                  {"Follow " + this.props.user.name}
-                </Button>
-                <Button style={layout.button} onPress={this.addFriend} isLoading={this.state.friendLoading} isDisabled={this.state.friendDisabled}>
-                  Send Friend Request
-                </Button>
+                {this.renderFollowButton()}
+                {this.renderFriendButton()}
                 </View>
             </View>
         )

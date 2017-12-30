@@ -47,7 +47,6 @@ class Friends extends React.Component {
     }
 
     getFriends(page, callback, options){
-      console.log("running getFriends()");
       FRIENDS_POST_FETCH(this.props.user.id, 'all', page)
         .then((responseJSON) => {
           callback(responseJSON, {
@@ -77,7 +76,7 @@ class Friends extends React.Component {
     viewProfile(rowData){
       this.props.navigator.push({
           screen: 'smf_frontend.Profile',
-          title: rowData.name + '\'s Profile',
+          title: rowData.friend.name + '\'s Profile',
           passProps: { user: rowData.friend, myUser: this.props.user }
       });
     }

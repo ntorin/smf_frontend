@@ -15,17 +15,17 @@ class Nav extends React.Component {
                 icon: require('assets/icons/directory.png'),
                 screen: 'smf_frontend.UserDirectory'
             },
-            {
+            /*{
                 name: 'Notifications',
                 icon: require('assets/icons/notifications.png'),
                 screen: 'smf_frontend.Notifications'
-            },
+            },*/
             {
                 name: 'Friends',
                 icon: require('assets/icons/friends.png'),
                 screen: 'smf_frontend.Friends'
             },
-            {
+            /*{
                 name: 'Settings',
                 icon: require('assets/icons/settings.png'),
                 screen: 'smf_frontend.Settings'
@@ -34,7 +34,7 @@ class Nav extends React.Component {
                 name: 'Help',
                 icon: require('assets/icons/help.png'),
                 screen: 'smf_frontend.Help'
-            },
+            },*/
             {
                 name: 'About',
                 icon: require('assets/icons/about.png'),

@@ -10,7 +10,6 @@ class ViewTopic extends React.Component {
 
     constructor(props) {
         super(props);
-        console.log(this.props.topic.title);
         this.replyTopic = this.replyTopic.bind(this);
         this.getPosts = this.getPosts.bind(this);
         this.quotePost = this.quotePost.bind(this);
@@ -19,7 +18,6 @@ class ViewTopic extends React.Component {
     getPosts(page, callback, options) {
         POSTS_POST_FETCH(this.props.topic.id, page)
             .then((responseJSON) => {
-                console.log(responseJSON);
                 callback(responseJSON, {
                     allLoaded: true,
                 })

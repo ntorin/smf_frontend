@@ -40,7 +40,7 @@ class Profile extends React.Component {
                 this.props.navigator.push({
                     screen: 'smf_frontend.EditProfile',
                     title: 'Edit Your Profile',
-                    passProps: {}
+                    passProps: { user: this.props.myUser }
                 });
             }
         }

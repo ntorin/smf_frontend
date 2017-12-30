@@ -16,16 +16,11 @@ class Chat extends React.Component {
           messageData: [{}],
       };
 
-      console.log("CONVERSATION_ID: " + this.props.conversation.id);
-      console.log("USER_ID: " + this.props.user.id);
-
       var t = this;
       cable.subscriptions.create(
           { channel: "ConversationChannel", room: this.props.conversation.id },
           {
               received(msg) {
-                  console.log(msg)
-
                   if (msg.sender_id != t.props.user.id) {
                       var message = {
                           _id: msg.id,
@@ -52,7 +47,6 @@ class Chat extends React.Component {
   getConversationMessages(page){
     CONVERSATION_MESSAGES_POST_FETCH(this.props.conversation.id, page)
       .then((responseJSON) => {
-        console.log(responseJSON)
                 var currMessages = [];
                 responseJSON.forEach(function (msg) {
                     var message = {
@@ -68,7 +62,6 @@ class Chat extends React.Component {
                     currMessages.push(message);
                 }, this);
                 this.setState((previousState) => ({ messages: GiftedChat.append(previousState.messages, currMessages) }))
-                console.log(currMessages)
       })
   }
 
@@ -79,7 +72,6 @@ class Chat extends React.Component {
         var input = messages[0].text;
         CONVERSATION_MESSAGES_POST(this.props.user.id, this.props.conversation.id, input)
           .then((responseJSON) => {
-            console.log(responseJSON);
           })
     }
 
