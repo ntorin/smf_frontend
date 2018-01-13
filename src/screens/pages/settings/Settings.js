@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, Text, Dimensions, Image, TextInput } from 'react-native';
+import { BaseStyles } from 'helpers/constants.js';
 
 class Settings extends React.Component {
 
@@ -9,8 +10,8 @@ class Settings extends React.Component {
 
     render(){
         return(
-            <View style={styles.container}>
-            
+            <View style={BaseStyles.container}>
+
             </View>
         )
     }

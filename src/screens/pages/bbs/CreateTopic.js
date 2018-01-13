@@ -6,7 +6,7 @@ import { Fumi } from 'react-native-textinput-effects';
 import TagInput from 'react-native-tag-input';
 import { MarkdownEditor } from 'react-native-markdown-editor';
 import Button from 'components/Button';
-import BaseStyles, { PrimaryColor } from 'helpers/styles';
+import { BaseStyles,  PrimaryColor, ScreenBackgroundColor } from 'helpers/constants';
 import { POSTS_POST, TOPICS_POST } from 'helpers/apicalls';
 
 class CreateTopic extends React.Component {
@@ -31,7 +31,6 @@ class CreateTopic extends React.Component {
           .then((responseJSON) => {
             POSTS_POST(this.props.group_id, responseJSON.id, this.props.user.id, this.state.content, true, this.state.is_anonymous, null)
               .then((responseJSON) => {
-                console.log(responseJSON)
                 this.props.navigator.pop({
                   animated: true, // does the pop have transition animation or does it happen immediately (optional)
                   animationType: 'fade', // 'fade' (for both) / 'slide-horizontal' (for android) does the pop have different transition animation (optional)
@@ -104,7 +103,7 @@ const layout = StyleSheet.create({
     contentContainer: {
         padding: 25,
         justifyContent: 'center',
-        backgroundColor: '#EDEDED'
+        backgroundColor: ScreenBackgroundColor
     },
 
     tags: {

@@ -2,20 +2,30 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { TabViewAnimated, TabBar, SceneMap } from 'react-native-tab-view';
 import PopulatableListView from 'components/PopulatableListView';
-import { PrimaryColor, NavNoElevation } from 'helpers/styles';
-
-
+import { PrimaryColor, NavNoElevation } from 'helpers/constants';
+import { FEEDS_POST_FETCH } from 'helpers/apicalls';
 
 
 class Feed extends React.Component {
 
   static navigatorStyle = NavNoElevation;
+  isVisible = this.props.navigator.screenIsCurrentlyVisible();
 
-
-  All = () => <PopulatableListView />;
-  Follows = () => <PopulatableListView />;
-  Friends = () => <PopulatableListView />;
-  BBS = () => <PopulatableListView />;
+  All = () => <PopulatableListView
+                type={'feed'}
+                onFetch={this.getAllFeeds}
+                pagination={true} />;
+  Follows = () => <PopulatableListView
+                    type={'feed'}
+                    onFetch={this.getFollowFeeds}
+                    pagination={true} />;
+  Friends = () => <PopulatableListView
+                    type={'feed'}
+                    onFetch={this.getFriendFeeds}
+                    pagination={true} />;
+  BBS = () => <PopulatableListView
+                type={'feed'}
+                pagination={true} />;
 
   constructor(props) {
     super(props);
@@ -28,7 +38,49 @@ class Feed extends React.Component {
         { key: '4', title: 'BBS' },
       ],
     };
+
+    this.getAllFeeds = this.getAllFeeds.bind(this);
+    this.getFollowFeeds = this.getFollowFeeds.bind(this);
+    this.getFriendFeeds = this.getFriendFeeds.bind(this);
+    this.getGroupFeeds = this.getGroupFeeds.bind(this);
+
     this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
+  }
+
+  getAllFeeds(page, callback, options){
+    FEEDS_POST_FETCH(this.props.user.id, 'all', page)
+      .then((responseJSON) => {
+        callback(responseJSON, {
+            allLoaded: true,
+        })
+      })
+  }
+
+  getFollowFeeds(page, callback, options){
+    FEEDS_POST_FETCH(this.props.user.id, 'follows', page)
+      .then((responseJSON) => {
+        callback(responseJSON, {
+            allLoaded: true,
+        })
+      })
+  }
+
+  getFriendFeeds(page, callback, options){
+    FEEDS_POST_FETCH(this.props.user.id, 'friends', page)
+      .then((responseJSON) => {
+        callback(responseJSON, {
+            allLoaded: true,
+        })
+      })
+  }
+
+  getGroupFeeds(page, callback, options){
+    FEEDS_POST_FETCH(this.props.user.id, 'groups', page)
+      .then((responseJSON) => {
+        callback(responseJSON, {
+            allLoaded: true,
+        })
+      })
   }
 
   onNavigatorEvent(event) { // this is the onPress handler for the two buttons together
@@ -43,7 +95,7 @@ class Feed extends React.Component {
         break;
 
       case 'DeepLink':
-        console.log(event.link);
+        if(this.isVisible){
         const parts = event.link.split('/'); // Link parts
         const payload = event.payload; // (optional) The payload
         if (parts[0] == 'nav') {
@@ -54,8 +106,19 @@ class Feed extends React.Component {
           });
           // handle the link somehow, usually run a this.props.navigator command
         }
+      }
         break;
+    }
 
+    switch(event.id){
+      case 'didAppear':
+      console.log('appeared');
+      this.isVisible = this.props.navigator.screenIsCurrentlyVisible();
+      break;
+      case 'didDisappear':
+      console.log('disappeared');
+      this.isVisible = this.props.navigator.screenIsCurrentlyVisible();
+      break;
     }
   }
 

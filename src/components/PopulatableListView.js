@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import GiftedListView from 'react-native-gifted-listview';
 import ListItem from 'components/ListItem';
-import BaseStyles from 'helpers/styles.js';
+import { BaseStyles } from 'helpers/constants.js';
 
 class PopulatableListView extends React.Component {
 
@@ -19,7 +19,7 @@ class PopulatableListView extends React.Component {
 
     renderSeparator(){
         return (
-            <View style={{padding: 5}}/>
+            <View style={{backgroundColor: "#000000", height: StyleSheet.hairlineWidth}}/>
         )
     }
 
@@ -33,6 +33,7 @@ class PopulatableListView extends React.Component {
                 refreshable={true} // enable pull-to-refresh for iOS and touch-to-refresh for Android
                 withSections={false} // enable sections
                 renderSeparator={this.renderSeparator}
+                enableEmptySections={true}
                 customStyles={{
                     paginationView: {
                         backgroundColor: '#eee',

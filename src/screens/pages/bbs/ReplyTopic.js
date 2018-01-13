@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import LongTextInput from 'components/LongTextInput';
 import Button from 'components/Button';
-import BaseStyles from 'helpers/styles.js';
+import { BaseStyles } from 'helpers/constants.js';
 import { MarkdownEditor } from 'react-native-markdown-editor';
 import { POSTS_POST } from 'helpers/apicalls';
 
@@ -20,7 +20,6 @@ class ReplyTopic extends React.Component {
     createPost(){
       POSTS_POST(this.props.topic.group_id, this.props.topic.id, this.props.user.id, this.state.content, false, this.state.is_anonymous, null)
         .then((responseJSON) => {
-          console.log(responseJSON)
             this.props.navigator.pop({
                 animated: true,
                 animationType: 'fade'

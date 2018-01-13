@@ -1,10 +1,10 @@
-import { Platform } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Foundation from 'react-native-vector-icons/Foundation';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import { iconsMap, iconsLoaded } from 'helpers/icons-loader';
 import { Navigation } from 'react-native-navigation';
-import BaseStyles, { PrimaryColor, PrimaryDimmed, NavMenu, ScreenBackgroundColor } from 'helpers/styles';
+import { JSON_HEADERS } from 'helpers/apicalls';
 
 var tabs;
 
@@ -77,18 +77,93 @@ iconsLoaded.then(() => {
     ];
 });
 
+export const onNavEvent = (event) => { // this is the onPress handler for the two buttons together
+  switch (event.type) {
+    case 'NavBarButtonPress':
+      if (event.id == 'menu') { // this is the same id field from the static navigatorButtons definition
+        this.props.navigator.toggleDrawer({
+          side: 'left',
+          animated: true
+        })
+      }
+      break;
 
+    case 'DeepLink':
+      if(this.isVisible){
+      const parts = event.link.split('/'); // Link parts
+      const payload = event.payload; // (optional) The payload
+      if (parts[0] == 'nav') {
+        this.props.navigator.push({
+            screen: parts[1],
+            title: payload,
+            passProps: { user: this.props.user }
+        });
+        // handle the link somehow, usually run a this.props.navigator command
+      }
+    }
+      break;
+  }
 
-let goToHome = (uid, client, access_token, user) => {
-        var auth = {
-            uid: uid,
-            client: client,
-            access_token: access_token
-        }
+  switch(event.id){
+    case 'didAppear':
+    console.log('appeared');
+    this.isVisible = this.props.navigator.screenIsCurrentlyVisible();
+    break;
+    case 'didDisappear':
+    console.log('disappeared');
+    this.isVisible = this.props.navigator.screenIsCurrentlyVisible();
+    break;
+  }
+}
+
+export const WEBSOCKET_URL = 'ws://ec2-18-220-137-59.us-east-2.compute.amazonaws.com/cable'
+export const PrimaryColor = '#73cfc9';
+export const PrimaryDimmed = 'rgba(115, 207, 201, 0.5)';
+export const ScreenBackgroundColor = '#FFFFFF';
+export const BaseStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: ScreenBackgroundColor,
+    padding: 15
+  },
+
+  absolute: {
+        position: "absolute",
+        top: 0, left: 0, bottom: 0, right: 0,
+  },
+});
+
+export const NavMenu = {
+                leftButtons: [{
+                    icon: iconsMap['menu'],
+                    id: 'menu',
+                }]
+            };
+
+export const NavStyle = {
+            navBarBackgroundColor: 'rgba(0, 0, 0, 0.5)',
+            drawUnderNavBar: false,
+            navBarTranslucent: true,
+            tabBarBackgroundColor: 'rgba(0, 0, 0, 0.5)',
+            drawUnderTabBar: false,
+            tabBarTranslucent: true,
+        };
+
+export const NavNoElevation = {
+  topBarElevationShadowEnabled: false
+}
+
+export const goToHome = (uid, client, access_token, token_type, expiry, user) => {
+
+        JSON_HEADERS['access-token'] = access_token;
+        JSON_HEADERS['token-type'] = token_type;
+        JSON_HEADERS['client'] = client;
+        JSON_HEADERS['expiry'] = expiry;
+        JSON_HEADERS['uid'] = uid;
 
         var props = {
-            auth: auth,
             user: user,
+            myUser: user,
             group: {
               id: 1
             }
@@ -117,7 +192,3 @@ let goToHome = (uid, client, access_token, user) => {
             passProps: props
         });
     }
-
-export {
-  goToHome,
-};

@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, ListView } from 'react-native';
 import Button from 'apsl-react-native-button';
 import NavItem from 'components/NavItem';
 import LiteProfile from 'components/LiteProfile';
+import { BaseStyles } from 'helpers/constants.js';
 
 class Nav extends React.Component {
 
@@ -14,17 +15,17 @@ class Nav extends React.Component {
                 icon: require('assets/icons/directory.png'),
                 screen: 'smf_frontend.UserDirectory'
             },
-            {
+            /*{
                 name: 'Notifications',
                 icon: require('assets/icons/notifications.png'),
                 screen: 'smf_frontend.Notifications'
-            },
+            },*/
             {
                 name: 'Friends',
                 icon: require('assets/icons/friends.png'),
                 screen: 'smf_frontend.Friends'
             },
-            {
+            /*{
                 name: 'Settings',
                 icon: require('assets/icons/settings.png'),
                 screen: 'smf_frontend.Settings'
@@ -33,7 +34,7 @@ class Nav extends React.Component {
                 name: 'Help',
                 icon: require('assets/icons/help.png'),
                 screen: 'smf_frontend.Help'
-            },
+            },*/
             {
                 name: 'About',
                 icon: require('assets/icons/about.png'),
@@ -76,7 +77,7 @@ class Nav extends React.Component {
 
     render() {
         return (
-            <View style={layout.container}>
+            <View style={BaseStyles.container}>
                 <LiteProfile user={this.props.user} />
                 <ListView
                     style={layout.listView}

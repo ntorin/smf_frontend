@@ -7,10 +7,10 @@ import { Fumi } from 'react-native-textinput-effects';
 import { iconsMap, iconsLoaded } from 'helpers/icons-loader';
 import { Navigation } from 'react-native-navigation';
 import Background from 'components/Background';
-import BaseStyles, { PrimaryColor, PrimaryDimmed, NavMenu, ScreenBackgroundColor } from 'helpers/styles';
+import { BaseStyles,  PrimaryColor, PrimaryDimmed, NavMenu, ScreenBackgroundColor } from 'helpers/constants';
 import { AUTH_POST_SIGN_IN, AUTH_POST } from 'helpers/apicalls';
 import Button from 'components/Button';
-import { goToHome } from 'helpers/homepage';
+import { goToHome } from 'helpers/constants';
 
 class Login extends React.Component {
 
@@ -21,7 +21,12 @@ class Login extends React.Component {
             password: '',
             user: {},
             responseHeaders: '',
-            status: ''
+            status: '',
+
+            loginLoading: false,
+            loginDisabled: false,
+            registerLoading: false,
+            registerDisabled: false,
         };
 
         this.loginUser = this.loginUser.bind(this);
@@ -31,14 +36,15 @@ class Login extends React.Component {
 
     setFirstResponse = (response) => {
       this.setState({ responseHeaders: response.headers.map, status: response.status })
-        console.log(this.state)
     }
 
     loginUser() {
         var email = this.state.email;
         var password = this.state.password;
 
-        AUTH_POST_SIGN_IN('user0@smf.com', '313Ghioio', this.setFirstResponse)
+        this.setState({loginLoading: true, registerDisabled: true})
+
+        AUTH_POST_SIGN_IN('user1@smf.com', '313Ghioio', this.setFirstResponse)
             .then((responseJSON) => {
               this.validateAuthentication(responseJSON);
             });
@@ -49,6 +55,8 @@ class Login extends React.Component {
         var password = this.state.password;
         var password_confirmation = this.state.password;
 
+        this.setState({registerLoading: true, loginDisabled: true})
+
         AUTH_POST(email, password, password_confirmation, this.setFirstResponse)
             .then((responseJSON) => {
               this.validateAuthentication(responseJSON);
@@ -56,13 +64,16 @@ class Login extends React.Component {
     }
 
     validateAuthentication(responseJSON){
-      console.log(responseJSON);
-      //errors = responseJSON.errors[0] ? responseJSON.errors : responseJSON.errors.full_messages
       if (this.state.status == 200) {
         this.setState({ user: responseJSON.data })
-        goToHome(this.state.responseHeaders['uid'], this.state.responseHeaders['client'], this.state.responseHeaders['access-token'], this.state.user);
+        goToHome(this.state.responseHeaders['uid'][0],
+        this.state.responseHeaders['client'][0],
+        this.state.responseHeaders['access-token'][0],
+        this.state.responseHeaders['token-type'][0],
+        this.state.responseHeaders['expiry'][0], this.state.user);
       } else {
         Alert.alert('Login Error', "Please make sure your email and password are correct, and try again.", [{ text: "OK", }])
+        this.setState({loginLoading: false, loginDisabled: false, registerLoading: false, registerDisabled: false})
       }
     }
 
@@ -92,10 +103,10 @@ class Login extends React.Component {
                     />
                 </View>
                 <View style={layout.buttons}>
-                    <Button onPress={this.loginUser}>
+                    <Button onPress={this.loginUser} isLoading={this.state.loginLoading} isDisabled={this.state.loginDisabled}>
                         Login
                     </Button>
-                    <Button onPress={this.registerUser}>
+                    <Button onPress={this.registerUser} isLoading={this.state.registerLoading} isDisabled={this.state.registerDisabled}>
                         Register
                     </Button>
                 </View>
@@ -118,7 +129,7 @@ const layout = StyleSheet.create({
     contentContainer: {
         padding: 25,
         justifyContent: 'center',
-        backgroundColor: '#EDEDED'
+        backgroundColor: '#F9F9F9'
     },
 
     credentials: {

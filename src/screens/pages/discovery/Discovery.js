@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { TabViewAnimated, TabBar, SceneMap } from 'react-native-tab-view';
 import PopulatableListView from 'components/PopulatableListView';
-import { PrimaryColor, BaseStyles, NavNoElevation } from 'helpers/styles';
+import { PrimaryColor, BaseStyles, NavNoElevation } from 'helpers/constants';
 
 class Discovery extends React.Component {
 

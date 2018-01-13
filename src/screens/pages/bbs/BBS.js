@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Text, TextInput } from 'react-native';
 import PopulatableListView from 'components/PopulatableListView';
 import Button from 'components/Button';
-import BaseStyles, { PrimaryColor } from 'helpers/styles.js';
+import { BaseStyles,  PrimaryColor } from 'helpers/constants.js';
 import { TOPICS_POST_FETCH } from 'helpers/apicalls.js';
 
 class BBS extends React.Component {
@@ -10,7 +10,13 @@ class BBS extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            searchQuery: '',
+            query: '',
+            sort_by: 'recent',
+
+            searchLoading: false,
+            searchDisabled: false,
+            newTopicLoading: false,
+            newTopicDisabled: false
         };
 
         this.createTopic = this.createTopic.bind(this);
@@ -22,27 +28,51 @@ class BBS extends React.Component {
     }
 
     onNavigatorEvent(event) { // this is the onPress handler for the two buttons together
-        if (event.type == 'NavBarButtonPress') { // this is the event type for button presses
+      switch (event.type) {
+        case 'NavBarButtonPress':
+          if (event.id == 'menu') { // this is the same id field from the static navigatorButtons definition
+            this.props.navigator.toggleDrawer({
+              side: 'left',
+              animated: true
+            })
+          }
+          break;
 
-            if (event.id == 'menu') { // this is the same id field from the static navigatorButtons definition
-                this.props.navigator.toggleDrawer({
-                    side: 'left',
-                    animated: true
-                })
-            }
+        case 'DeepLink':
+          if(this.isVisible){
+          const parts = event.link.split('/'); // Link parts
+          const payload = event.payload; // (optional) The payload
+          if (parts[0] == 'nav') {
+            this.props.navigator.push({
+                screen: parts[1],
+                title: payload,
+                passProps: { user: this.props.user }
+            });
+            // handle the link somehow, usually run a this.props.navigator command
+          }
         }
+          break;
+      }
+
+      switch(event.id){
+        case 'didAppear':
+        console.log('appeared');
+        this.isVisible = this.props.navigator.screenIsCurrentlyVisible();
+        break;
+        case 'didDisappear':
+        console.log('disappeared');
+        this.isVisible = this.props.navigator.screenIsCurrentlyVisible();
+        break;
+      }
     }
 
-    getTopics(page = 1, callback, options) {
-      console.log("Propas: " + this.props.group.id);
-        TOPICS_POST_FETCH(this.props.group.id, 'recent', '', 0, 25, null)
+    getTopics(page, callback, options) {
+        TOPICS_POST_FETCH(this.props.group.id, this.state.sort_by, this.state.query, page)
             .then((responseJSON) => {
-              console.log(responseJSON)
                 callback(responseJSON, {
                     allLoaded: true,
                 })
             });
-
     }
 
     advancedSearch() {
@@ -84,16 +114,16 @@ class BBS extends React.Component {
                         placeholderTextColor={PrimaryColor}
                         selectionColor={PrimaryColor}
                         textAlign='center'
-                        onChangeText={(text) => this.setState({ searchQuery: text })}
+                        onChangeText={(text) => this.setState({ query: text })}
                         autoCorrect={true}
                         autoCapitalize={'none'}
                         returnKeyType={'search'} />
-                    <Button style={layout.advancedSearchButton} onPress={this.advancedSearch}>
+                    <Button style={layout.advancedSearchButton} onPress={this.advancedSearch} isLoading={this.state.searchLoading} isDisabled={this.state.searchDisabled}>
                         Advanced
                     </Button>
                 </View>
                 <View>
-                    <Button style={layout.newTopicButton} onPress={this.createTopic}>
+                    <Button style={layout.newTopicButton} onPress={this.createTopic} isLoading={this.state.newTopicLoading} isDisabled={this.state.newTopicDisabled}>
                         New Topic
                     </Button>
                 </View>
@@ -102,7 +132,7 @@ class BBS extends React.Component {
                         type={'topic'}
                         onFetch={this.getTopics}
                         onPress={this.viewTopic}
-                        pagination={false}
+                        pagination={true}
                     />
                 </View>
             </View>
@@ -130,6 +160,7 @@ const layout = StyleSheet.create({
     },
 
     topicList: {
+      flex: 1
     },
 });
 

@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Text, Dimensions, Image, TextInput } from 'react-native';
 import PopulatableListView from 'components/PopulatableListView';
 import { USERS_POST_FETCH } from 'helpers/apicalls';
+import { BaseStyles } from 'helpers/constants.js';
 
 class UserDirectory extends React.Component {
 
@@ -31,7 +32,7 @@ class UserDirectory extends React.Component {
     viewProfile(rowData){
       this.props.navigator.push({
           screen: 'smf_frontend.Profile',
-          title: 'Search Topics',
+          title: rowData.name + "\'s Profile",
           passProps: {
             user: rowData,
             myUser: this.props.user
@@ -41,7 +42,7 @@ class UserDirectory extends React.Component {
 
     render(){
         return(
-            <View style={styles.container}>
+            <View style={BaseStyles.container}>
             <PopulatableListView
                 type={'user'}
                 onFetch={this.getUsers}

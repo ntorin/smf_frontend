@@ -1,84 +1,50 @@
 import React from 'react';
 import { StyleSheet, View, Text, Dimensions, Image, TextInput, ListView, RefreshControl } from 'react-native';
 import Button from 'components/Button';
-import {BaseStyles, NavStyle, PrimaryColor} from 'helpers/styles.js';
-
-var friendList = [
-                {
-                    friendName: 'salsa',
-                    friendLastMessage: 'i lov u',
-                    friendMessageDate: new Date().toDateString(),
-                    friendNumberUnread: 1,
-                },
-                {
-                    friendName: 'kappa',
-                    friendLastMessage: 'keepo',
-                    friendMessageDate: new Date().toDateString(),
-                    friendNumberUnread: 0,
-                },
-            ]
-
-var navigatorStyle = NavStyle;
+import PopulatableListView from 'components/PopulatableListView';
+import ActionCable from 'react-native-actioncable';
+import {BaseStyles, NavStyle, PrimaryColor} from 'helpers/constants.js';
+import { CONVERSATIONS_POST_FETCH } from 'helpers/apicalls';
 
 class Messages extends React.Component {
 
     constructor(props) {
         super(props);
-        const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
         this.state = {
-            refreshing: false,
-            friendList: friendList,
-            friends: ds.cloneWithRows(friendList)
+          query: '',
+          sort_by: 'recent'
         };
-        
+
+        this.getConversations = this.getConversations.bind(this);
+        this.goToChat = this.goToChat.bind(this);
     }
 
-    _onRefresh() {
-        this.setState({ refreshing: true });
-        this.fetchFriends().then(() => {
-            this.setState({ refreshing: false });
-        });
-    }
+    onNavigatorEvent(event) { // this is the onPress handler for the two buttons together
+        if (event.type == 'NavBarButtonPress') { // this is the event type for button presses
 
-    fetchFriends() {
-        //get list of friend chats
-    }
-
-    
-
-    renderRow(rowData){
-        if(rowData.friendNumberUnread>0){
-            return(
-                    <Button onPress={() => this.goToChat(rowData)} style={styles.listItem}>
-                        <View style={styles.containerMessage}>    
-                            <Text style={styles.username}>{rowData.friendName} - </Text>
-                            <Text style={styles.message}>{rowData.friendLastMessage} - </Text>
-                            <Text style={{textAlign: 'left'}}>Received {rowData.friendMessageDate} </Text>
-                        </View>
-                        <View style={styles.containerUnread}>
-                            <Text style={styles.unread}>{rowData.friendNumberUnread}</Text>
-                        </View>
-                    </Button>
-            )
-        }
-        else{
-            return(
-                    <Button onPress={() => this.goToChat(rowData)} style={styles.listItem}>
-                        <View style={styles.containerMessage}>    
-                            <Text style={styles.username}>{rowData.friendName} - </Text>
-                            <Text style={styles.message}>{rowData.friendLastMessage} - </Text>
-                            <Text style={{textAlign: 'left'}}>Received {rowData.friendMessageDate} </Text>
-                        </View>
-                    </Button>
-            )
+            if (event.id == 'menu') { // this is the same id field from the static navigatorButtons definition
+                this.props.navigator.toggleDrawer({
+                    side: 'left',
+                    animated: true
+                })
+            }
         }
     }
 
-    goToChat(rowData){ 
+    getConversations(page, callback, options) {
+      CONVERSATIONS_POST_FETCH(this.props.user.id, this.state.sort_by, this.state.query, page)
+        .then((responseJSON) => {
+          callback(responseJSON, {
+            allLoaded: true
+          })
+        })
+    }
+
+    goToChat(rowData){
         this.props.navigator.push({
             screen: 'smf_frontend.Chat',
-            title: 'Chat with ' + rowData.friendName,
-            passProps: {friend: rowData}
+            title: rowData.name,
+            passProps: { conversation: rowData, user: this.props.user }
         });
     }
 
@@ -88,17 +54,17 @@ class Messages extends React.Component {
 
     render() {
         return (
-            <View style={styles.container}>
+            <View style={layout.container}>
                 <TextInput placeholder={'🔎 Search...'} autoCorrect={false} autoCapitalize={'none'}
                     keyboardType={'web-search'} onSubmitEditing={() => this.filterQuery()} style={styles.searchBar} />
-                <ListView
-                    dataSource={this.state.friends}
-                    refreshControl={
-                        <RefreshControl
-                            refreshing={this.state.refreshing}
-                            onRefresh={this._onRefresh.bind(this)}
-                        />}
-                    renderRow={this.renderRow.bind(this)} />
+                    <View style={layout.conversationList}>
+                        <PopulatableListView
+                            type={'conversation'}
+                            onFetch={this.getConversations}
+                            onPress={this.goToChat}
+                            pagination={true}
+                        />
+                    </View>
 
             </View>
         )
@@ -106,49 +72,16 @@ class Messages extends React.Component {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        paddingRight: 10,
-        paddingLeft: 10,
-    },
-    containerUnread: {
-        flex: 1,
-        borderRadius: 8,
-        backgroundColor: '#FF0000',
-        alignContent: 'flex-start',
-        padding: 4
-    },
-    containerMessage:{
-        flex: 15,
-        paddingLeft: 8,
-        flexDirection: 'row',
-    },
-    unread:{
-        fontWeight: 'bold',
-        textAlign: 'center',
-        color: '#FFFFFF',
-        fontSize: 16
-    },
-    username:{
-        fontWeight: 'bold',
-        textAlign: 'left'
-    },
-    message:{
-        fontStyle: 'italic',
-        textAlign: 'left'
-    },
-    backgroundImage: {
-        flex: 1,
-        resizeMode: 'cover'
-    },
+});
 
-    searchBar: {
-        textAlign: 'center'
-    },
+const layout = StyleSheet.create({
+  container: {
 
-    listItem: {
-        flexDirection: 'row'
-    },
+  },
+
+  conversationList: {
+
+  }
 });
 
 export default Messages;

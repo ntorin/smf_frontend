@@ -7,7 +7,7 @@ import TagInput from 'react-native-tag-input';
 import { GROUPS_POST, GROUPS_POST_VALIDATE_IDENTIFIER, GROUP_USERS_POST, } from 'helpers/apicalls';
 
 import Button from 'components/Button';
-import BaseStyles, { PrimaryColor } from 'helpers/styles.js';
+import { BaseStyles,  PrimaryColor, ScreenBackgroundColor } from 'helpers/constants.js';
 
 class CreateGroup extends React.Component {
 
@@ -44,8 +44,6 @@ class CreateGroup extends React.Component {
     validateIdentifier(){
       GROUPS_POST_VALIDATE_IDENTIFIER(this.state.identifier, null)
         .then((responseJSON) => {
-          console.log(responseJSON);
-          console.log(responseJSON.message + "; " + responseJSON.valid)
         })
     }
 
@@ -152,7 +150,7 @@ const layout = StyleSheet.create({
     descriptionContainer: {
         padding: 25,
         justifyContent: 'center',
-        backgroundColor: '#EDEDED'
+        backgroundColor: ScreenBackgroundColor
     },
 
     tags: {

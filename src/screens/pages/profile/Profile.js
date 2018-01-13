@@ -3,7 +3,7 @@ import { StyleSheet, View, Text } from 'react-native';
 import { TabViewAnimated, TabBar, SceneMap } from 'react-native-tab-view';
 import PopulatableListView from 'components/PopulatableListView';
 import { iconsMap } from 'helpers/icons-loader';
-import BaseStyles, { PrimaryColor, NavNoElevation } from 'helpers/styles.js';
+import { BaseStyles,  PrimaryColor, NavNoElevation } from 'helpers/constants.js';
 import ProfileInfo from './ProfileInfo';
 
 class Profile extends React.Component {
@@ -11,7 +11,7 @@ class Profile extends React.Component {
 
     static navigatorStyle = NavNoElevation;
 
-    Info = () => <ProfileInfo user={this.props.user} />;
+    Info = () => <ProfileInfo user={this.props.user} myUser={this.props.myUser} />;
     Activity = () => <PopulatableListView />;
 
     constructor(props) {
@@ -40,7 +40,7 @@ class Profile extends React.Component {
                 this.props.navigator.push({
                     screen: 'smf_frontend.EditProfile',
                     title: 'Edit Your Profile',
-                    passProps: {}
+                    passProps: { user: this.props.myUser }
                 });
             }
         }

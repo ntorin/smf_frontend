@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import BaseStyles from 'helpers/styles.js';
+import { BaseStyles } from 'helpers/constants.js';
 
 class Help extends React.Component {
 
@@ -11,7 +11,7 @@ class Help extends React.Component {
     render(){
         return(
             <View style={BaseStyles.container}>
-            
+
             </View>
         )
     }

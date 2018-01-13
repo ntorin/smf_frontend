@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, Text, Image, findNodeHandle } from 'react-native';
-import BaseStyles from 'helpers/styles.js';
+import {BaseStyles} from 'helpers/constants.js';
 import { BlurView } from 'react-native-blur';
 
 

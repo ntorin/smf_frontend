@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Text, TextInput } from 'react-native';
 import PopulatableListView from 'components/PopulatableListView';
 import Button from 'components/Button';
-import BaseStyles, { PrimaryColor } from 'helpers/styles.js';
+import { BaseStyles,  PrimaryColor } from 'helpers/constants.js';
 import { GROUPS_POST_FETCH } from 'helpers/apicalls.js';
 import Modal from 'components/Modal';
 
@@ -14,10 +14,18 @@ class Groups extends React.Component {
             isModalVisible: false,
             username: '',
             userid: '',
+            sort_by: 'recent',
+            query: '',
+
+            advancedSearchLoading: false,
+            advancedSearchDisabled: false,
+            newGroupLoading: false,
+            newGroupDisabled: false
         }
 
         this.createGroup = this.createGroup.bind(this);
         this.viewGroup = this.viewGroup.bind(this);
+        this.getGroups = this.getGroups.bind(this);
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
     }
 
@@ -37,10 +45,9 @@ class Groups extends React.Component {
         }
     }
 
-    getGroups(page = 1, callback, options) {
-        GROUPS_POST_FETCH('recent', '', 0, 25)
+    getGroups(page, callback, options) {
+        GROUPS_POST_FETCH(this.state.sort_by, this.state.query, page)
             .then((responseJSON) => {
-                console.log("THE GROUPS: " + responseJSON)
                 callback(responseJSON, {
                     allLoaded: true,
                 })
@@ -52,6 +59,8 @@ class Groups extends React.Component {
     }
 
     createGroup() {
+      this.setState({newGroupLoading: true, advancedSearchDisabled: true})
+
         this.props.navigator.push({
             screen: 'smf_frontend.CreateGroup',
             title: 'Create Group',
@@ -59,6 +68,11 @@ class Groups extends React.Component {
               user: this.props.user
             }
         });
+
+        var t = this;
+        setTimeout(function(){
+          t.setState({newGroupLoading: false, advancedSearchDisabled: false})
+        }, 500)
     }
 
     viewGroup(rowData) {
@@ -112,16 +126,24 @@ class Groups extends React.Component {
                         placeholderTextColor={PrimaryColor}
                         selectionColor={PrimaryColor}
                         textAlign='center'
-                        onChangeText={(text) => this.setState({ searchQuery: text })}
+                        onChangeText={(text) => this.setState({ query: text })}
                         autoCorrect={true}
                         autoCapitalize={'none'}
                         returnKeyType={'search'} />
-                    <Button style={layout.advancedSearchButton} onPress={this._showModal}>
+                    <Button
+                    style={layout.advancedSearchButton}
+                    onPress={this._showModal}
+                    isLoading={this.state.advancedSearchLoading}
+                    isDisabled={this.state.advancedSearchDisabled}>
                         Advanced
                     </Button>
                 </View>
                 <View>
-                    <Button style={layout.newTopicButton} onPress={this.createGroup}>
+                    <Button
+                    style={layout.newTopicButton}
+                    onPress={this.createGroup}
+                    isLoading={this.state.newGroupLoading}
+                    isDisabled={this.state.newGroupDisabled}>
                         New Group
                     </Button>
                 </View>
