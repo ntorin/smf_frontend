@@ -19,7 +19,11 @@ class EditProfile extends React.Component {
     }
 
     updateUserInfo(){
-      USERS_PUT_UPDATE()
+        console.log(this.state);
+      USERS_PUT_UPDATE(this.props.user.id, this.state.name, this.state.blurb, this.state.birthday)
+        .then((responseJSON) => {
+            console.log(responseJSON);
+        })
     }
 
     render(){
@@ -60,9 +64,9 @@ class EditProfile extends React.Component {
                     />
                 </View>
                 <View style={{padding: 8}}>
-                    <Button onPress={this.updateUserInfo}>
-                        Save
-                    </Button>
+                    <Button 
+                    title={"Save"} 
+                    onPress={this.updateUserInfo}/>
                 </View>
             </View>
         )

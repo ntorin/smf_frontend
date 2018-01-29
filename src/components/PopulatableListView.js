@@ -13,14 +13,17 @@ class PopulatableListView extends React.Component {
 
     renderRowView(rowData) {
         return (
-            <ListItem rowData={rowData} type={this.props.type} onPress={this.props.onPress} />
+            <ListItem rowData={rowData} type={this.props.type} onPress={this.props.onPress} onLongPress={this.props.onLongPress} />
         )
     }
 
-    renderSeparator(){
+    renderSeparator() {
         return (
-            <View style={{backgroundColor: "#000000", height: StyleSheet.hairlineWidth}}/>
+            <View style={{ backgroundColor: "#000000", height: StyleSheet.hairlineWidth }} />
         )
+    }
+    renderPaginationAllLoadedView() {
+        return (<View/>);
     }
 
     render() {
@@ -33,6 +36,7 @@ class PopulatableListView extends React.Component {
                 refreshable={true} // enable pull-to-refresh for iOS and touch-to-refresh for Android
                 withSections={false} // enable sections
                 renderSeparator={this.renderSeparator}
+                paginationAllLoadedView={this.renderPaginationAllLoadedView}
                 enableEmptySections={true}
                 customStyles={{
                     paginationView: {

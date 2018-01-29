@@ -20,7 +20,11 @@ class Chat extends React.Component {
       cable.subscriptions.create(
           { channel: "ConversationChannel", room: this.props.conversation.id },
           {
+              connected(){console.log('connected')},
+              disconnected(){console.log('disconnected')},
+
               received(msg) {
+                  console.log(msg);
                   if (msg.sender_id != t.props.user.id) {
                       var message = {
                           _id: msg.id,
@@ -28,7 +32,7 @@ class Chat extends React.Component {
                           createdAt: new Date(msg.created_at),
                           user: {
                               _id: msg.user_id,
-                              name: msg.user.name,
+                              name: msg.name,
                               avatar: ''
                           }
                       }

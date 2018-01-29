@@ -6,7 +6,7 @@ import { Fumi } from 'react-native-textinput-effects';
 import TagInput from 'react-native-tag-input';
 import { MarkdownEditor } from 'react-native-markdown-editor';
 import Button from 'components/Button';
-import { BaseStyles,  PrimaryColor, ScreenBackgroundColor } from 'helpers/constants';
+import { BaseStyles, PrimaryColor, ScreenBackgroundColor } from 'helpers/constants';
 import { POSTS_POST, TOPICS_POST } from 'helpers/apicalls';
 
 class CreateTopic extends React.Component {
@@ -24,19 +24,19 @@ class CreateTopic extends React.Component {
         this.labelExtractor = this.labelExtractor.bind(this);
     }
 
-    createTopic(){
-      var tags = this.state.tags.join();
+    createTopic() {
+        var tags = this.state.tags.join();
 
-      TOPICS_POST(this.props.group_id, this.props.user.id, this.state.title, 0, tags, null)
-          .then((responseJSON) => {
-            POSTS_POST(this.props.group_id, responseJSON.id, this.props.user.id, this.state.content, true, this.state.is_anonymous, null)
-              .then((responseJSON) => {
-                this.props.navigator.pop({
-                  animated: true, // does the pop have transition animation or does it happen immediately (optional)
-                  animationType: 'fade', // 'fade' (for both) / 'slide-horizontal' (for android) does the pop have different transition animation (optional)
-              });
-              })
-          });
+        TOPICS_POST(this.props.group_id, this.props.user.id, this.state.title, 0, tags, null)
+            .then((responseJSON) => {
+                POSTS_POST(this.props.group_id, responseJSON.id, this.props.user.id, this.state.content, true, this.state.is_anonymous, null)
+                    .then((responseJSON) => {
+                        this.props.navigator.pop({
+                            animated: true, // does the pop have transition animation or does it happen immediately (optional)
+                            animationType: 'fade', // 'fade' (for both) / 'slide-horizontal' (for android) does the pop have different transition animation (optional)
+                        });
+                    })
+            });
     }
 
     onChangeTags = (tags) => {
@@ -78,11 +78,9 @@ class CreateTopic extends React.Component {
                         onChangeText={this.onChangeText}
                     />
                 </View>
-                        <MarkdownEditor onMarkdownChange={(content) => this.setState({content: content})} />
+                <MarkdownEditor onMarkdownChange={(content) => this.setState({ content: content })} />
 
-                <Button onPress={this.createTopic}>
-                    Create New Topic
-            </Button>
+                <Button title={"Create New Topic"} onPress={this.createTopic} />
             </View>
         )
     }
@@ -110,7 +108,7 @@ const layout = StyleSheet.create({
         flexDirection: 'row'
     },
 
-    input:{
+    input: {
         paddingTop: 10,
         paddingBottom: 10,
         height: 150,

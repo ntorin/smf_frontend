@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Text, Dimensions, Image, TextInput } from 'react-native';
 import PopulatableListView from 'components/PopulatableListView';
 import { USERS_POST_FETCH } from 'helpers/apicalls';
-import { BaseStyles } from 'helpers/constants.js';
+import { BaseStyles, PrimaryColor } from 'helpers/constants.js';
 
 class UserDirectory extends React.Component {
 
@@ -12,8 +12,7 @@ class UserDirectory extends React.Component {
           identifier: '',
           name: '',
           sort_by: 'popular',
-          offset: 0,
-          limit: 100
+          query: '',
         }
 
         this.getUsers = this.getUsers.bind(this);
@@ -21,7 +20,7 @@ class UserDirectory extends React.Component {
     }
 
     getUsers(page = 1, callback, options){
-      USERS_POST_FETCH(this.state.identifier, this.state.name, this.state.sort_by, this.state.offset, this.state.limit, null)
+      USERS_POST_FETCH(this.state.identifier, this.state.name, this.state.sort_by, page)
         .then((responseJSON) => {
           callback(responseJSON, {
               allLoaded: true,
@@ -43,12 +42,25 @@ class UserDirectory extends React.Component {
     render(){
         return(
             <View style={BaseStyles.container}>
+            <View>
+                <TextInput
+                    placeholder={'🔎 Search...'}
+                    placeholderTextColor={PrimaryColor}
+                    selectionColor={PrimaryColor}
+                    textAlign='center'
+                    onChangeText={(text) => this.setState({ query: text })}
+                    autoCorrect={true}
+                    autoCapitalize={'none'}
+                    returnKeyType={'search'} />
+            </View>
+            <View>
             <PopulatableListView
                 type={'user'}
                 onFetch={this.getUsers}
                 onPress={this.viewProfile}
                 pagination={false}
             />
+            </View>
             </View>
         )
     }

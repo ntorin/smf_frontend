@@ -46,7 +46,7 @@ class ViewTopic extends React.Component {
                         onFetch={this.getPosts}
                         onPress={this.quotePost}
                     />
-                <Button style={layout.newTopicButton} onPress={this.replyTopic}>
+                <Button title={"Reply"} style={layout.newTopicButton} onPress={this.replyTopic}>
                     Reply
                 </Button>
             </View>

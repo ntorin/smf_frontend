@@ -31,7 +31,7 @@ class ReplyTopic extends React.Component {
         return(
             <View style={BaseStyles.container}>
                 <MarkdownEditor onMarkdownChange={(content) => this.setState({content: content})} />
-                <Button onPress={this.createPost}>
+                <Button title={"Send Reply"} onPress={this.createPost}>
                     Send Reply
                 </Button>
             </View>

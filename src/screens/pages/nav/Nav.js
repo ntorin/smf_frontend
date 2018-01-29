@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, ListView } from 'react-native';
 import Button from 'apsl-react-native-button';
 import NavItem from 'components/NavItem';
 import LiteProfile from 'components/LiteProfile';
-import { BaseStyles } from 'helpers/constants.js';
+import { BaseStyles, logoutUser } from 'helpers/constants.js';
 
 class Nav extends React.Component {
 
@@ -15,26 +15,16 @@ class Nav extends React.Component {
                 icon: require('assets/icons/directory.png'),
                 screen: 'smf_frontend.UserDirectory'
             },
-            /*{
+            {
                 name: 'Notifications',
                 icon: require('assets/icons/notifications.png'),
                 screen: 'smf_frontend.Notifications'
-            },*/
+            },
             {
                 name: 'Friends',
                 icon: require('assets/icons/friends.png'),
                 screen: 'smf_frontend.Friends'
             },
-            /*{
-                name: 'Settings',
-                icon: require('assets/icons/settings.png'),
-                screen: 'smf_frontend.Settings'
-            },
-            {
-                name: 'Help',
-                icon: require('assets/icons/help.png'),
-                screen: 'smf_frontend.Help'
-            },*/
             {
                 name: 'About',
                 icon: require('assets/icons/about.png'),
@@ -43,7 +33,7 @@ class Nav extends React.Component {
             {
                 name: 'Log Out',
                 icon: require('assets/icons/logout.png'),
-                screen: 'smf_frontend.Login'
+                screen: 'logout'
             },
         ];
         const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
@@ -63,16 +53,20 @@ class Nav extends React.Component {
     }
 
     goToPage(rowData) {
-        this.props.navigator.handleDeepLink({
-            link: 'nav/' + rowData.screen,
-            payload: rowData.name
-        });
-
-        this.props.navigator.toggleDrawer({
-          side: 'left',
-          animated: true,
-          to: 'closed'
-        })
+        if(rowData.screen === 'logout'){
+            logoutUser();
+        }else{
+            this.props.navigator.handleDeepLink({
+                link: 'nav/' + rowData.screen,
+                payload: rowData.name
+            });
+    
+            this.props.navigator.toggleDrawer({
+              side: 'left',
+              animated: true,
+              to: 'closed'
+            })
+        }
     }
 
     render() {

@@ -1,4 +1,6 @@
-let BASE_URL = "http://ec2-18-220-137-59.us-east-2.compute.amazonaws.com"
+import { user } from 'helpers/constants';
+
+let BASE_URL = "https://api.citru.me"
 let GET = "GET";
 let POST = "POST";
 let PUT = "PUT";
@@ -81,8 +83,8 @@ let AUTH_POST = (email, password, password_confirmation, firstResponse) => {
  */
 let AUTH_POST_SIGN_IN = (email, password, firstResponse) => {
     var body = JSON.stringify({
-      email: email,
-      password: password,
+        email: email,
+        password: password,
     });
 
     if (firstResponse == null) {
@@ -107,142 +109,143 @@ let BLOCKS_URL = BASE_URL + "/blocks";
 let CONVERSATION_MESSAGES_URL = BASE_URL + "/conversation_messages";
 
 let CONVERSATION_MESSAGES_POST = (user_id, conversation_id, message) => {
-  var body = JSON.stringify({
-    user_id: user_id,
-    conversation_id: conversation_id,
-    message: message
-  })
+    var body = JSON.stringify({
+        user_id: user_id,
+        conversation_id: conversation_id,
+        message: message
+    })
 
-  return fetch(
-      CONVERSATION_MESSAGES_URL,
-      {
-          method: POST,
-          headers: JSON_HEADERS,
-          body: body
-      }
-  ).then((response) => {
-      return (response.json());
-  });
+    return fetch(
+        CONVERSATION_MESSAGES_URL,
+        {
+            method: POST,
+            headers: JSON_HEADERS,
+            body: body
+        }
+    ).then((response) => {
+        return (response.json());
+    });
 }
 
 let CONVERSATION_MESSAGES_POST_FETCH = (conversation_id, page) => {
-  var body = JSON.stringify({
-    conversation_id: conversation_id,
-    page: page
-  })
+    var body = JSON.stringify({
+        conversation_id: conversation_id,
+        page: page
+    })
 
-  return fetch(
-      CONVERSATION_MESSAGES_URL + "/fetch",
-      {
-          method: POST,
-          headers: JSON_HEADERS,
-          body: body
-      }
-  ).then((response) => {
-      return (response.json());
-  });
+    return fetch(
+        CONVERSATION_MESSAGES_URL + "/fetch",
+        {
+            method: POST,
+            headers: JSON_HEADERS,
+            body: body
+        }
+    ).then((response) => {
+        return (response.json());
+    });
 }
 
 let CONVERSATION_USERS_URL = BASE_URL + "/conversation_users";
 
 let CONVERSATION_USERS_POST = (user_id, conversation_id) => {
-  var body = JSON.stringify({
-    user_id: user_id,
-    conversation_id: conversation_id
-  })
+    var body = JSON.stringify({
+        user_id: user_id,
+        conversation_id: conversation_id
+    })
 
-  return fetch(
-      CONVERSATION_USERS_URL,
-      {
-          method: POST,
-          headers: JSON_HEADERS,
-          body: body
-      }
-  ).then((response) => {
-      return (response.json());
-  });
+    return fetch(
+        CONVERSATION_USERS_URL,
+        {
+            method: POST,
+            headers: JSON_HEADERS,
+            body: body
+        }
+    ).then((response) => {
+        return (response.json());
+    });
 }
 
 let CONVERSATION_USERS_POST_FETCH = (conversation_id, page) => {
-  var body = JSON.stringify({
-    conversation_id: conversation_id,
-    page: page
-  })
+    var body = JSON.stringify({
+        conversation_id: conversation_id,
+        page: page
+    })
 
-  return fetch(
-      CONVERSATION_USERS_URL,
-      {
-          method: POST,
-          headers: JSON_HEADERS,
-          body: body
-      }
-  ).then((response) => {
-      return (response.json());
-  });
+    return fetch(
+        CONVERSATION_USERS_URL,
+        {
+            method: POST,
+            headers: JSON_HEADERS,
+            body: body
+        }
+    ).then((response) => {
+        return (response.json());
+    });
 }
 
 let CONVERSATIONS_URL = BASE_URL + "/conversations";
 
 let CONVERSATIONS_POST = (name, description, is_group) => {
-  var body = JSON.stringify({
-    name: name,
-    description: description,
-    is_group: is_group,
-  })
+    var body = JSON.stringify({
+        name: name,
+        description: description,
+        is_group: is_group,
+    })
 
-  return fetch(
-      CONVERSATIONS_URL,
-      {
-          method: POST,
-          headers: JSON_HEADERS,
-          body: body
-      }
-  ).then((response) => {
-      return (response.json());
-  });
+    return fetch(
+        CONVERSATIONS_URL,
+        {
+            method: POST,
+            headers: JSON_HEADERS,
+            body: body
+        }
+    ).then((response) => {
+        return (response.json());
+    });
 }
 
 let CONVERSATIONS_POST_FETCH = (user_id, sort_by, query, page) => {
-  var body = JSON.stringify({
-    user_id, user_id,
-    sort_by: sort_by,
-    query: query,
-    page: page
-  })
+    var body = JSON.stringify({
+        user_id, user_id,
+        sort_by: sort_by,
+        query: query,
+        page: page
+    })
 
-  return fetch(
-      CONVERSATIONS_URL + "/fetch",
-      {
-          method: POST,
-          headers: JSON_HEADERS,
-          body: body
-      }
-  ).then((response) => {
-      return (response.json());
-  });
+    return fetch(
+        CONVERSATIONS_URL + "/fetch",
+        {
+            method: POST,
+            headers: JSON_HEADERS,
+            body: body
+        }
+    ).then((response) => {
+        return (response.json());
+    });
 }
 
 let CREDIT_HISTORIES_URL = BASE_URL + "/credit_histories";
 
 let FEEDS_URL = BASE_URL + "/feeds";
 
-let FEEDS_POST_FETCH = (user_id, feed_type, page) => {
-  var body = JSON.stringify({
-    user_id: user_id,
-    feed_type: feed_type,
-    page: page
-  })
+let FEEDS_POST_FETCH = (user_id, fetch_type, activity_id, page) => {
+    var body = JSON.stringify({
+        user_id: user_id,
+        fetch_type: fetch_type,
+        activity_id: activity_id,
+        page: page
+    })
 
-  return fetch(
-      FEEDS_URL,
-      {
-          method: POST,
-          headers: JSON_HEADERS,
-          body: body
-      }
-  ).then((response) => {
-      return (response.json());
-  });
+    return fetch(
+        FEEDS_URL + "/fetch",
+        {
+            method: POST,
+            headers: JSON_HEADERS,
+            body: body
+        }
+    ).then((response) => {
+        return (response.json());
+    });
 }
 
 let FOLLOWS_URL = BASE_URL + "/follows";
@@ -266,40 +269,40 @@ let FOLLOWS_POST = (user_id, following_id) => {
 }
 
 let FOLLOWS_POST_CHECK_REQUEST = (user_id, following_id) => {
-  var body = JSON.stringify({
-    user_id: user_id,
-    following_id: following_id
-  })
+    var body = JSON.stringify({
+        user_id: user_id,
+        following_id: following_id
+    })
 
-  return fetch(
-      FOLLOWS_URL + '/check_request',
-      {
-          method: POST,
-          headers: JSON_HEADERS,
-          body: body
-      }
-  ).then((response) => {
-      return (response.json());
-  });
+    return fetch(
+        FOLLOWS_URL + '/check_request',
+        {
+            method: POST,
+            headers: JSON_HEADERS,
+            body: body
+        }
+    ).then((response) => {
+        return (response.json());
+    });
 }
 
 let FOLLOWS_DELETE = (follow_id) => {
-  return fetch(
-      FOLLOWS_URL + '/' + follow_id,
-      {
-          method: DELETE,
-          headers: JSON_HEADERS
-      }
-  )
+    return fetch(
+        FOLLOWS_URL + '/' + follow_id,
+        {
+            method: DELETE,
+            headers: JSON_HEADERS
+        }
+    )
 }
 
 let FRIENDS_URL = BASE_URL + "/friends";
 
 let FRIENDS_POST_FETCH = (user_id, fetch_type, page) => {
     var body = JSON.stringify({
-      user_id: user_id,
-      fetch_type: fetch_type,
-      page: page
+        user_id: user_id,
+        fetch_type: fetch_type,
+        page: page
     });
 
     return fetch(
@@ -335,7 +338,7 @@ let FRIENDS_POST = (friend_one, friend_two) => {
 
 let FRIENDS_POST_ACCEPT_REQUEST = (request_id) => {
     var body = JSON.stringify({
-      request_id: request_id
+        request_id: request_id
     });
     return fetch(
         FRIENDS_URL + "/accept_request",
@@ -350,31 +353,31 @@ let FRIENDS_POST_ACCEPT_REQUEST = (request_id) => {
 }
 
 let FRIENDS_POST_CHECK_REQUEST = (user_id, friend_id) => {
-  var body = JSON.stringify({
-    user_id: user_id,
-    friend_id: friend_id
-  })
+    var body = JSON.stringify({
+        user_id: user_id,
+        friend_id: friend_id
+    })
 
-  return fetch(
-      FRIENDS_URL + "/check_request",
-      {
-          method: POST,
-          headers: JSON_HEADERS,
-          body: body
-      }
-  ).then((response) => {
-      return (response.json());
-  });
+    return fetch(
+        FRIENDS_URL + "/check_request",
+        {
+            method: POST,
+            headers: JSON_HEADERS,
+            body: body
+        }
+    ).then((response) => {
+        return (response.json());
+    });
 }
 
 let FRIENDS_DELETE = (friend_id) => {
-  return fetch(
-      FRIENDS_URL + '/' + friend_id,
-      {
-          method: DELETE,
-          headers: JSON_HEADERS
-      }
-  )
+    return fetch(
+        FRIENDS_URL + '/' + friend_id,
+        {
+            method: DELETE,
+            headers: JSON_HEADERS
+        }
+    )
 }
 
 let GROUPS_URL = BASE_URL + "/groups";
@@ -493,10 +496,10 @@ let GROUPS_POST_VALIDATE_IDENTIFIER = (identifier) => {
 
 let GROUP_USERS_URL = BASE_URL + "/group_users";
 
-let GROUP_USERS_POST =  (user_id, group_id) => {
+let GROUP_USERS_POST = (user_id, group_id) => {
     var body = JSON.stringify({
-      group_id: group_id,
-      user_id: user_id
+        group_id: group_id,
+        user_id: user_id
     });
 
     return fetch(
@@ -512,31 +515,31 @@ let GROUP_USERS_POST =  (user_id, group_id) => {
 }
 
 let GROUP_USERS_POST_CHECK_REQUEST = (user_id, group_id) => {
-  var body = JSON.stringify({
-    user_id: user_id,
-    group_id: group_id
-  })
+    var body = JSON.stringify({
+        user_id: user_id,
+        group_id: group_id
+    })
 
-  return fetch(
-      GROUP_USERS_URL + "/check_request",
-      {
-          method: POST,
-          headers: JSON_HEADERS,
-          body: body
-      }
-  ).then((response) => {
-      return (response.json());
-  });
+    return fetch(
+        GROUP_USERS_URL + "/check_request",
+        {
+            method: POST,
+            headers: JSON_HEADERS,
+            body: body
+        }
+    ).then((response) => {
+        return (response.json());
+    });
 }
 
 let GROUP_USERS_DELETE = (group_user_id) => {
-  return fetch(
-      GROUP_USERS_URL + "/" + group_user_id,
-      {
-          method: DELETE,
-          headers: JSON_HEADERS,
-      }
-  )
+    return fetch(
+        GROUP_USERS_URL + "/" + group_user_id,
+        {
+            method: DELETE,
+            headers: JSON_HEADERS,
+        }
+    )
 }
 
 let NOTIFICATIONS_URL = BASE_URL + "/notifications";
@@ -617,6 +620,43 @@ let POSTS_DELETE = (post_id) => {
     )
 }
 
+let REFERRALS_URL = BASE_URL + "/referrals";
+
+let REFERRALS_POST = (user_id, referrer_id) => {
+    var body = JSON.stringify({
+        user_id: user_id,
+        referrer_id: referrer_id
+    });
+
+    return fetch(
+        REFERRALS_URL,
+        {
+            method: POST,
+            headers: JSON_HEADERS,
+            body: body,
+        }
+    ).then((response) => {
+        return (response.json());
+    });
+}
+
+let REFERRALS_POST_CHECK_USER = (user_id, referrer) => {
+    var body = JSON.stringify({
+        referrer: referrer_id
+    });
+
+    return fetch(
+        REFERRALS_URL + "/check_user",
+        {
+            method: POST,
+            headers: JSON_HEADERS,
+            body: body,
+        }
+    ).then((response) => {
+        return (response.json());
+    });
+}
+
 let REPORTS_URL = BASE_URL + "/reports";
 
 let TOPICS_URL = BASE_URL + "/topics";
@@ -644,11 +684,9 @@ let TOPICS_POST_FETCH = (group_id, sort_by, query, page) => {
             headers: JSON_HEADERS,
             body: body,
         }
-    )
-        .then((response) => {
-            return (response.json());
-        }
-        );
+    ).then((response) => {
+        return (response.json());
+    });
 }
 
 /**
@@ -752,9 +790,59 @@ let USERS_POST_VALIDATE_IDENTIFIER = (identifier) => {
     });
 }
 
-let USERS_PUT_UPDATE = () => {
+let USERS_PUT_UPDATE = (user_id, name, blurb, birthday) => {
+    var body = JSON.stringify({
+        name: name,
+        blurb: blurb,
+        birthday: birthday,
+    });
 
+    return fetch(
+        USERS_URL + "/" + user_id,
+        {
+            method: PUT,
+            headers: JSON_HEADERS,
+            body: body
+        }
+    ).then((response) => {
+        return (response.json());
+    });
 }
+
+let USERS_PUT_CREATE_IDENTIFIER = (user_id, identifier) => {
+    var body = JSON.stringify({
+        identifier: identifier
+    });
+
+    return fetch(
+        USERS_URL + "/" + user_id,
+        {
+            method: PUT,
+            headers: JSON_HEADERS,
+            body: body
+        }
+    ).then((response) => {
+        return (response.json());
+    });
+}
+
+let USERS_PUT_CREATE_NAME = (user_id, name) => {
+    var body = JSON.stringify({
+        name: name
+    });
+
+    return fetch(
+        USERS_URL + "/" + user_id,
+        {
+            method: PUT,
+            headers: JSON_HEADERS,
+            body: body
+        }
+    ).then((response) => {
+        return (response.json());
+    });
+}
+
 
 
 export {
@@ -800,5 +888,7 @@ export {
 
     USERS_POST_FETCH,
     USERS_POST_VALIDATE_IDENTIFIER,
-    USERS_PUT_UPDATE
+    USERS_PUT_UPDATE,
+    USERS_PUT_CREATE_IDENTIFIER,
+    USERS_PUT_CREATE_NAME
 }
