@@ -3,8 +3,9 @@ import { StyleSheet, View, Text } from 'react-native';
 import { TabViewAnimated, TabBar, SceneMap } from 'react-native-tab-view';
 import PopulatableListView from 'components/PopulatableListView';
 import { iconsMap } from 'helpers/icons-loader';
-import { BaseStyles,  PrimaryColor, NavNoElevation } from 'helpers/constants.js';
+import { BaseStyles, PrimaryColor, NavNoElevation } from 'helpers/constants.js';
 import ProfileInfo from './ProfileInfo';
+import { FEEDS_POST_FETCH } from 'helpers/apicalls';
 
 class Profile extends React.Component {
 
@@ -12,7 +13,10 @@ class Profile extends React.Component {
     static navigatorStyle = NavNoElevation;
 
     Info = () => <ProfileInfo user={this.props.user} myUser={this.props.myUser} />;
-    Activity = () => <PopulatableListView />;
+    Activity = () => <PopulatableListView
+        type={'feed'}
+        onFetch={this.getActivityFeeds}
+        pagination={true} />;
 
     constructor(props) {
         super(props);
@@ -24,7 +28,17 @@ class Profile extends React.Component {
             ],
         }
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
+        this.getActivityFeeds = this.getActivityFeeds.bind(this);
     };
+
+    getActivityFeeds(page, callback, options) {
+        FEEDS_POST_FETCH(this.props.myUser.id, 'user', this.props.user.id, page)
+            .then((responseJSON) => {
+                callback(responseJSON, {
+                    allLoaded: true,
+                })
+            })
+    }
 
     onNavigatorEvent(event) { // this is the onPress handler for the two buttons together
         if (event.type == 'NavBarButtonPress') { // this is the event type for button presses

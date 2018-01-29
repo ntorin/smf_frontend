@@ -12,20 +12,20 @@ class Feed extends React.Component {
   isVisible = this.props.navigator.screenIsCurrentlyVisible();
 
   All = () => <PopulatableListView
-                type={'feed'}
-                onFetch={this.getAllFeeds}
-                pagination={true} />;
+    type={'feed'}
+    onFetch={this.getAllFeeds}
+    pagination={true} />;
   Follows = () => <PopulatableListView
-                    type={'feed'}
-                    onFetch={this.getFollowFeeds}
-                    pagination={true} />;
+    type={'feed'}
+    onFetch={this.getFollowFeeds}
+    pagination={true} />;
   Friends = () => <PopulatableListView
-                    type={'feed'}
-                    onFetch={this.getFriendFeeds}
-                    pagination={true} />;
+    type={'feed'}
+    onFetch={this.getFriendFeeds}
+    pagination={true} />;
   BBS = () => <PopulatableListView
-                type={'feed'}
-                pagination={true} />;
+    type={'feed'}
+    pagination={true} />;
 
   constructor(props) {
     super(props);
@@ -47,38 +47,38 @@ class Feed extends React.Component {
     this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
   }
 
-  getAllFeeds(page, callback, options){
-    FEEDS_POST_FETCH(this.props.user.id, 'all', page)
+  getAllFeeds(page, callback, options) {
+    FEEDS_POST_FETCH(this.props.user.id, 'all', null, page)
       .then((responseJSON) => {
         callback(responseJSON, {
-            allLoaded: true,
+          allLoaded: true,
         })
       })
   }
 
-  getFollowFeeds(page, callback, options){
-    FEEDS_POST_FETCH(this.props.user.id, 'follows', page)
+  getFollowFeeds(page, callback, options) {
+    FEEDS_POST_FETCH(this.props.user.id, 'follows', null, page)
       .then((responseJSON) => {
         callback(responseJSON, {
-            allLoaded: true,
+          allLoaded: true,
         })
       })
   }
 
-  getFriendFeeds(page, callback, options){
-    FEEDS_POST_FETCH(this.props.user.id, 'friends', page)
+  getFriendFeeds(page, callback, options) {
+    FEEDS_POST_FETCH(this.props.user.id, 'friends', null, page)
       .then((responseJSON) => {
         callback(responseJSON, {
-            allLoaded: true,
+          allLoaded: true,
         })
       })
   }
 
-  getGroupFeeds(page, callback, options){
-    FEEDS_POST_FETCH(this.props.user.id, 'groups', page)
+  getGroupFeeds(page, callback, options) {
+    FEEDS_POST_FETCH(this.props.user.id, 'groups', null, page)
       .then((responseJSON) => {
         callback(responseJSON, {
-            allLoaded: true,
+          allLoaded: true,
         })
       })
   }
@@ -95,30 +95,30 @@ class Feed extends React.Component {
         break;
 
       case 'DeepLink':
-        if(this.isVisible){
-        const parts = event.link.split('/'); // Link parts
-        const payload = event.payload; // (optional) The payload
-        if (parts[0] == 'nav') {
-          this.props.navigator.push({
+        if (this.isVisible) {
+          const parts = event.link.split('/'); // Link parts
+          const payload = event.payload; // (optional) The payload
+          if (parts[0] == 'nav') {
+            this.props.navigator.push({
               screen: parts[1],
               title: payload,
               passProps: { user: this.props.user }
-          });
-          // handle the link somehow, usually run a this.props.navigator command
+            });
+            // handle the link somehow, usually run a this.props.navigator command
+          }
         }
-      }
         break;
     }
 
-    switch(event.id){
+    switch (event.id) {
       case 'didAppear':
-      console.log('appeared');
-      this.isVisible = this.props.navigator.screenIsCurrentlyVisible();
-      break;
+        console.log('appeared');
+        this.isVisible = this.props.navigator.screenIsCurrentlyVisible();
+        break;
       case 'didDisappear':
-      console.log('disappeared');
-      this.isVisible = this.props.navigator.screenIsCurrentlyVisible();
-      break;
+        console.log('disappeared');
+        this.isVisible = this.props.navigator.screenIsCurrentlyVisible();
+        break;
     }
   }
 

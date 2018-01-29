@@ -49,6 +49,7 @@ class Friends extends React.Component {
     getFriends(page, callback, options){
       FRIENDS_POST_FETCH(this.props.user.id, 'all', page)
         .then((responseJSON) => {
+          console.log(responseJSON);
           callback(responseJSON, {
               allLoaded: true,
           })

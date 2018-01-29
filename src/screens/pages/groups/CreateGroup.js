@@ -7,7 +7,7 @@ import TagInput from 'react-native-tag-input';
 import { GROUPS_POST, GROUPS_POST_VALIDATE_IDENTIFIER, GROUP_USERS_POST, } from 'helpers/apicalls';
 
 import Button from 'components/Button';
-import { BaseStyles,  PrimaryColor, ScreenBackgroundColor } from 'helpers/constants.js';
+import { BaseStyles, PrimaryColor, ScreenBackgroundColor } from 'helpers/constants.js';
 
 class CreateGroup extends React.Component {
 
@@ -16,7 +16,7 @@ class CreateGroup extends React.Component {
         this.state = {
             name: '',
             identifier: '',
-            group_type: '',
+            group_type: 'public',
             description: '',
             tags: [],
             tagText: '',
@@ -26,25 +26,25 @@ class CreateGroup extends React.Component {
         this.validateIdentifier = this.validateIdentifier.bind(this);
     }
 
-    createGroup(){
-      var tags = this.state.tags.join();
+    createGroup() {
+        var tags = this.state.tags.join();
 
-      GROUPS_POST(this.props.user.id, this.state.identifier, this.state.name, this.state.description, this.state.group_type, tags, null)
-        .then((responseJSON) => {
-          GROUP_USERS_POST(responseJSON.id, this.props.user.id)
+        GROUPS_POST(this.props.user.id, this.state.identifier, this.state.name, this.state.description, this.state.group_type, tags, null)
             .then((responseJSON) => {
-                this.props.navigator.pop({
-                    animated: true,
-                    animationType: 'fade'
-                });
+                GROUP_USERS_POST(responseJSON.id, this.props.user.id)
+                    .then((responseJSON) => {
+                        this.props.navigator.pop({
+                            animated: true,
+                            animationType: 'fade'
+                        });
+                    })
             })
-        })
     }
 
-    validateIdentifier(){
-      GROUPS_POST_VALIDATE_IDENTIFIER(this.state.identifier, null)
-        .then((responseJSON) => {
-        })
+    validateIdentifier() {
+        GROUPS_POST_VALIDATE_IDENTIFIER(this.state.identifier, null)
+            .then((responseJSON) => {
+            })
     }
 
     onChangeTags = (tags) => {
@@ -72,34 +72,34 @@ class CreateGroup extends React.Component {
     render() {
         return (
             <View style={BaseStyles.container}>
-            <View style={layout.identifierRow}>
-                <TextInput
-                style={layout.identifier}
-                    placeholder={'Identifier'}
-                    placeholderTextColor={PrimaryColor}
-                    underlineColorAndroid={PrimaryColor}
-                    onChangeText={(text) => this.setState({ name: text })} />
-                    <Button onPress={this.validateIdentifier} style={layout.validateIdentifier}>
-                         Check
-                    </Button>
+                <View style={layout.identifierRow}>
+                    <TextInput
+                        style={layout.identifier}
+                        placeholder={'Identifier'}
+                        placeholderTextColor={PrimaryColor}
+                        underlineColorAndroid={PrimaryColor}
+                        onChangeText={(text) => this.setState({ name: text })} />
+                    <Button title={"Check"}
+                        onPress={this.validateIdentifier}
+                        style={layout.validateIdentifier} />
                 </View>
                 <TextInput
                     placeholder={'Name'}
                     placeholderTextColor={PrimaryColor}
                     underlineColorAndroid={PrimaryColor}
                     onChangeText={(text) => this.setState({ name: text })} />
-                    <View>
-                        <ScrollView>
-                            <TextInput
-                                placeholder={'Description'}
-                                placeholderTextColor={PrimaryColor}
-                                underlineColorAndroid={PrimaryColor}
-                                selectionColor={PrimaryColor}
-                                multiline={true}
-                                onChangeText={(text) => this.setState({ description: text })}
-                                autoCorrect={true} />
-                        </ScrollView>
-                    </View>
+                <View>
+                    <ScrollView>
+                        <TextInput
+                            placeholder={'Description'}
+                            placeholderTextColor={PrimaryColor}
+                            underlineColorAndroid={PrimaryColor}
+                            selectionColor={PrimaryColor}
+                            multiline={true}
+                            onChangeText={(text) => this.setState({ description: text })}
+                            autoCorrect={true} />
+                    </ScrollView>
+                </View>
                 <View style={layout.tags}>
                     <Text style={styles.tagHeader}>Tags:</Text>
                     <TagInput
@@ -110,21 +110,19 @@ class CreateGroup extends React.Component {
                         onChangeText={this.onChangeText}
                     />
                 </View>
-                <View style={{flexDirection: 'row'}}>
-                    <Text style={styles.privacyText}>Privacy</Text>
-                    <Picker
-                        style={{flex: 3}}
+                <View style={{ flexDirection: 'row' }}>
+                    { /* <Text style={styles.privacyText}>Privacy</Text>
+                     <Picker
+                        style={{ flex: 3 }}
                         selectedValue={this.state.group_type}
-                        onValueChange={(itemValue, itemIndex) => this.setState({group_type: itemValue})}
+                        onValueChange={(itemValue, itemIndex) => this.setState({ group_type: itemValue })}
                         prompt={'Group Type'}>
                         <Picker.Item label={"Invite Only"} value={"private"} />
                         <Picker.Item label={"Public"} value={"public"} />
                         <Picker.Item label={"Apply Only"} value={"apply"} />
-                    </Picker>
+                    </Picker>*/ }
                 </View>
-                <Button onPress={this.createGroup}>
-                    Create New Topic
-            </Button>
+                <Button title={"Create New Group"} onPress={this.createGroup} />
             </View>
         )
     }
@@ -142,9 +140,9 @@ const layout = StyleSheet.create({
         flex: 1
     },
 
-    privacyText:{
-        flex:1,
-        textAlignVertical:'bottom'
+    privacyText: {
+        flex: 1,
+        textAlignVertical: 'bottom'
     },
 
     descriptionContainer: {
@@ -158,15 +156,15 @@ const layout = StyleSheet.create({
     },
 
     identifierRow: {
-      flexDirection: 'row'
+        flexDirection: 'row'
     },
 
     identifier: {
-      flex: 7
+        flex: 7
     },
 
     validateIdentifier: {
-      flex: 3
+        flex: 3
     }
 });
 

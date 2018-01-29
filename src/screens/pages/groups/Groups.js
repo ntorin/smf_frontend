@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Text, TextInput } from 'react-native';
 import PopulatableListView from 'components/PopulatableListView';
 import Button from 'components/Button';
-import { BaseStyles,  PrimaryColor } from 'helpers/constants.js';
+import { BaseStyles, PrimaryColor } from 'helpers/constants.js';
 import { GROUPS_POST_FETCH } from 'helpers/apicalls.js';
 import Modal from 'components/Modal';
 
@@ -11,14 +11,11 @@ class Groups extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            isModalVisible: false,
             username: '',
             userid: '',
             sort_by: 'recent',
             query: '',
 
-            advancedSearchLoading: false,
-            advancedSearchDisabled: false,
             newGroupLoading: false,
             newGroupDisabled: false
         }
@@ -28,10 +25,6 @@ class Groups extends React.Component {
         this.getGroups = this.getGroups.bind(this);
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
     }
-
-    _showModal = () => this.setState({ isModalVisible: true })
-
-    _hideModal = () => this.setState({ isModalVisible: false })
 
     onNavigatorEvent(event) { // this is the onPress handler for the two buttons together
         if (event.type == 'NavBarButtonPress') { // this is the event type for button presses
@@ -46,32 +39,27 @@ class Groups extends React.Component {
     }
 
     getGroups(page, callback, options) {
+        console.log("getting groups; query: " + this.state.query);
         GROUPS_POST_FETCH(this.state.sort_by, this.state.query, page)
             .then((responseJSON) => {
-                callback(responseJSON, {
-                    allLoaded: true,
-                })
+                callback(responseJSON)
             });
     }
 
-    advancedSearch() {
-
-    }
-
     createGroup() {
-      this.setState({newGroupLoading: true, advancedSearchDisabled: true})
+        this.setState({ newGroupLoading: true, newGroupDisabled: true })
 
         this.props.navigator.push({
             screen: 'smf_frontend.CreateGroup',
             title: 'Create Group',
             passProps: {
-              user: this.props.user
+                user: this.props.user
             }
         });
 
         var t = this;
-        setTimeout(function(){
-          t.setState({newGroupLoading: false, advancedSearchDisabled: false})
+        setTimeout(function () {
+            t.setState({ newGroupLoading: false, newGroupDisabled: false })
         }, 500)
     }
 
@@ -80,8 +68,8 @@ class Groups extends React.Component {
             screen: 'smf_frontend.ViewGroup',
             title: rowData.name,
             passProps: {
-              group: rowData,
-              user: this.props.user
+                group: rowData,
+                user: this.props.user
             }
         });
     }
@@ -89,37 +77,6 @@ class Groups extends React.Component {
     render() {
         return (
             <View style={BaseStyles.container}>
-                <Modal
-                    onRequestClose={this._hideModal}
-                    visible={this.state.isModalVisible}>
-
-                    <View style={layout.searchPanel}>
-                        <TextInput
-                            style={{flex: 3}}
-                            placeholder={'nickname'}
-                            onChangeText={(text) => this.setState({ username: text })} />
-                            <Button style={{flex: 1}}>
-                                 Check
-                            </Button>
-                    </View>
-
-                    <View style={layout.searchPanel}>
-                        <TextInput
-                            style={{flex: 3}}
-                            placeholder={'user id'}
-                            onChangeText={(text) => this.setState({ userid: text })} />
-                            <Button style={{flex: 1}}>
-                                 Check
-                            </Button>
-                    </View>
-
-                    <Button onPress={this._hideModal}>
-                        Confirm
-                    </Button>
-
-
-                </Modal>
-
                 <View style={layout.searchPanel}>
                     <TextInput style={layout.searchBar}
                         placeholder={'🔎 Search...'}
@@ -127,24 +84,16 @@ class Groups extends React.Component {
                         selectionColor={PrimaryColor}
                         textAlign='center'
                         onChangeText={(text) => this.setState({ query: text })}
+                        onSubmitEditing={() => this.getGroups()}
                         autoCorrect={true}
                         autoCapitalize={'none'}
                         returnKeyType={'search'} />
                     <Button
-                    style={layout.advancedSearchButton}
-                    onPress={this._showModal}
-                    isLoading={this.state.advancedSearchLoading}
-                    isDisabled={this.state.advancedSearchDisabled}>
-                        Advanced
-                    </Button>
-                </View>
-                <View>
-                    <Button
-                    style={layout.newTopicButton}
-                    onPress={this.createGroup}
-                    isLoading={this.state.newGroupLoading}
-                    isDisabled={this.state.newGroupDisabled}>
-                        New Group
+                        title={"New Group"}
+                        style={styles.newTopicButton}
+                        onPress={this.createGroup}
+                        loading={this.state.newGroupLoading}
+                        disabled={this.state.newGroupDisabled}>
                     </Button>
                 </View>
                 <View style={layout.groupList}>
@@ -160,7 +109,9 @@ class Groups extends React.Component {
 }
 
 const styles = StyleSheet.create({
-
+    newTopicButton: {
+        flex: 3
+    }
 });
 
 const layout = StyleSheet.create({
@@ -168,11 +119,7 @@ const layout = StyleSheet.create({
         flexDirection: 'row'
     },
     searchBar: {
-        flex: 5
-    },
-
-    advancedSearchButton: {
-        flex: 5
+        flex: 7
     },
 
     groupList: {

@@ -5,7 +5,7 @@ import Button from 'components/Button';
 import PopulatableListView from 'components/PopulatableListView';
 import GroupInfo from './GroupInfo';
 import { BaseStyles, PrimaryColor, NavNoElevation } from 'helpers/constants';
-import { GROUP_USERS_POST } from 'helpers/apicalls';
+import { GROUP_USERS_POST, FEEDS_POST_FETCH } from 'helpers/apicalls';
 
 class ViewGroup extends React.Component {
 
@@ -13,7 +13,10 @@ class ViewGroup extends React.Component {
 
   Overview = () => <GroupInfo
                       {...this.props} />;
-  Activity = () => <PopulatableListView />;
+  Activity = () => <PopulatableListView
+  type={'feed'}
+  onFetch={this.getActivityFeeds}
+  pagination={true} />;
   Members = () => <PopulatableListView />;
 
     constructor(props){
@@ -26,6 +29,17 @@ class ViewGroup extends React.Component {
             { key: '3', title: 'Members' },
           ],
         };
+
+        this.getActivityFeeds = this.getActivityFeeds.bind(this);
+    }
+
+    getActivityFeeds(page, callback, options){
+      FEEDS_POST_FETCH(this.props.user.id, 'group', this.props.group.id, page)
+        .then((responseJSON) => {
+          callback(responseJSON, {
+            allLoaded: true,
+          })
+        })
     }
 
     _handleIndexChange = index => this.setState({ index });

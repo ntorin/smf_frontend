@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Text, Image } from 'react-native';
 import Button from 'react-native-button';
-import { BaseStyles,  PrimaryColor, ScreenBackgroundColor } from 'helpers/constants.js';
+import { BaseStyles, PrimaryColor, ScreenBackgroundColor } from 'helpers/constants.js';
 import Avatar from 'components/Avatar';
 import { MarkdownView } from 'react-native-markdown-view';
 import Moment from 'moment';
@@ -12,94 +12,90 @@ class ListItem extends React.Component {
         super(props);
     }
 
-    renderTags(tags){
-      var tagsArray = [''];
-      if(tags){
-        tagsArray = tags.split(",");
-      }
-
-      return(
-        <View style={[layout.flexStart, layout.row, layout.tags]}>
-          {tagsArray.map(function(name, index){
-            return <View style={layout.row} key={index}><View style={styles.tag}><Text style={styles.tagText}>{name}</Text></View><Text>{" "}</Text></View>
-          })}
-        </View>
-      )
-    }
-
-    renderPreview(preview){
-      return preview && preview.length >= 50 ? <Text style={styles.dimmedFont}>{preview}...</Text> : <Text style={styles.dimmedFont}>{preview}</Text>;
-    }
-
-    renderTopic() {
-        rd = this.props.rowData;
+    renderTags(tags) {
+        var tagsArray = [''];
+        if (tags) {
+            tagsArray = tags.split(",");
+        }
 
         return (
-            <View style={styles.container}>
-                    <Text style={styles.bigFont}>{rd.title}</Text>
-                    <View style={layout.row}>
-                        <Text style={[layout.name, styles.smallFont, styles.alignLeft]}>by {rd.user.name}</Text>
-                        <Text style={[layout.flexEnd, styles.smallFont, styles.alignRight]}>{rd.post_count} posts • {Moment(rd.last_post_date).fromNow()}</Text>
-                    </View>
-                    {this.renderPreview(rd.post_preview)}
-                    <View style={layout.row}>
-                    {this.renderTags(rd.tags)}
-                    <View style={[layout.row, layout.flexEnd, layout.stats]}>
-                    <Image source={require('assets/icons/postsmall.png')}/>
-                    <Text style={[styles.smallFont, layout.flexEnd]}>{rd.post_count}</Text>
-                    </View>
-                    </View>
+            <View style={[layout.flexStart, layout.row, layout.tags, layout.wrap]}>
+                {tagsArray.map(function (name, index) {
+                    return <View style={layout.row} key={index}><View style={styles.tag}><Text style={styles.tagText}>{name}</Text></View><Text>{" "}</Text></View>
+                })}
             </View>
         )
     }
 
-    renderGroup() {
-        rd = this.props.rowData;
+    renderPreview(preview) {
+        return preview && preview.length >= 50 ? <Text style={styles.dimmedFont}>{preview}...</Text> : <Text style={styles.dimmedFont}>{preview}</Text>;
+    }
+
+    renderTopic(rd, user) {
 
         return (
             <View style={styles.container}>
-                    <Text style={styles.bigFont}>{rd.name}</Text>
-                    <View style={layout.row}>
+                <Text style={styles.bigFont}>{rd.title}</Text>
+                <View style={layout.row}>
+                    <Text style={[layout.name, styles.smallFont, styles.alignLeft]}>by {user.name}</Text>
+                    <Text style={[layout.flexEnd, styles.smallFont, styles.alignRight]}>{rd.post_count} posts • {Moment(rd.last_post_date).fromNow()}</Text>
+                </View>
+                {this.renderPreview(rd.post_preview)}
+                <View style={layout.row}>
+                    {this.renderTags(rd.tags)}
+                </View>
+                <View style={[layout.row, layout.flexEnd, layout.stats]}>
+                    <Image source={require('assets/icons/postsmall.png')} />
+                    <Text style={[styles.smallFont, layout.flexEnd]}>{rd.post_count}</Text>
+                </View>
+            </View>
+        )
+    }
+
+    renderGroup(rd) {
+
+        return (
+            <View style={styles.container}>
+                <Text style={styles.bigFont}>{rd.name}</Text>
+                <View style={layout.row}>
                     <Text style={[styles.smallFont, layout.flexStart, styles.alignLeft]}>{rd.identifier}</Text>
                     <Text style={[styles.smallFont, layout.flexEnd, styles.alignRight]}>last activity {Moment(rd.updated_at).fromNow()}</Text>
-                    </View>
-                    <Text style={styles.dimmedFont}>{rd.description}</Text>
-                    <View style={layout.row}>
+                </View>
+                <Text style={styles.dimmedFont}>{rd.description}</Text>
+                <View style={layout.row}>
                     {this.renderTags(rd.tags)}
-                    <View style={[layout.row, layout.flexEnd, layout.stats]}>
-                    <Image source={require('assets/icons/membersmall.png')}/>
+                </View>
+                <View style={[layout.row, layout.flexEnd, layout.stats]}>
+                    <Image source={require('assets/icons/membersmall.png')} />
                     <Text style={[styles.smallFont, layout.flexEnd]}>{rd.member_count}</Text>
-                    <Image source={require('assets/icons/topicsmall.png')}/>
+                    <Image source={require('assets/icons/topicsmall.png')} />
                     <Text style={[styles.smallFont, layout.flexEnd]}>{rd.topic_count}</Text>
-                    <Image source={require('assets/icons/postsmall.png')}/>
+                    <Image source={require('assets/icons/postsmall.png')} />
                     <Text style={[styles.smallFont, layout.flexEnd]}>{rd.post_count}</Text>
-                    </View>
-                    </View>
+                </View>
             </View>
         );
     }
 
-    renderPost() {
-        rd = this.props.rowData;
-            return (
-                <View style={styles.container}>
-                        <View>
-                            <View style={layout.row}>
-                            <Text style={styles.bold}>{rd.user.name}</Text>
-                            <Text style={[layout.flexEnd, styles.alignRight]}>{Moment(rd.created_at).fromNow()}</Text>
-                            </View>
-                            <View style={layout.row}>
-                            <Text style={styles.smallFont}>{rd.user.identifier}</Text>
-                            <Text style={[layout.flexEnd, styles.alignRight, styles.smallFont]}>{rd.id}</Text>
-                            </View>
-                        </View>
-                        <MarkdownView>{rd.content}</MarkdownView>
+    renderPost(rd, user) {
+        return (
+            <View style={styles.container}>
+                <View>
+                    <View style={layout.row}>
+                        <Text style={styles.bold}>{user.name}</Text>
+                        <Text style={[layout.flexEnd, styles.alignRight]}>{Moment(rd.created_at).fromNow()}</Text>
+                    </View>
+                    <View style={layout.row}>
+                        <Text style={styles.smallFont}>{user.identifier}</Text>
+                        <Text style={[layout.flexEnd, styles.alignRight, styles.smallFont]}>{rd.id}</Text>
+                    </View>
                 </View>
-            )
+                <MarkdownView>{rd.content}</MarkdownView>
+            </View>
+        )
     }
 
-    renderNotification() {
-        rd = this.props.rowData;
+    renderNotification(rd) {
 
         if (rd.is_seen) {
             return (
@@ -123,51 +119,84 @@ class ListItem extends React.Component {
         }
     }
 
-    renderUser() {
-        rd = this.props.rowData;
-        if(rd.friend){
-          rd = this.props.rowData.friend;
+    renderUser(rd) {
+        if (rd.friend) {
+            rd = this.props.rowData.friend;
         }
 
         return (
             <View style={styles.container}>
-                    <View style={layout.row}>
-                        <View style={layout.columnEnd}>
-                            <Text style={styles.bigFont}>{rd.name}</Text>
-                            <Text style={styles.smallFont}>{rd.identifier}</Text>
-                            <Text style={styles.dimmedFont}>{rd.blurb}</Text>
-                            <View style={layout.row}>
-                            <Image source={require('assets/icons/postsmall.png')}/>
+                <View style={layout.row}>
+                    <View style={layout.columnEnd}>
+                        <Text style={styles.bigFont}>{rd.name}</Text>
+                        <Text style={styles.smallFont}>{rd.identifier}</Text>
+                        <Text style={styles.dimmedFont}>{rd.blurb}</Text>
+                        <View style={layout.row}>
+                            <Image source={require('assets/icons/postsmall.png')} />
                             <Text style={[styles.smallFont, layout.flexEnd]}>{rd.post_count}</Text>
-                            <Image source={require('assets/icons/topicsmall.png')}/>
+                            <Image source={require('assets/icons/topicsmall.png')} />
                             <Text style={[styles.smallFont, layout.flexEnd]}>{rd.topic_count}</Text>
-                            <Image source={require('assets/icons/followsmall.png')}/>
+                            <Image source={require('assets/icons/followsmall.png')} />
                             <Text style={[styles.smallFont, layout.flexEnd]}>{rd.follower_count}</Text>
-                            </View>
                         </View>
                     </View>
+                </View>
             </View>
         )
     }
 
-    renderConversation(){
-      rd = this.props.rowData;
+    renderConversation(rd) {
 
-      return(
-        <View style={styles.container}>
+        return (
+            <View style={styles.container}>
                 <Text style={styles.bigFont}>{rd.name}</Text>
                 <View style={layout.row}>
-                <Text style={[styles.smallFont, layout.flexEnd, styles.alignRight]}>last activity {Moment(rd.updated_at).fromNow()}</Text>
+                    <Text style={[styles.smallFont, layout.flexEnd, styles.alignRight]}>last activity {Moment(rd.updated_at).fromNow()}</Text>
                 </View>
                 {this.renderPreview(rd.last_message)}
                 <View style={layout.row}>
-                <View style={[layout.row, layout.flexEnd, layout.stats]}>
-                <Image source={require('assets/icons/membersmall.png')}/>
-                <Text style={[styles.smallFont, layout.flexEnd]}>{rd.member_count}</Text>
+                    <View style={[layout.row, layout.flexEnd, layout.stats]}>
+                        <Image source={require('assets/icons/membersmall.png')} />
+                        <Text style={[styles.smallFont, layout.flexEnd]}>{rd.member_count}</Text>
+                    </View>
                 </View>
-                </View>
-        </View>
-      )
+            </View>
+        )
+    }
+
+    renderFeed() {
+        rd = this.props.rowData;
+        var view;
+
+        switch (rd.feed_type.split('-')[0]) {
+            case 'topic':
+                view = (
+                    <View style={styles.container}>
+                        <Text style={[styles.medFont]}>{"New Topic"}</Text>
+                        {this.renderTopic(rd.feed, rd.user)}
+                    </View>
+                )
+                break;
+            case 'group':
+                view = (
+                    <View style={styles.container}>
+                        <Text style={[styles.medFont]}>{rd.user.name + " joined a Group"}</Text>
+                        {this.renderGroup(rd.feed)}
+                    </View>
+                )
+                break;
+            case 'post':
+                view = (
+                    <View style={styles.container}>
+                        <Text style={[styles.medFont]}>{"New Post"}</Text>
+                        {this.renderPost(rd.feed, rd.user)}
+                    </View>
+                )
+                break;
+
+        }
+
+        return view;
     }
 
     renderItem(type) {
@@ -175,22 +204,25 @@ class ListItem extends React.Component {
 
         switch (type) {
             case 'topic':
-                toRender = this.renderTopic();
+                toRender = this.renderTopic(this.props.rowData, this.props.rowData.user);
                 break;
             case 'group':
-                toRender = this.renderGroup();
+                toRender = this.renderGroup(this.props.rowData);
                 break;
             case 'post':
-                toRender = this.renderPost();
+                toRender = this.renderPost(this.props.rowData, this.props.rowData.user);
                 break;
             case 'notification':
-                toRender = this.renderNotification();
+                toRender = this.renderNotification(this.props.rowData);
                 break;
             case 'user':
-                toRender = this.renderUser();
+                toRender = this.renderUser(this.props.rowData);
                 break;
             case 'conversation':
-                toRender = this.renderConversation();
+                toRender = this.renderConversation(this.props.rowData);
+                break;
+            case 'feed':
+                toRender = this.renderFeed();
                 break;
             default:
                 break;
@@ -202,7 +234,7 @@ class ListItem extends React.Component {
     render() {
         return (
             <View>
-                <Button onPress={() => this.props.onPress(this.props.rowData)}>
+                <Button onPress={() => this.props.onPress(this.props.rowData)} onLongPress={() => this.props.onLongPress(this.props.rowData)}>
                     {this.renderItem(this.props.type)}
                 </Button>
             </View>
@@ -213,8 +245,8 @@ class ListItem extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-      padding: 5,
-      backgroundColor: ScreenBackgroundColor
+        padding: 5,
+        backgroundColor: ScreenBackgroundColor
     },
     containerBlue: {
         borderRadius: 8,
@@ -229,7 +261,11 @@ const styles = StyleSheet.create({
     },
 
     smallFont: {
-      fontSize: 12,
+        fontSize: 12,
+    },
+
+    medFont: {
+        fontSize: 16
     },
 
     bigFont: {
@@ -238,20 +274,20 @@ const styles = StyleSheet.create({
     },
 
     bold: {
-      fontWeight: 'bold'
+        fontWeight: 'bold'
     },
 
     alignLeft: {
-      textAlign: 'left',
+        textAlign: 'left',
     },
 
     alignRight: {
-      textAlign: 'right',
+        textAlign: 'right',
     },
 
     dimmedFont: {
-      color: '#8e8e8e',
-      paddingBottom: 2
+        color: '#8e8e8e',
+        paddingBottom: 2
     },
 
     tag: {
@@ -262,25 +298,29 @@ const styles = StyleSheet.create({
     },
 
     tagText: {
-      color: '#FFFFFF'
+        color: '#FFFFFF'
     }
 });
 
 const layout = StyleSheet.create({
     row: {
-      flexDirection: 'row',
+        flexDirection: 'row',
+    },
+
+    wrap: {
+        flexWrap: 'wrap'
     },
 
     tags: {
-      flex: 1
+        flex: 1
     },
 
     stats: {
-      flex: 1
+        flex: 1
     },
 
     namePostsDate: {
-      flexDirection: 'row'
+        flexDirection: 'row'
     },
 
     name: {
