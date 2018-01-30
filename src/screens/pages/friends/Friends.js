@@ -47,9 +47,8 @@ class Friends extends React.Component {
     }
 
     getFriends(page, callback, options){
-      FRIENDS_POST_FETCH(this.props.user.id, 'all', page)
+      FRIENDS_POST_FETCH('all', page)
         .then((responseJSON) => {
-          console.log(responseJSON);
           callback(responseJSON, {
               allLoaded: true,
           })
@@ -57,7 +56,7 @@ class Friends extends React.Component {
     }
 
     getIncoming(page, callback, options){
-      FRIENDS_POST_FETCH(this.props.user.id, 'incoming', page)
+      FRIENDS_POST_FETCH('incoming', page)
         .then((responseJSON) => {
           callback(responseJSON, {
               allLoaded: true,
@@ -66,7 +65,7 @@ class Friends extends React.Component {
     }
 
     getOutgoing(page, callback, options){
-      FRIENDS_POST_FETCH(this.props.user.id, 'outgoing', page)
+      FRIENDS_POST_FETCH('outgoing', page)
         .then((responseJSON) => {
           callback(responseJSON, {
               allLoaded: true,
@@ -78,7 +77,7 @@ class Friends extends React.Component {
       this.props.navigator.push({
           screen: 'smf_frontend.Profile',
           title: rowData.friend.name + '\'s Profile',
-          passProps: { user: rowData.friend, myUser: this.props.user }
+          passProps: { user: rowData.friend }
       });
     }
 

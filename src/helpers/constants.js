@@ -10,13 +10,17 @@ export var user = {
     id: 0
 }
 
+export const editUser = (usr) => {
+    user = usr;
+}
+
 var tabs;
 
 iconsLoaded.then(() => {
     tabs = [
         {
             label: 'Feed',
-            screen: 'smf_frontend.Friends',
+            screen: 'smf_frontend.Feed',
             icon: iconsMap['news'],
             title: 'Feed',
             navigatorButtons: {
@@ -99,8 +103,7 @@ export const onNavEvent = (event) => { // this is the onPress handler for the tw
                 if (parts[0] == 'nav') {
                     this.props.navigator.push({
                         screen: parts[1],
-                        title: payload,
-                        passProps: { user: this.props.user }
+                        title: payload
                     });
                     // handle the link somehow, usually run a this.props.navigator command
                 }
@@ -110,11 +113,9 @@ export const onNavEvent = (event) => { // this is the onPress handler for the tw
 
     switch (event.id) {
         case 'didAppear':
-            console.log('appeared');
             this.isVisible = this.props.navigator.screenIsCurrentlyVisible();
             break;
         case 'didDisappear':
-            console.log('disappeared');
             this.isVisible = this.props.navigator.screenIsCurrentlyVisible();
             break;
     }
@@ -174,24 +175,22 @@ export const startApp = () => {
     });
   }
 
-export const setAuthData = (uid, client, access_token, token_type, expiry) => {
+export const setAuthData = (uid, client, access_token, token_type, expiry, usr) => {
     JSON_HEADERS['access-token'] = access_token;
     JSON_HEADERS['token-type'] = token_type;
     JSON_HEADERS['client'] = client;
     JSON_HEADERS['expiry'] = expiry;
     JSON_HEADERS['uid'] = uid;
+    user = usr;
 }
 
-export const goToHome = (usr) => {
-    console.log('u: ' + user.id);
-    user = usr;
-    console.log(user.id);
+export const goToHome = () => {
     var props = {
         user: user,
-        myUser: user,
         group: {
             id: 1
-        }
+        },
+        joinStatus: 'joined'
     }
     Navigation.startTabBasedApp({
         tabs,

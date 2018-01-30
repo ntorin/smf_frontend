@@ -108,9 +108,9 @@ let BLOCKS_URL = BASE_URL + "/blocks";
 
 let CONVERSATION_MESSAGES_URL = BASE_URL + "/conversation_messages";
 
-let CONVERSATION_MESSAGES_POST = (user_id, conversation_id, message) => {
+let CONVERSATION_MESSAGES_POST = (conversation_id, message) => {
     var body = JSON.stringify({
-        user_id: user_id,
+        user_id: user.id,
         conversation_id: conversation_id,
         message: message
     })
@@ -147,9 +147,9 @@ let CONVERSATION_MESSAGES_POST_FETCH = (conversation_id, page) => {
 
 let CONVERSATION_USERS_URL = BASE_URL + "/conversation_users";
 
-let CONVERSATION_USERS_POST = (user_id, conversation_id) => {
+let CONVERSATION_USERS_POST = (conversation_id) => {
     var body = JSON.stringify({
-        user_id: user_id,
+        user_id: user.id,
         conversation_id: conversation_id
     })
 
@@ -204,9 +204,9 @@ let CONVERSATIONS_POST = (name, description, is_group) => {
     });
 }
 
-let CONVERSATIONS_POST_FETCH = (user_id, sort_by, query, page) => {
+let CONVERSATIONS_POST_FETCH = (sort_by, query, page) => {
     var body = JSON.stringify({
-        user_id, user_id,
+        user_id: user.id,
         sort_by: sort_by,
         query: query,
         page: page
@@ -228,9 +228,10 @@ let CREDIT_HISTORIES_URL = BASE_URL + "/credit_histories";
 
 let FEEDS_URL = BASE_URL + "/feeds";
 
-let FEEDS_POST_FETCH = (user_id, fetch_type, activity_id, page) => {
+let FEEDS_POST_FETCH = (fetch_type, activity_id, page) => {
+    console.log(user.name);
     var body = JSON.stringify({
-        user_id: user_id,
+        user_id: user.id,
         fetch_type: fetch_type,
         activity_id: activity_id,
         page: page
@@ -250,10 +251,10 @@ let FEEDS_POST_FETCH = (user_id, fetch_type, activity_id, page) => {
 
 let FOLLOWS_URL = BASE_URL + "/follows";
 
-let FOLLOWS_POST = (user_id, following_id) => {
+let FOLLOWS_POST = (following_id) => {
     var body = JSON.stringify({
         following_id: following_id,
-        follower_id: user_id
+        follower_id: user.id
     });
 
     return fetch(
@@ -268,9 +269,9 @@ let FOLLOWS_POST = (user_id, following_id) => {
     });
 }
 
-let FOLLOWS_POST_CHECK_REQUEST = (user_id, following_id) => {
+let FOLLOWS_POST_CHECK_REQUEST = (following_id) => {
     var body = JSON.stringify({
-        user_id: user_id,
+        user_id: user.id,
         following_id: following_id
     })
 
@@ -298,9 +299,9 @@ let FOLLOWS_DELETE = (follow_id) => {
 
 let FRIENDS_URL = BASE_URL + "/friends";
 
-let FRIENDS_POST_FETCH = (user_id, fetch_type, page) => {
+let FRIENDS_POST_FETCH = (fetch_type, page) => {
     var body = JSON.stringify({
-        user_id: user_id,
+        user_id: user.id,
         fetch_type: fetch_type,
         page: page
     });
@@ -352,9 +353,9 @@ let FRIENDS_POST_ACCEPT_REQUEST = (request_id) => {
     });
 }
 
-let FRIENDS_POST_CHECK_REQUEST = (user_id, friend_id) => {
+let FRIENDS_POST_CHECK_REQUEST = (friend_id) => {
     var body = JSON.stringify({
-        user_id: user_id,
+        user_id: user.id,
         friend_id: friend_id
     })
 
@@ -429,15 +430,14 @@ let GROUPS_GET_SINGLE = (group_id) => {
 /**
  * Creates a group.
  *
- * @param {number} user_id
  * @param {string} identifier
  * @param {string} name
  * @param {string} description
  * @param {string} tags
  */
-let GROUPS_POST = (user_id, identifier, name, description, group_type, tags) => {
+let GROUPS_POST = (identifier, name, description, group_type, tags) => {
     var body = JSON.stringify({
-        user_id: user_id,
+        user_id: user.id,
         identifier: identifier,
         name: name,
         description: description,
@@ -496,10 +496,10 @@ let GROUPS_POST_VALIDATE_IDENTIFIER = (identifier) => {
 
 let GROUP_USERS_URL = BASE_URL + "/group_users";
 
-let GROUP_USERS_POST = (user_id, group_id) => {
+let GROUP_USERS_POST = (group_id) => {
     var body = JSON.stringify({
         group_id: group_id,
-        user_id: user_id
+        user_id: user.id
     });
 
     return fetch(
@@ -514,9 +514,9 @@ let GROUP_USERS_POST = (user_id, group_id) => {
     });
 }
 
-let GROUP_USERS_POST_CHECK_REQUEST = (user_id, group_id) => {
+let GROUP_USERS_POST_CHECK_REQUEST = (group_id) => {
     var body = JSON.stringify({
-        user_id: user_id,
+        user_id: user.id,
         group_id: group_id
     })
 
@@ -575,17 +575,17 @@ let POSTS_POST_FETCH = (topic_id, page) => {
 
 /**
  * Creates a post.
+ * @param {number} group_id
  * @param {number} topic_id
- * @param {number} user_id
  * @param {string} number
  * @param {boolean} is_op
  * @param {boolean} is_anonymous
  */
-let POSTS_POST = (group_id, topic_id, user_id, content, is_op, is_anonymous) => {
+let POSTS_POST = (group_id, topic_id, content, is_op, is_anonymous) => {
     var body = JSON.stringify({
         group_id: group_id,
         topic_id: topic_id,
-        user_id: user_id,
+        user_id: user.id,
         content: content,
         is_op: is_op,
         is_anonymous: is_anonymous,
@@ -622,9 +622,9 @@ let POSTS_DELETE = (post_id) => {
 
 let REFERRALS_URL = BASE_URL + "/referrals";
 
-let REFERRALS_POST = (user_id, referrer_id) => {
+let REFERRALS_POST = (referrer_id) => {
     var body = JSON.stringify({
-        user_id: user_id,
+        user_id: user.id,
         referrer_id: referrer_id
     });
 
@@ -640,7 +640,7 @@ let REFERRALS_POST = (user_id, referrer_id) => {
     });
 }
 
-let REFERRALS_POST_CHECK_USER = (user_id, referrer) => {
+let REFERRALS_POST_CHECK_USER = (referrer) => {
     var body = JSON.stringify({
         referrer: referrer_id
     });
@@ -709,15 +709,14 @@ let TOPICS_GET_SINGLE = (topic_id) => {
 /**
  * Creates a topic.
  * @param {number} group_id
- * @param {number} user_id
  * @param {string} title
  * @param {number} topic_type
  * @param {string} tags
  */
-let TOPICS_POST = (group_id, user_id, title, topic_type, tags) => {
+let TOPICS_POST = (group_id, title, topic_type, tags) => {
     var body = JSON.stringify({
         group_id: group_id,
-        user_id,
+        user_id: user.id,
         title: title,
         topic_type: topic_type,
         tags: tags,
@@ -790,7 +789,7 @@ let USERS_POST_VALIDATE_IDENTIFIER = (identifier) => {
     });
 }
 
-let USERS_PUT_UPDATE = (user_id, name, blurb, birthday) => {
+let USERS_PUT_UPDATE = (name, blurb, birthday) => {
     var body = JSON.stringify({
         name: name,
         blurb: blurb,
@@ -798,7 +797,7 @@ let USERS_PUT_UPDATE = (user_id, name, blurb, birthday) => {
     });
 
     return fetch(
-        USERS_URL + "/" + user_id,
+        USERS_URL + "/" + user.id,
         {
             method: PUT,
             headers: JSON_HEADERS,
@@ -809,13 +808,13 @@ let USERS_PUT_UPDATE = (user_id, name, blurb, birthday) => {
     });
 }
 
-let USERS_PUT_CREATE_IDENTIFIER = (user_id, identifier) => {
+let USERS_PUT_CREATE_IDENTIFIER = (identifier) => {
     var body = JSON.stringify({
         identifier: identifier
     });
 
     return fetch(
-        USERS_URL + "/" + user_id,
+        USERS_URL + "/" + user.id,
         {
             method: PUT,
             headers: JSON_HEADERS,
@@ -826,13 +825,13 @@ let USERS_PUT_CREATE_IDENTIFIER = (user_id, identifier) => {
     });
 }
 
-let USERS_PUT_CREATE_NAME = (user_id, name) => {
+let USERS_PUT_CREATE_NAME = (name) => {
     var body = JSON.stringify({
         name: name
     });
 
     return fetch(
-        USERS_URL + "/" + user_id,
+        USERS_URL + "/" + user.id,
         {
             method: PUT,
             headers: JSON_HEADERS,

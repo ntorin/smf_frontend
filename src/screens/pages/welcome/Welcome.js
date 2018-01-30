@@ -4,6 +4,7 @@ import { BaseStyles, goToHome, PrimaryColor } from 'helpers/constants';
 import Button from 'components/Button';
 import { CheckBox, FormLabel, FormInput, FormValidationMessage } from 'react-native-elements';
 import { USERS_POST_VALIDATE_IDENTIFIER, USERS_PUT_CREATE_NAME, USERS_PUT_CREATE_IDENTIFIER } from 'helpers/apicalls';
+import { user } from 'helpers/constants'; 
 
 class Welcome extends React.Component {
 
@@ -38,11 +39,11 @@ class Welcome extends React.Component {
             passed_referral: false
         }
 
-        if (this.props.user.accepted_tos != false) {
+        if (user.accepted_tos != false) {
             this.state.passed_tos = true;
         }
 
-        if (this.props.user.identifier != null) {
+        if (user.identifier != null) {
             this.state.passed_identifier = true;
         }
 
@@ -57,11 +58,11 @@ class Welcome extends React.Component {
     goToMenu() {
         this.setState({ passed_name: true })
         if (this.state.passed_identifier) {
-            goToHome(this.props.user);
+            goToHome();
         }
     }
 
-    checkIdentifierRegex(text){
+    checkIdentifierRegex(text) {
         this.setState({ identifier_valid: false, identifier_message: '', identifier_field: text });
     }
 
@@ -78,9 +79,12 @@ class Welcome extends React.Component {
     }
 
     setIdentifier() {
-        USERS_PUT_CREATE_IDENTIFIER(this.props.user.id, this.state.identifier)
+        USERS_PUT_CREATE_IDENTIFIER(this.state.identifier)
             .then((responseJSON) => {
                 this.setState({ passed_identifier: true })
+            })
+        GROUP_USERS_POST(1) //joining the global BBS
+            .then((responseJSON) => {
             })
     }
 
@@ -93,7 +97,7 @@ class Welcome extends React.Component {
     }
 
     setName() {
-        USERS_PUT_CREATE_NAME(this.props.user.id, this.state.name)
+        USERS_PUT_CREATE_NAME(this.state.name)
             .then((responseJSON) => {
                 this.setState({ passed_name: true });
             })
@@ -102,21 +106,21 @@ class Welcome extends React.Component {
     checkUser() {
         this.setState({ referrer: this.state.referrer_field, checkDisabled: true, checkLoading: true })
         REFERRALS_POST_CHECK_USER(this.state.referrer)
-        .then((responseJSON) => {
-            this.setState({ referral_message: responseJSON.message, referral_valid: responseJSON.valid })
-            if (!responseJSON.valid) {
-                this.setState({ referrer: '' });
-            }else{
-                this.setState({ referrer_id: responseJSON.referrer_id});
-            }
-            this.setState({ checkDisabled: false, checkLoading: false })
-        });
+            .then((responseJSON) => {
+                this.setState({ referral_message: responseJSON.message, referral_valid: responseJSON.valid })
+                if (!responseJSON.valid) {
+                    this.setState({ referrer: '' });
+                } else {
+                    this.setState({ referrer_id: responseJSON.referrer_id });
+                }
+                this.setState({ checkDisabled: false, checkLoading: false })
+            });
     }
 
-    addReferral(){
-        REFERRALS_POST(this.props.user.id, this.state.referrer_id)
+    addReferral() {
+        REFERRALS_POST(this.state.referrer_id)
             .then((responseJSON) => {
-                goToMenu(this.props.user);
+                goToMenu();
             });
     }
 

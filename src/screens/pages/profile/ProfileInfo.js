@@ -5,6 +5,7 @@ import LiteProfile from 'components/LiteProfile';
 import Button from 'components/Button';
 import { FRIENDS_POST, FRIENDS_POST_CHECK_REQUEST, FRIENDS_DELETE, FOLLOWS_POST, FOLLOWS_POST_CHECK_REQUEST, FOLLOWS_DELETE } from 'helpers/apicalls';
 import Moment from 'moment';
+import { user } from 'helpers/constants'; 
 
 class ProfileInfo extends React.Component {
 
@@ -34,7 +35,7 @@ class ProfileInfo extends React.Component {
   }
 
   checkFriend() {
-    FRIENDS_POST_CHECK_REQUEST(this.props.myUser.id, this.props.user.id)
+    FRIENDS_POST_CHECK_REQUEST(this.props.user.id)
       .then((responseJSON) => {
         this.setState({
           friend: responseJSON.friend,
@@ -45,7 +46,7 @@ class ProfileInfo extends React.Component {
 
   addFriend() {
     this.setState({ friendLoading: true, followDisabled: true })
-    FRIENDS_POST(this.props.myUser.id, this.props.user.id)
+    FRIENDS_POST(this.props.user.id)
       .then((responseJSON) => {
         checkFriend();
       })
@@ -60,7 +61,7 @@ class ProfileInfo extends React.Component {
   }
 
   checkFollow() {
-    FOLLOWS_POST_CHECK_REQUEST(this.props.myUser.id, this.props.user.id)
+    FOLLOWS_POST_CHECK_REQUEST(this.props.user.id)
       .then((responseJSON) => {
         this.setState({
           follow: responseJSON.follow,
@@ -72,7 +73,7 @@ class ProfileInfo extends React.Component {
 
   followUser() {
     this.setState({ followLoading: true, friendDisabled: true })
-    FOLLOWS_POST(this.props.myUser.id, this.props.user.id)
+    FOLLOWS_POST(this.props.user.id)
       .then((responseJSON) => {
         this.checkFollow();
       })
@@ -87,7 +88,7 @@ class ProfileInfo extends React.Component {
   }
 
   renderFriendButton() {
-    if (this.props.myUser.id != this.props.user.id) {
+    if (user.id != this.props.user.id) {
       switch (this.state.friendStatus) {
         case 'friends':
           return (
@@ -138,7 +139,7 @@ class ProfileInfo extends React.Component {
   }
 
   renderFollowButton() {
-    if (this.props.myUser.id != this.props.user.id) {
+    if (user.id != this.props.user.id) {
       switch (this.state.followStatus) {
         case 'followed':
           return (
@@ -181,6 +182,7 @@ class ProfileInfo extends React.Component {
             <Text style={layout.counts}>Birthday: {this.props.user.birthday}</Text>
             <Text style={layout.counts}>Posts: {this.props.user.post_count}</Text>
             <Text style={layout.counts}>Topics: {this.props.user.topic_count}</Text>
+            <Text style={layout.counts}>Referrals: {this.props.user.referral_count}</Text>
           </View>
         </View>
         <View style={layout.row}>

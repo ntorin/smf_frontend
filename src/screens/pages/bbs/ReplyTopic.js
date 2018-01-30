@@ -18,7 +18,7 @@ class ReplyTopic extends React.Component {
     }
 
     createPost(){
-      POSTS_POST(this.props.topic.group_id, this.props.topic.id, this.props.user.id, this.state.content, false, this.state.is_anonymous, null)
+      POSTS_POST(this.props.topic.group_id, this.props.topic.id, this.state.content, false, this.state.is_anonymous, null)
         .then((responseJSON) => {
             this.props.navigator.pop({
                 animated: true,

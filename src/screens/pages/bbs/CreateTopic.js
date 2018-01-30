@@ -27,13 +27,13 @@ class CreateTopic extends React.Component {
     createTopic() {
         var tags = this.state.tags.join();
 
-        TOPICS_POST(this.props.group_id, this.props.user.id, this.state.title, 0, tags, null)
+        TOPICS_POST(this.props.group_id, this.state.title, 0, tags, null)
             .then((responseJSON) => {
-                POSTS_POST(this.props.group_id, responseJSON.id, this.props.user.id, this.state.content, true, this.state.is_anonymous, null)
+                POSTS_POST(this.props.group_id, responseJSON.id, this.state.content, true, this.state.is_anonymous, null)
                     .then((responseJSON) => {
                         this.props.navigator.pop({
-                            animated: true, // does the pop have transition animation or does it happen immediately (optional)
-                            animationType: 'fade', // 'fade' (for both) / 'slide-horizontal' (for android) does the pop have different transition animation (optional)
+                            animated: true, 
+                            animationType: 'fade',
                         });
                     })
             });

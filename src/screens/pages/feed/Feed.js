@@ -2,7 +2,7 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { TabViewAnimated, TabBar, SceneMap } from 'react-native-tab-view';
 import PopulatableListView from 'components/PopulatableListView';
-import { PrimaryColor, NavNoElevation } from 'helpers/constants';
+import { PrimaryColor, NavNoElevation, user } from 'helpers/constants';
 import { FEEDS_POST_FETCH } from 'helpers/apicalls';
 
 
@@ -48,38 +48,58 @@ class Feed extends React.Component {
   }
 
   getAllFeeds(page, callback, options) {
-    FEEDS_POST_FETCH(this.props.user.id, 'all', null, page)
+    FEEDS_POST_FETCH('all', null, page)
       .then((responseJSON) => {
-        callback(responseJSON, {
-          allLoaded: true,
-        })
+        if (responseJSON.length < 1) {
+          callback(responseJSON, {
+            allLoaded: true
+          })
+        } else {
+          callback(responseJSON)
+        }
+        this.setState({ forceUpdate: false })
       })
   }
 
   getFollowFeeds(page, callback, options) {
-    FEEDS_POST_FETCH(this.props.user.id, 'follows', null, page)
+    FEEDS_POST_FETCH('follows', null, page)
       .then((responseJSON) => {
-        callback(responseJSON, {
-          allLoaded: true,
-        })
+        if (responseJSON.length < 1) {
+          callback(responseJSON, {
+            allLoaded: true
+          })
+        } else {
+          callback(responseJSON)
+        }
+        this.setState({ forceUpdate: false })
       })
   }
 
   getFriendFeeds(page, callback, options) {
-    FEEDS_POST_FETCH(this.props.user.id, 'friends', null, page)
+    FEEDS_POST_FETCH('friends', null, page)
       .then((responseJSON) => {
-        callback(responseJSON, {
-          allLoaded: true,
-        })
+        if (responseJSON.length < 1) {
+          callback(responseJSON, {
+            allLoaded: true
+          })
+        } else {
+          callback(responseJSON)
+        }
+        this.setState({ forceUpdate: false })
       })
   }
 
   getGroupFeeds(page, callback, options) {
-    FEEDS_POST_FETCH(this.props.user.id, 'groups', null, page)
+    FEEDS_POST_FETCH('groups', null, page)
       .then((responseJSON) => {
-        callback(responseJSON, {
-          allLoaded: true,
-        })
+        if (responseJSON.length < 1) {
+          callback(responseJSON, {
+            allLoaded: true
+          })
+        } else {
+          callback(responseJSON)
+        }
+        this.setState({ forceUpdate: false })
       })
   }
 
@@ -101,8 +121,7 @@ class Feed extends React.Component {
           if (parts[0] == 'nav') {
             this.props.navigator.push({
               screen: parts[1],
-              title: payload,
-              passProps: { user: this.props.user }
+              title: payload
             });
             // handle the link somehow, usually run a this.props.navigator command
           }
@@ -112,11 +131,9 @@ class Feed extends React.Component {
 
     switch (event.id) {
       case 'didAppear':
-        console.log('appeared');
         this.isVisible = this.props.navigator.screenIsCurrentlyVisible();
         break;
       case 'didDisappear':
-        console.log('disappeared');
         this.isVisible = this.props.navigator.screenIsCurrentlyVisible();
         break;
     }

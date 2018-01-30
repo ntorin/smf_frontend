@@ -10,6 +10,16 @@ class ViewTopic extends React.Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            replyLoading: false,
+            replyDisabled: false,
+        }
+
+        if (this.props.joinStatus === 'none') {
+            this.state.replyDisabled = true;
+        }
+
+
         this.replyTopic = this.replyTopic.bind(this);
         this.getPosts = this.getPosts.bind(this);
         this.quotePost = this.quotePost.bind(this);
@@ -22,31 +32,40 @@ class ViewTopic extends React.Component {
                     allLoaded: true,
                 })
             });
-          }
+    }
     replyTopic() {
+        this.setState({ replyLoading: true, replyDisabled: true })
         this.props.navigator.push({
             screen: 'smf_frontend.ReplyTopic',
             title: 'Reply to ' + this.props.topic.title,
             passProps: {
-              topic: this.props.topic,
-              user: this.props.user
+                topic: this.props.topic
             }
         });
+        var t = this;
+        setTimeout(function () {
+            t.setState({ replyLoading: false, replyDisabled: false })
+        }, 500)
     };
 
-    quotePost(){
+    quotePost() {
 
     }
 
     render() {
         return (
-            <View style={BaseStyles.container}>
+            <View style={layout.container}>
                 <PopulatableListView
-                        type={'post'}
-                        onFetch={this.getPosts}
-                        onPress={this.quotePost}
-                    />
-                <Button title={"Reply"} style={layout.newTopicButton} onPress={this.replyTopic}>
+                    type={'post'}
+                    onFetch={this.getPosts}
+                    onPress={this.quotePost}
+                />
+                <Button
+                    title={"Reply"}
+                    style={layout.newTopicButton}
+                    disabled={this.state.replyDisabled}
+                    loading={this.state.replyLoading}
+                    onPress={this.replyTopic}>
                     Reply
                 </Button>
             </View>
@@ -59,6 +78,9 @@ const styles = StyleSheet.create({
 });
 
 const layout = StyleSheet.create({
+    container: {
+        flex: 1
+    }
 });
 
 export default ViewTopic;

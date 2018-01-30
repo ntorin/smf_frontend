@@ -29,9 +29,9 @@ class CreateGroup extends React.Component {
     createGroup() {
         var tags = this.state.tags.join();
 
-        GROUPS_POST(this.props.user.id, this.state.identifier, this.state.name, this.state.description, this.state.group_type, tags, null)
+        GROUPS_POST(this.state.identifier, this.state.name, this.state.description, this.state.group_type, tags, null)
             .then((responseJSON) => {
-                GROUP_USERS_POST(responseJSON.id, this.props.user.id)
+                GROUP_USERS_POST(responseJSON.id)
                     .then((responseJSON) => {
                         this.props.navigator.pop({
                             animated: true,

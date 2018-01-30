@@ -3,7 +3,7 @@ import { StyleSheet, View, Text } from 'react-native';
 import { TabViewAnimated, TabBar, SceneMap } from 'react-native-tab-view';
 import PopulatableListView from 'components/PopulatableListView';
 import { iconsMap } from 'helpers/icons-loader';
-import { BaseStyles, PrimaryColor, NavNoElevation } from 'helpers/constants.js';
+import { BaseStyles, PrimaryColor, NavNoElevation, user } from 'helpers/constants.js';
 import ProfileInfo from './ProfileInfo';
 import { FEEDS_POST_FETCH } from 'helpers/apicalls';
 
@@ -12,11 +12,11 @@ class Profile extends React.Component {
 
     static navigatorStyle = NavNoElevation;
 
-    Info = () => <ProfileInfo user={this.props.user} myUser={this.props.myUser} />;
-    Activity = () => <PopulatableListView
+    Info = () => <ProfileInfo user={this.props.user} />;
+    Activity = () => <View style={{flex:1}}><PopulatableListView
         type={'feed'}
         onFetch={this.getActivityFeeds}
-        pagination={true} />;
+        pagination={true}/></View>;
 
     constructor(props) {
         super(props);
@@ -32,11 +32,16 @@ class Profile extends React.Component {
     };
 
     getActivityFeeds(page, callback, options) {
-        FEEDS_POST_FETCH(this.props.myUser.id, 'user', this.props.user.id, page)
+        FEEDS_POST_FETCH('user', this.props.user.id, page)
             .then((responseJSON) => {
-                callback(responseJSON, {
-                    allLoaded: true,
-                })
+                if (responseJSON.length < 1) {
+                    callback(responseJSON, {
+                        allLoaded: true
+                    })
+                } else {
+                    callback(responseJSON)
+                }
+                this.setState({ forceUpdate: false })
             })
     }
 
@@ -53,8 +58,7 @@ class Profile extends React.Component {
             if (event.id == 'edit') {
                 this.props.navigator.push({
                     screen: 'smf_frontend.EditProfile',
-                    title: 'Edit Your Profile',
-                    passProps: { user: this.props.myUser }
+                    title: 'Edit Your Profile'
                 });
             }
         }

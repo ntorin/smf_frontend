@@ -3,54 +3,55 @@ import { StyleSheet, View, Text } from 'react-native';
 import { GiftedChat } from 'react-native-gifted-chat';
 import { CONVERSATION_MESSAGES_POST, CONVERSATION_MESSAGES_POST_FETCH } from 'helpers/apicalls';
 import ActionCable from 'react-native-actioncable';
-import { WEBSOCKET_URL } from 'helpers/constants';
+import { WEBSOCKET_URL, user } from 'helpers/constants';
 
 const cable = ActionCable.createConsumer(WEBSOCKET_URL);
 
 class Chat extends React.Component {
 
-  constructor(props) {
-      super(props);
-      this.state = {
-          messages: [],
-          messageData: [{}],
-      };
+    constructor(props) {
+        super(props);
+        this.state = {
+            messages: [],
+            messageData: [{}],
+        };
 
-      var t = this;
-      cable.subscriptions.create(
-          { channel: "ConversationChannel", room: this.props.conversation.id },
-          {
-              connected(){console.log('connected')},
-              disconnected(){console.log('disconnected')},
+        var t = this;
+        cable.subscriptions.create(
+            { channel: "ConversationChannel", room: this.props.conversation.id },
+            {
+                connected() { console.log('connected') },
+                disconnected() { console.log('disconnected') },
 
-              received(msg) {
-                  console.log(msg);
-                  if (msg.sender_id != t.props.user.id) {
-                      var message = {
-                          _id: msg.id,
-                          text: msg.message,
-                          createdAt: new Date(msg.created_at),
-                          user: {
-                              _id: msg.user_id,
-                              name: msg.name,
-                              avatar: ''
-                          }
-                      }
+                received(msg) {
+                    console.log(msg);
+                    if (msg.message.user_id != user.id) {
+                        var message = {
+                            _id: msg.message.id,
+                            text: msg.message.message,
+                            createdAt: new Date(msg.message.created_at),
+                            user: {
+                                _id: msg.message.user_id,
+                                name: msg.name,
+                                avatar: ''
+                            }
+                        }
 
-                      t.setState((previousState) => ({
-                          messages: GiftedChat.append(previousState.messages, message),
-                      }));
-                  }
-              }
-          }
-      );
+                        t.setState((previousState) => ({
+                            messages: GiftedChat.append(previousState.messages, message),
+                        }));
+                        console.log('hm');
+                    }
+                }
+            }
+        );
 
-      this.getConversationMessages();
-  }
+        this.getConversationMessages();
+    }
 
-  getConversationMessages(page){
-    CONVERSATION_MESSAGES_POST_FETCH(this.props.conversation.id, page)
-      .then((responseJSON) => {
+    getConversationMessages(page) {
+        CONVERSATION_MESSAGES_POST_FETCH(this.props.conversation.id, page)
+            .then((responseJSON) => {
                 var currMessages = [];
                 responseJSON.forEach(function (msg) {
                     var message = {
@@ -66,17 +67,17 @@ class Chat extends React.Component {
                     currMessages.push(message);
                 }, this);
                 this.setState((previousState) => ({ messages: GiftedChat.append(previousState.messages, currMessages) }))
-      })
-  }
+            })
+    }
 
     onSend(messages = []) {
         this.setState((previousState) => ({
             messages: GiftedChat.append(previousState.messages, messages),
         }));
         var input = messages[0].text;
-        CONVERSATION_MESSAGES_POST(this.props.user.id, this.props.conversation.id, input)
-          .then((responseJSON) => {
-          })
+        CONVERSATION_MESSAGES_POST(this.props.conversation.id, input)
+            .then((responseJSON) => {
+            })
     }
 
     render() {
@@ -85,7 +86,7 @@ class Chat extends React.Component {
                 messages={this.state.messages}
                 onSend={(messages) => this.onSend(messages)}
                 user={{
-                    _id: this.props.user.id,
+                    _id: user.id,
                 }}
             />
         );

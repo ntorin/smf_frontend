@@ -76,17 +76,14 @@ class Login extends React.Component {
                 this.state.responseHeaders['client'][0],
                 this.state.responseHeaders['access-token'][0],
                 this.state.responseHeaders['token-type'][0],
-                this.state.responseHeaders['expiry'][0]);
+                this.state.responseHeaders['expiry'][0], responseJSON.data);
             if (this.isNewUser()) {
                 this.props.navigator.push({
                     screen: 'smf_frontend.Welcome',
-                    title: 'Welcome',
-                    passProps: {
-                        user: this.state.user,
-                    }
+                    title: 'Welcome'
                 });
             } else {
-                goToHome(this.state.user);
+                goToHome();
             }
         } else {
             Alert.alert('Login Error', "Please make sure your email and password are correct, and try again.", [{ text: "OK", }])

@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Text, TextInput } from 'react-native';
 import PopulatableListView from 'components/PopulatableListView';
 import Button from 'components/Button';
-import { BaseStyles, PrimaryColor } from 'helpers/constants.js';
+import { BaseStyles, PrimaryColor, user } from 'helpers/constants.js';
 import { TOPICS_POST_FETCH } from 'helpers/apicalls.js';
 import Modal from 'components/Modal';
 
@@ -14,6 +14,8 @@ const topicOptions = [
 
 class BBS extends React.Component {
 
+    isVisible = this.props.navigator.screenIsCurrentlyVisible()
+
     constructor(props) {
         super(props);
         this.state = {
@@ -21,12 +23,17 @@ class BBS extends React.Component {
 
             query: '',
             sort_by: 'recent',
+            forceUpdate: false,
 
             searchLoading: false,
             searchDisabled: false,
             newTopicLoading: false,
             newTopicDisabled: false
         };
+
+        if (this.props.joinStatus === 'none') {
+            this.state.newTopicDisabled = true;
+        }
 
         this.createTopic = this.createTopic.bind(this);
         this.viewTopic = this.viewTopic.bind(this);
@@ -57,8 +64,7 @@ class BBS extends React.Component {
                     if (parts[0] == 'nav') {
                         this.props.navigator.push({
                             screen: parts[1],
-                            title: payload,
-                            passProps: { user: this.props.user }
+                            title: payload
                         });
                         // handle the link somehow, usually run a this.props.navigator command
                     }
@@ -68,11 +74,9 @@ class BBS extends React.Component {
 
         switch (event.id) {
             case 'didAppear':
-                console.log('appeared');
                 this.isVisible = this.props.navigator.screenIsCurrentlyVisible();
                 break;
             case 'didDisappear':
-                console.log('disappeared');
                 this.isVisible = this.props.navigator.screenIsCurrentlyVisible();
                 break;
         }
@@ -81,10 +85,14 @@ class BBS extends React.Component {
     getTopics(page, callback, options) {
         TOPICS_POST_FETCH(this.props.group.id, this.state.sort_by, this.state.query, page)
             .then((responseJSON) => {
-                console.log(responseJSON);
-                callback(responseJSON, {
-                    allLoaded: true,
-                })
+                if (responseJSON.length < 1) {
+                    callback(responseJSON, {
+                        allLoaded: true
+                    })
+                } else {
+                    callback(responseJSON)
+                }
+                this.setState({ forceUpdate: false })
             });
     }
 
@@ -95,8 +103,7 @@ class BBS extends React.Component {
             screen: 'smf_frontend.CreateTopic',
             title: 'Create Topic',
             passProps: {
-                group_id: this.props.group.id,
-                user: this.props.user
+                group_id: this.props.group.id
             }
         });
 
@@ -112,21 +119,24 @@ class BBS extends React.Component {
             title: rowData.title,
             passProps: {
                 topic: rowData,
-                user: this.props.user
+                joinStatus: this.props.joinStatus
             }
         });
     }
 
-
+    renderModal() {
+        return (
+            <Modal
+                onRequestClose={this._hideModal}
+                visible={this.state.isModalVisible}>
+            </Modal>
+        )
+    }
 
     render() {
         return (
-            <View style={BaseStyles.container}>
-                <Modal
-                    onRequestClose={this._hideModal}
-                    visible={this.state.isModalVisible}>
-                    
-                </Modal>
+            <View style={layout.container}>
+                {renderModal()}
                 <View style={layout.searchPanel}>
                     <TextInput style={layout.searchBar}
                         placeholder={'🔎 Search...'}
@@ -134,6 +144,7 @@ class BBS extends React.Component {
                         selectionColor={PrimaryColor}
                         textAlign='center'
                         onChangeText={(text) => this.setState({ query: text })}
+                        onSubmitEditing={() => this.setState({ forceUpdate: true })}
                         autoCorrect={true}
                         autoCapitalize={'none'}
                         returnKeyType={'search'} />
@@ -151,6 +162,7 @@ class BBS extends React.Component {
                         onPress={this.viewTopic}
                         onLongPress={this._showModal}
                         pagination={true}
+                        forceUpdate={this.state.forceUpdate}
                     />
                 </View>
             </View>
@@ -165,8 +177,13 @@ const styles = StyleSheet.create({
 });
 
 const layout = StyleSheet.create({
+    container: {
+        flex: 1
+    },
+
     searchPanel: {
-        flexDirection: 'row'
+        flexDirection: 'row',
+        padding: 15
     },
     searchBar: {
         flex: 7

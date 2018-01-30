@@ -40,7 +40,7 @@ class ListItem extends React.Component {
                     <Text style={[layout.name, styles.smallFont, styles.alignLeft]}>by {user.name}</Text>
                     <Text style={[layout.flexEnd, styles.smallFont, styles.alignRight]}>{rd.post_count} posts • {Moment(rd.last_post_date).fromNow()}</Text>
                 </View>
-                {this.renderPreview(rd.post_preview)}
+                {this.renderPreview(rd.preview)}
                 <View style={layout.row}>
                     {this.renderTags(rd.tags)}
                 </View>

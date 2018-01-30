@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, ListView } from 'react-native';
 import Button from 'apsl-react-native-button';
 import NavItem from 'components/NavItem';
 import LiteProfile from 'components/LiteProfile';
-import { BaseStyles, logoutUser } from 'helpers/constants.js';
+import { BaseStyles, logoutUser, user } from 'helpers/constants.js';
 
 class Nav extends React.Component {
 
@@ -72,7 +72,7 @@ class Nav extends React.Component {
     render() {
         return (
             <View style={BaseStyles.container}>
-                <LiteProfile user={this.props.user} />
+                <LiteProfile user={user} />
                 <ListView
                     style={layout.listView}
                     dataSource={this.state.menu}

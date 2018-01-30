@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Text, TextInput } from 'react-native';
 import PopulatableListView from 'components/PopulatableListView';
 import Button from 'components/Button';
-import { BaseStyles, PrimaryColor } from 'helpers/constants.js';
+import { BaseStyles, PrimaryColor, user } from 'helpers/constants.js';
 import { GROUPS_POST_FETCH } from 'helpers/apicalls.js';
 import Modal from 'components/Modal';
 
@@ -15,6 +15,7 @@ class Groups extends React.Component {
             userid: '',
             sort_by: 'recent',
             query: '',
+            forceUpdate: false,
 
             newGroupLoading: false,
             newGroupDisabled: false
@@ -39,10 +40,16 @@ class Groups extends React.Component {
     }
 
     getGroups(page, callback, options) {
-        console.log("getting groups; query: " + this.state.query);
         GROUPS_POST_FETCH(this.state.sort_by, this.state.query, page)
             .then((responseJSON) => {
-                callback(responseJSON)
+                if (responseJSON.length < 1) {
+                    callback(responseJSON, {
+                        allLoaded: true
+                    })
+                } else {
+                    callback(responseJSON)
+                }
+                this.setState({ forceUpdate: false })
             });
     }
 
@@ -51,10 +58,7 @@ class Groups extends React.Component {
 
         this.props.navigator.push({
             screen: 'smf_frontend.CreateGroup',
-            title: 'Create Group',
-            passProps: {
-                user: this.props.user
-            }
+            title: 'Create Group'
         });
 
         var t = this;
@@ -68,15 +72,14 @@ class Groups extends React.Component {
             screen: 'smf_frontend.ViewGroup',
             title: rowData.name,
             passProps: {
-                group: rowData,
-                user: this.props.user
+                group: rowData
             }
         });
     }
 
     render() {
         return (
-            <View style={BaseStyles.container}>
+            <View style={layout.container}>
                 <View style={layout.searchPanel}>
                     <TextInput style={layout.searchBar}
                         placeholder={'🔎 Search...'}
@@ -84,7 +87,7 @@ class Groups extends React.Component {
                         selectionColor={PrimaryColor}
                         textAlign='center'
                         onChangeText={(text) => this.setState({ query: text })}
-                        onSubmitEditing={() => this.getGroups()}
+                        onSubmitEditing={() => this.setState({ forceUpdate: true })}
                         autoCorrect={true}
                         autoCapitalize={'none'}
                         returnKeyType={'search'} />
@@ -101,6 +104,7 @@ class Groups extends React.Component {
                         type={'group'}
                         onFetch={this.getGroups}
                         onPress={this.viewGroup}
+                        forceUpdate={this.state.forceUpdate}
                     />
                 </View>
             </View >
@@ -115,14 +119,20 @@ const styles = StyleSheet.create({
 });
 
 const layout = StyleSheet.create({
+    container: {
+        flex: 1
+    },
+
     searchPanel: {
-        flexDirection: 'row'
+        flexDirection: 'row',
+        padding: 15
     },
     searchBar: {
         flex: 7
     },
 
     groupList: {
+        flex: 1
 
     }
 });

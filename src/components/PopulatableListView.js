@@ -36,6 +36,7 @@ class PopulatableListView extends React.Component {
                 refreshable={true} // enable pull-to-refresh for iOS and touch-to-refresh for Android
                 withSections={false} // enable sections
                 renderSeparator={this.renderSeparator}
+                forceUpdate={this.props.forceUpdate}
                 paginationAllLoadedView={this.renderPaginationAllLoadedView}
                 enableEmptySections={true}
                 customStyles={{

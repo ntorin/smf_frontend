@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, Dimensions, Image, TextInput, ListView, Refresh
 import Button from 'components/Button';
 import PopulatableListView from 'components/PopulatableListView';
 import ActionCable from 'react-native-actioncable';
-import {BaseStyles, NavStyle, PrimaryColor} from 'helpers/constants.js';
+import { BaseStyles, NavStyle, PrimaryColor, user } from 'helpers/constants.js';
 import { CONVERSATIONS_POST_FETCH } from 'helpers/apicalls';
 
 class Messages extends React.Component {
@@ -11,8 +11,8 @@ class Messages extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-          query: '',
-          sort_by: 'recent'
+            query: '',
+            sort_by: 'recent',
         };
 
         this.getConversations = this.getConversations.bind(this);
@@ -32,39 +32,37 @@ class Messages extends React.Component {
     }
 
     getConversations(page, callback, options) {
-      CONVERSATIONS_POST_FETCH(this.props.user.id, this.state.sort_by, this.state.query, page)
-        .then((responseJSON) => {
-          callback(responseJSON, {
-            allLoaded: true
-          })
-        })
+        CONVERSATIONS_POST_FETCH(this.state.sort_by, this.state.query, page)
+            .then((responseJSON) => {
+                callback(responseJSON, {
+                    allLoaded: true
+                })
+            })
     }
 
-    goToChat(rowData){
+    goToChat(rowData) {
         this.props.navigator.push({
             screen: 'smf_frontend.Chat',
             title: rowData.name,
-            passProps: { conversation: rowData, user: this.props.user }
+            passProps: { conversation: rowData }
         });
     }
 
-    filterQuery(){
+    filterQuery() {
 
     }
 
     render() {
         return (
             <View style={layout.container}>
-                <TextInput placeholder={'🔎 Search...'} autoCorrect={false} autoCapitalize={'none'}
-                    keyboardType={'web-search'} onSubmitEditing={() => this.filterQuery()} style={styles.searchBar} />
-                    <View style={layout.conversationList}>
-                        <PopulatableListView
-                            type={'conversation'}
-                            onFetch={this.getConversations}
-                            onPress={this.goToChat}
-                            pagination={true}
-                        />
-                    </View>
+                <View style={layout.conversationList}>
+                    <PopulatableListView
+                        type={'conversation'}
+                        onFetch={this.getConversations}
+                        onPress={this.goToChat}
+                        pagination={true}
+                    />
+                </View>
 
             </View>
         )
@@ -75,13 +73,13 @@ const styles = StyleSheet.create({
 });
 
 const layout = StyleSheet.create({
-  container: {
+    container: {
 
-  },
+    },
 
-  conversationList: {
+    conversationList: {
 
-  }
+    }
 });
 
 export default Messages;

@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, TextInput} from 'react-native';
 import TextField from 'react-native-md-textinput';
 import Button from 'components/Button';
 import DatePicker from 'react-native-datepicker'
-import { BaseStyles,  PrimaryColor } from 'helpers/constants.js';
+import { BaseStyles,  PrimaryColor, user, editUser } from 'helpers/constants.js';
 import { USERS_PUT_UPDATE } from 'helpers/apicalls';
 
 class EditProfile extends React.Component {
@@ -11,18 +11,22 @@ class EditProfile extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-          name: this.props.user.name,
-          blurb: this.props.user.blurb,
-          birthday: this.props.user.birthday,
+          name: user.name,
+          blurb: user.blurb,
+          birthday: user.birthday,
         }
         this.updateUserInfo = this.updateUserInfo.bind(this);
     }
 
     updateUserInfo(){
-        console.log(this.state);
-      USERS_PUT_UPDATE(this.props.user.id, this.state.name, this.state.blurb, this.state.birthday)
+      USERS_PUT_UPDATE(this.state.name, this.state.blurb, this.state.birthday)
         .then((responseJSON) => {
             console.log(responseJSON);
+            editUser(responseJSON);
+            this.props.navigator.pop({
+                animated: true, 
+                animationType: 'fade', 
+            });
         })
     }
 

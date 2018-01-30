@@ -30,13 +30,13 @@ class GroupInfo extends React.Component {
       title: this.props.group.name,
       passProps: {
         group: this.props.group,
-        user: this.props.user
+        joinStatus: this.state.joinStatus
       }
     });
   }
 
   checkGroup() {
-    GROUP_USERS_POST_CHECK_REQUEST(this.props.user.id, this.props.group.id)
+    GROUP_USERS_POST_CHECK_REQUEST(this.props.group.id)
       .then((responseJSON) => {
         this.setState({
           groupUser: responseJSON.group_user,
@@ -47,7 +47,7 @@ class GroupInfo extends React.Component {
 
   joinGroup() {
     this.setState({ joinLoading: true })
-    GROUP_USERS_POST(this.props.user.id, this.props.group.id)
+    GROUP_USERS_POST(this.props.group.id)
       .then((responseJSON) => {
         this.checkGroup();
       })
@@ -65,15 +65,15 @@ class GroupInfo extends React.Component {
     switch (this.state.joinStatus) {
       case 'creator':
         return (
-          <Button 
-          disabled 
-          title={"Creator of " + this.props.group.name} />
+          <Button
+            disabled
+            title={"Creator of " + this.props.group.name} />
         )
         break;
       case 'joined':
         return (
-          <Button 
-          title={"Leave " + this.props.group.name}
+          <Button
+            title={"Leave " + this.props.group.name}
             onPress={this.leaveGroup}
             loading={this.state.joinLoading}
             disabled={this.state.joinDisabled} />
@@ -81,8 +81,8 @@ class GroupInfo extends React.Component {
         break;
       case 'none':
         return (
-          <Button 
-          title={"Join " + this.props.group.name}
+          <Button
+            title={"Join " + this.props.group.name}
             onPress={this.joinGroup}
             loading={this.state.joinLoading}
             disabled={this.state.joinDisabled} />
@@ -91,12 +91,26 @@ class GroupInfo extends React.Component {
     }
   }
 
+  kek() {
+    if (this.state.joinStatus === 'none') {
+      return (<View>
+        <Text>{"You have not joined " + this.props.group.name + " yet. You will not be able to make any topics or posts until you do so."}</Text>
+      </View>)
+    } else {
+      return (<View />)
+    }
+  }
+
   render() {
     return (
       <View style={BaseStyles.container}>
         {this.renderJoinButton()}
-        <Button title={"View " + this.props.group.name + "\'s BBS"} 
-        onPress={this.goToBBS}/>
+        <Button title={"View " + this.props.group.name + "\'s BBS"}
+          onPress={this.goToBBS} />
+        {this.state.joinStatus === 'none' &&
+          <View>
+            <Text>{"You have not joined " + this.props.group.name + " yet. You will not be able to make any topics or posts until you do so."}</Text>
+          </View>}
       </View>
     )
   }
