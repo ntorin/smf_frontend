@@ -21,7 +21,8 @@ const icons = {
   "mail": [30, "#fff", Foundation],
   "compass": [30, "#fff", Entypo],
   "menu": [30, "#fff", Entypo],
-  "group": [30, "#fff", FontAwesome]
+  "group": [30, "#fff", FontAwesome],
+  "pin": [30, "#fff", Octicons]
 }
 
 const defaultIconProvider = Entypo;

@@ -1,9 +1,10 @@
 import React from 'react';
 import { StyleSheet, View, Text, Image } from 'react-native';
 import Button from 'react-native-button';
-import { BaseStyles, PrimaryColor, ScreenBackgroundColor } from 'helpers/constants.js';
+import { BaseStyles, PrimaryColor, ScreenBackgroundColor, ANDROID_ADMOB_AD_UNIT_ID } from 'helpers/constants.js';
 import Avatar from 'components/Avatar';
 import { MarkdownView } from 'react-native-markdown-view';
+import { AdMobBanner, AdMobRewarded, PublisherBanner } from 'react-native-admob';
 import Moment from 'moment';
 
 class ListItem extends React.Component {
@@ -53,26 +54,35 @@ class ListItem extends React.Component {
     }
 
     renderGroup(rd) {
-
         return (
-            <View style={styles.container}>
-                <Text style={styles.bigFont}>{rd.name}</Text>
-                <View style={layout.row}>
-                    <Text style={[styles.smallFont, layout.flexStart, styles.alignLeft]}>{rd.identifier}</Text>
-                    <Text style={[styles.smallFont, layout.flexEnd, styles.alignRight]}>last activity {Moment(rd.updated_at).fromNow()}</Text>
+            <View>
+                <View style={styles.container}>
+                    <Text style={styles.bigFont}>{rd.name}</Text>
+                    <View style={layout.row}>
+                        <Text style={[styles.smallFont, layout.flexStart, styles.alignLeft]}>{rd.identifier}</Text>
+                        <Text style={[styles.smallFont, layout.flexEnd, styles.alignRight]}>last activity {Moment(rd.updated_at).fromNow()}</Text>
+                    </View>
+                    <Text style={styles.dimmedFont}>{rd.description}</Text>
+                    <View style={layout.row}>
+                        {this.renderTags(rd.tags)}
+                    </View>
+                    <View style={[layout.row, layout.flexEnd, layout.stats]}>
+                        <Image source={require('assets/icons/membersmall.png')} />
+                        <Text style={[styles.smallFont, layout.flexEnd]}>{rd.member_count}</Text>
+                        <Image source={require('assets/icons/topicsmall.png')} />
+                        <Text style={[styles.smallFont, layout.flexEnd]}>{rd.topic_count}</Text>
+                        <Image source={require('assets/icons/postsmall.png')} />
+                        <Text style={[styles.smallFont, layout.flexEnd]}>{rd.post_count}</Text>
+                    </View>
                 </View>
-                <Text style={styles.dimmedFont}>{rd.description}</Text>
-                <View style={layout.row}>
-                    {this.renderTags(rd.tags)}
-                </View>
-                <View style={[layout.row, layout.flexEnd, layout.stats]}>
-                    <Image source={require('assets/icons/membersmall.png')} />
-                    <Text style={[styles.smallFont, layout.flexEnd]}>{rd.member_count}</Text>
-                    <Image source={require('assets/icons/topicsmall.png')} />
-                    <Text style={[styles.smallFont, layout.flexEnd]}>{rd.topic_count}</Text>
-                    <Image source={require('assets/icons/postsmall.png')} />
-                    <Text style={[styles.smallFont, layout.flexEnd]}>{rd.post_count}</Text>
-                </View>
+                {/*<View style={{flex:1}}>
+                <AdMobBanner
+                    adSize="fullBanner"
+                    adUnitID={ANDROID_ADMOB_AD_UNIT_ID}
+                    testDevices={[AdMobBanner.simulatorId]}
+                    onAdFailedToLoad={error => console.error(error)}
+                />
+                </View> */}
             </View>
         );
     }

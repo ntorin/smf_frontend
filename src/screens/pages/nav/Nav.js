@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, ListView } from 'react-native';
+import { StyleSheet, View, Text, ListView, Dimensions } from 'react-native';
 import Button from 'apsl-react-native-button';
 import NavItem from 'components/NavItem';
 import LiteProfile from 'components/LiteProfile';
@@ -71,7 +71,7 @@ class Nav extends React.Component {
 
     render() {
         return (
-            <View style={BaseStyles.container}>
+            <View style={[BaseStyles.container, layout.container]}>
                 <LiteProfile user={user} />
                 <ListView
                     style={layout.listView}
@@ -84,9 +84,7 @@ class Nav extends React.Component {
 
 const layout = StyleSheet.create({
     container: {
-        flex: 1,
-        padding: 15,
-        backgroundColor: '#EDEDEE',
+        width: Dimensions.get('window').width * 0.8
     },
 
     listView: {

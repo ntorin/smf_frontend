@@ -5,7 +5,7 @@ import LiteProfile from 'components/LiteProfile';
 import Button from 'components/Button';
 import { FRIENDS_POST, FRIENDS_POST_CHECK_REQUEST, FRIENDS_DELETE, FOLLOWS_POST, FOLLOWS_POST_CHECK_REQUEST, FOLLOWS_DELETE } from 'helpers/apicalls';
 import Moment from 'moment';
-import { user } from 'helpers/constants'; 
+import { user } from 'helpers/constants';
 
 class ProfileInfo extends React.Component {
 
@@ -21,6 +21,8 @@ class ProfileInfo extends React.Component {
       followDisabled: false
     }
 
+    this.viewGroups = this.viewGroups.bind(this);
+    this.viewFollows = this.viewFollows.bind(this);
     this.addFriend = this.addFriend.bind(this);
     this.deleteFriend = this.deleteFriend.bind(this);
     this.followUser = this.followUser.bind(this);
@@ -87,6 +89,27 @@ class ProfileInfo extends React.Component {
       })
   }
 
+  viewGroups(){
+    console.log(this.props);
+    this.props.navigator.push({
+        screen: 'smf_frontend.UserGroups',
+        title: this.props.user.name + '\'s groups',
+        passProps: {
+          user: this.props.user
+        }
+    });
+  }
+
+  viewFollows(){
+    this.props.navigator.push({
+        screen: 'smf_frontend.UserFollows',
+        title: this.props.user.name + '\'s follows',
+        passProps: {
+          user: this.props.user
+        }
+    });
+  }
+
   renderFriendButton() {
     if (user.id != this.props.user.id) {
       switch (this.state.friendStatus) {
@@ -135,7 +158,6 @@ class ProfileInfo extends React.Component {
           break;
       }
     }
-
   }
 
   renderFollowButton() {
@@ -143,26 +165,26 @@ class ProfileInfo extends React.Component {
       switch (this.state.followStatus) {
         case 'followed':
           return (
-            <View style={{flex:1}}>
-            <Button
-              title={"Unfollow"}
-              style={layout.button}
-              onPress={this.unfollowUser}
-              loading={this.state.followLoading}
-              disabled={this.state.followDisabled} />
-              </View>
+            <View style={{ flex: 1 }}>
+              <Button
+                title={"Unfollow"}
+                style={layout.button}
+                onPress={this.unfollowUser}
+                loading={this.state.followLoading}
+                disabled={this.state.followDisabled} />
+            </View>
           )
           break;
 
         case 'none':
           return (
-            <View style={{flex:1}}>
-            <Button
-              title={"Follow"}
-              style={layout.button}
-              onPress={this.followUser}
-              loading={this.state.followLoading}
-              disabled={this.state.followDisabled} />
+            <View style={{ flex: 1 }}>
+              <Button
+                title={"Follow"}
+                style={layout.button}
+                onPress={this.followUser}
+                loading={this.state.followLoading}
+                disabled={this.state.followDisabled} />
             </View>
           )
           break;
@@ -188,6 +210,20 @@ class ProfileInfo extends React.Component {
         <View style={layout.row}>
           {this.renderFollowButton()}
           {this.renderFriendButton()}
+        </View>
+        <View style={layout.row}>
+          <View style={{ flex: 1 }}>
+            <Button
+              title={"View Groups"}
+              style={layout.button}
+              onPress={this.viewGroups} />
+          </View>
+          <View style={{ flex: 1 }}>
+            <Button
+              title={"View Follows"}
+              style={layout.button}
+              onPress={this.viewFollows} />
+          </View>
         </View>
       </View>
     )

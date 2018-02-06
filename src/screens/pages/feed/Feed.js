@@ -7,9 +7,7 @@ import { FEEDS_POST_FETCH } from 'helpers/apicalls';
 
 
 class Feed extends React.Component {
-
   static navigatorStyle = NavNoElevation;
-  isVisible = this.props.navigator.screenIsCurrentlyVisible();
 
   All = () => <PopulatableListView
     type={'feed'}
@@ -115,26 +113,35 @@ class Feed extends React.Component {
         break;
 
       case 'DeepLink':
-        if (this.isVisible) {
-          const parts = event.link.split('/'); // Link parts
-          const payload = event.payload; // (optional) The payload
-          if (parts[0] == 'nav') {
-            this.props.navigator.push({
-              screen: parts[1],
-              title: payload
-            });
-            // handle the link somehow, usually run a this.props.navigator command
+        this.props.navigator.screenIsCurrentlyVisible().then((responseJSON) => {
+          isVisible = responseJSON
+          if (isVisible) {
+            const parts = event.link.split('/'); // Link parts
+            const payload = event.payload; // (optional) The payload
+            if (parts[0] == 'nav') {
+              this.props.navigator.push({
+                screen: parts[1],
+                title: payload
+              });
+              // handle the link somehow, usually run a this.props.navigator command
+            }
           }
-        }
+        });
         break;
     }
 
     switch (event.id) {
       case 'didAppear':
-        this.isVisible = this.props.navigator.screenIsCurrentlyVisible();
+        this.props.navigator.screenIsCurrentlyVisible().then((responseJSON) => {
+          isVisible = responseJSON;
+          console.log('feed appeared; ' + isVisible);
+        });
         break;
       case 'didDisappear':
-        this.isVisible = this.props.navigator.screenIsCurrentlyVisible();
+        this.props.navigator.screenIsCurrentlyVisible().then((responseJSON) => {
+          isVisible = responseJSON;
+          console.log('feed disappeared; ' + isVisible);
+        });
         break;
     }
   }

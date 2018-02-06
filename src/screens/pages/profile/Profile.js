@@ -12,11 +12,15 @@ class Profile extends React.Component {
 
     static navigatorStyle = NavNoElevation;
 
-    Info = () => <ProfileInfo user={this.props.user} />;
-    Activity = () => <View style={{flex:1}}><PopulatableListView
-        type={'feed'}
-        onFetch={this.getActivityFeeds}
-        pagination={true}/></View>;
+    Info = () => <ProfileInfo
+        {...this.props}
+        user={this.props.user} />;
+    Activity = () => <View style={{ flex: 1 }}
+    ><PopulatableListView
+            type={'feed'}
+            onFetch={this.getActivityFeeds}
+            pagination={true} />
+    </View>;
 
     constructor(props) {
         super(props);
@@ -46,21 +50,54 @@ class Profile extends React.Component {
     }
 
     onNavigatorEvent(event) { // this is the onPress handler for the two buttons together
-        if (event.type == 'NavBarButtonPress') { // this is the event type for button presses
+        switch (event.type) {
+            case 'NavBarButtonPress':
+                if (event.id == 'menu') { // this is the same id field from the static navigatorButtons definition
+                    this.props.navigator.toggleDrawer({
+                        side: 'left',
+                        animated: true
+                    })
+                }
 
-            if (event.id == 'menu') { // this is the same id field from the static navigatorButtons definition
-                this.props.navigator.toggleDrawer({
-                    side: 'left',
-                    animated: true
-                })
-            }
+                if (event.id == 'edit') {
+                    this.props.navigator.push({
+                        screen: 'smf_frontend.EditProfile',
+                        title: 'Edit Your Profile'
+                    });
+                }
+                break;
 
-            if (event.id == 'edit') {
-                this.props.navigator.push({
-                    screen: 'smf_frontend.EditProfile',
-                    title: 'Edit Your Profile'
+            case 'DeepLink':
+                this.props.navigator.screenIsCurrentlyVisible().then((responseJSON) => {
+                    isVisible = responseJSON
+                    if (isVisible) {
+                        const parts = event.link.split('/'); // Link parts
+                        const payload = event.payload; // (optional) The payload
+                        if (parts[0] == 'nav') {
+                            this.props.navigator.push({
+                                screen: parts[1],
+                                title: payload
+                            });
+                            // handle the link somehow, usually run a this.props.navigator command
+                        }
+                    }
                 });
-            }
+                break;
+        }
+
+        switch (event.id) {
+            case 'didAppear':
+                this.props.navigator.screenIsCurrentlyVisible().then((responseJSON) => {
+                    isVisible = responseJSON;
+                    console.log('feed appeared; ' + isVisible);
+                });
+                break;
+            case 'didDisappear':
+                this.props.navigator.screenIsCurrentlyVisible().then((responseJSON) => {
+                    isVisible = responseJSON;
+                    console.log('feed disappeared; ' + isVisible);
+                });
+                break;
         }
     }
 

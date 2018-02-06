@@ -287,6 +287,24 @@ let FOLLOWS_POST_CHECK_REQUEST = (following_id) => {
     });
 }
 
+let FOLLOWS_POST_MY_FOLLOWS = (user_id, page) => {
+    var body = JSON.stringify({
+        user_id: user_id,
+        page: page
+    });
+
+    return fetch(
+        FOLLOWS_URL + "/my_follows",
+        {
+            method: POST,
+            headers: JSON_HEADERS,
+            body: body
+        }
+    ).then((response) => {
+        return (response.json());
+    });
+}
+
 let FOLLOWS_DELETE = (follow_id) => {
     return fetch(
         FOLLOWS_URL + '/' + follow_id,
@@ -399,6 +417,25 @@ let GROUPS_POST_FETCH = (sort_by, query, page) => {
 
     return fetch(
         GROUPS_URL + "/fetch",
+        {
+            method: POST,
+            headers: JSON_HEADERS,
+            body: body
+        }
+    ).then((response) => {
+        return (response.json());
+    });
+}
+
+let GROUPS_POST_MY_GROUPS = (user_id, page) => {
+
+    var body = JSON.stringify({
+        user_id: user_id,
+        page: page
+    });
+
+    return fetch(
+        GROUPS_URL + "/my_groups",
         {
             method: POST,
             headers: JSON_HEADERS,
@@ -668,7 +705,7 @@ let TOPICS_URL = BASE_URL + "/topics";
  * @param {string} query search string; LIKE searches topic names
  * @param {number} page
  */
-let TOPICS_POST_FETCH = (group_id, sort_by, query, page) => {
+let TOPICS_POST_FETCH = (group_id, sort_by, pinned, query, page) => {
 
     var body = JSON.stringify({
         group_id: group_id,
@@ -863,6 +900,7 @@ export {
 
     FOLLOWS_POST,
     FOLLOWS_POST_CHECK_REQUEST,
+    FOLLOWS_POST_MY_FOLLOWS,
     FOLLOWS_DELETE,
 
     FRIENDS_POST_FETCH,
@@ -877,6 +915,7 @@ export {
 
     GROUPS_POST,
     GROUPS_POST_FETCH,
+    GROUPS_POST_MY_GROUPS,
     GROUPS_POST_VALIDATE_IDENTIFIER,
 
     POSTS_POST,

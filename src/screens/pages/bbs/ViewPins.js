@@ -13,38 +13,17 @@ const topicOptions = [
     }
 ]
 
-class BBS extends React.Component {
-    static navigatorButtons = {
-        rightButtons: [{
-            icon: iconsMap['pin'],
-            id: 'pins',
-        }]
-    };
+class ViewPins extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
             isModalVisible: false,
-
-            query: '',
-            sort_by: 'recent',
-            forceUpdate: false,
-
-            searchLoading: false,
-            searchDisabled: false,
-            newTopicLoading: false,
-            newTopicDisabled: false
         };
 
-        if (this.props.joinStatus === 'none') {
-            this.state.newTopicDisabled = true;
-        }
-
-        this.createTopic = this.createTopic.bind(this);
         this.viewTopic = this.viewTopic.bind(this);
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
         this.getTopics = this.getTopics.bind(this);
-        this.createTopic = this.createTopic.bind(this);
     }
 
     _showModal = () => this.setState({ isModalVisible: true })
@@ -64,7 +43,7 @@ class BBS extends React.Component {
                 if (event.id == 'pins') {
                     this.props.navigator.push({
                         screen: 'smf_frontend.ViewPins',
-                        title: 'Pinned Topics for ' + this.props.group.name,
+                        title: 'Pinned Topics',
                         passProps: {
                             group: this.props.group,
                             joinStatus: this.state.joinStatus
@@ -108,7 +87,7 @@ class BBS extends React.Component {
     }
 
     getTopics(page, callback, options) {
-        TOPICS_POST_FETCH(this.props.group.id, this.state.sort_by, false, this.state.query, page)
+        TOPICS_POST_FETCH(this.props.group.id, this.state.sort_by, true, this.state.query, page)
             .then((responseJSON) => {
                 if (responseJSON.length < 1) {
                     callback(responseJSON, {
@@ -119,23 +98,6 @@ class BBS extends React.Component {
                 }
                 this.setState({ forceUpdate: false })
             });
-    }
-
-    createTopic() {
-        this.setState({ newTopicLoading: true, newTopicDisabled: true })
-
-        this.props.navigator.push({
-            screen: 'smf_frontend.CreateTopic',
-            title: 'Create Topic',
-            passProps: {
-                group_id: this.props.group.id
-            }
-        });
-
-        var t = this;
-        setTimeout(function () {
-            t.setState({ newTopicLoading: false, newTopicDisabled: false })
-        }, 500)
     }
 
     viewTopic(rowData) {
@@ -162,28 +124,10 @@ class BBS extends React.Component {
         return (
             <View style={layout.container}>
                 {this.renderModal()}
-                <View style={layout.searchPanel}>
-                    <TextInput style={layout.searchBar}
-                        placeholder={'🔎 Search...'}
-                        placeholderTextColor={PrimaryColor}
-                        selectionColor={PrimaryColor}
-                        textAlign='center'
-                        onChangeText={(text) => this.setState({ query: text })}
-                        onSubmitEditing={() => this.setState({ forceUpdate: true })}
-                        autoCorrect={true}
-                        autoCapitalize={'none'}
-                        returnKeyType={'search'} />
-                    <Button
-                        title={"New Topic"}
-                        style={styles.newTopicButton}
-                        onPress={this.createTopic}
-                        loading={this.state.newTopicLoading}
-                        disabled={this.state.newTopicDisabled} />
-                </View>
                 <View style={layout.topicList}>
                     <PopulatableListView
                         type={'topic'}
-                        onFetch={this.getTopics}
+                        onFetch={this.getPinnedTopics}
                         onPress={this.viewTopic}
                         onLongPress={this._showModal}
                         pagination={true}
@@ -219,4 +163,4 @@ const layout = StyleSheet.create({
     },
 });
 
-export default BBS;
+export default ViewPins;

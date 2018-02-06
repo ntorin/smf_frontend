@@ -6,6 +6,14 @@ import { iconsMap, iconsLoaded } from 'helpers/icons-loader';
 import { Navigation } from 'react-native-navigation';
 import { JSON_HEADERS } from 'helpers/apicalls';
 
+export const WEBSOCKET_URL = 'ws://18.218.93.101/cable';
+
+export const ANDROID_ADMOB_APP_ID = 'ca-app-pub-3289567150609681~2704928270';
+export const ANDROID_ADMOB_AD_UNIT_ID = 'ca-app-pub-3289567150609681/5928312822';
+
+export const IOS_ADMOB_APP_ID = '';
+export const IOS_ADMOB_AD_UNIT_ID = '';
+
 export var user = {
     id: 0
 }
@@ -121,7 +129,6 @@ export const onNavEvent = (event) => { // this is the onPress handler for the tw
     }
 }
 
-export const WEBSOCKET_URL = 'ws://18.218.93.101/cable'
 export const PrimaryColor = '#73cfc9';
 export const PrimaryDimmed = 'rgba(115, 207, 201, 0.5)';
 export const ScreenBackgroundColor = '#FFFFFF';
@@ -188,7 +195,9 @@ export const goToHome = () => {
     var props = {
         user: user,
         group: {
-            id: 1
+            id: 1,
+            name: 'Global BBS',
+            identifier: 'global',
         },
         joinStatus: 'joined'
     }
