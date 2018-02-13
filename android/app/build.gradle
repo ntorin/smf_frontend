@@ -139,6 +139,8 @@ dependencies {
     compile "com.facebook.react:react-native:+"  // From node_modules
     compile project(':react-native-navigation')
     compile project(':react-native-blur')
+    compile project(path: ':react-native-push-notification')
+    compile project(path: ':react-native-admob')
 }
 
 // Run this once to be able to run the application with BUCK

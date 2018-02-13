@@ -224,12 +224,28 @@ let CONVERSATIONS_POST_FETCH = (sort_by, query, page) => {
     });
 }
 
+let CONVERSATIONS_PUT_UPDATE = (conversation_id, is_muted) => {
+    var body = JSON.stringify({
+        is_muted: is_muted
+    });
+
+    return fetch(
+        CONVERSATIONS_URL + "/" + conversation_id,
+        {
+            method: PUT,
+            headers: JSON_HEADERS,
+            body: body
+        }
+    ).then((response) => {
+        return (response.json());
+    });
+}
+
 let CREDIT_HISTORIES_URL = BASE_URL + "/credit_histories";
 
 let FEEDS_URL = BASE_URL + "/feeds";
 
 let FEEDS_POST_FETCH = (fetch_type, activity_id, page) => {
-    console.log(user.name);
     var body = JSON.stringify({
         user_id: user.id,
         fetch_type: fetch_type,
@@ -551,6 +567,24 @@ let GROUP_USERS_POST = (group_id) => {
     });
 }
 
+let GROUP_USERS_POST_FETCH = (group_id, page) => {
+    var body = JSON.stringify({
+        group_id: group_id,
+        page: page
+    });
+
+    return fetch(
+        GROUP_USERS_URL + "/fetch",
+        {
+            method: POST,
+            headers: JSON_HEADERS,
+            body: body
+        }
+    ).then((response) => {
+        return (response.json());
+    });
+}
+
 let GROUP_USERS_POST_CHECK_REQUEST = (group_id) => {
     var body = JSON.stringify({
         user_id: user.id,
@@ -561,6 +595,24 @@ let GROUP_USERS_POST_CHECK_REQUEST = (group_id) => {
         GROUP_USERS_URL + "/check_request",
         {
             method: POST,
+            headers: JSON_HEADERS,
+            body: body
+        }
+    ).then((response) => {
+        return (response.json());
+    });
+}
+
+let GROUP_USERS_PUT_UPDATE = (group_user_id, role, is_banned) => {
+    var body = JSON.stringify({
+        role: role,
+        is_banned: is_banned
+    });
+
+    return fetch(
+        GROUP_USERS_URL + "/" + group_user_id,
+        {
+            method: PUT,
             headers: JSON_HEADERS,
             body: body
         }
@@ -695,6 +747,28 @@ let REFERRALS_POST_CHECK_USER = (referrer) => {
 }
 
 let REPORTS_URL = BASE_URL + "/reports";
+
+let REPORTS_POST = (group_id, reported_id, reason, comment) => {
+    var body = JSON.stringify({
+        group_id: group_id,
+        reporter_id: user.id,
+        reported_id: reported_id,
+        reason: reason,
+        comment: comment
+    });
+
+    return fetch(
+        REPORTS_URL,
+        {
+            method: POST,
+            headers: JSON_HEADERS,
+            body: body
+        }
+    ).then((response) => {
+        return (response.json());
+    });
+}
+
 
 let TOPICS_URL = BASE_URL + "/topics";
 
@@ -895,6 +969,7 @@ export {
 
     CONVERSATIONS_POST,
     CONVERSATIONS_POST_FETCH,
+    CONVERSATIONS_PUT_UPDATE,
 
     FEEDS_POST_FETCH,
 
@@ -911,6 +986,8 @@ export {
 
     GROUP_USERS_POST,
     GROUP_USERS_POST_CHECK_REQUEST,
+    GROUP_USERS_POST_FETCH,
+    GROUP_USERS_PUT_UPDATE,
     GROUP_USERS_DELETE,
 
     GROUPS_POST,
@@ -920,6 +997,8 @@ export {
 
     POSTS_POST,
     POSTS_POST_FETCH,
+
+    REPORTS_POST,
 
     TOPICS_POST,
     TOPICS_POST_FETCH,

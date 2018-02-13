@@ -6,12 +6,7 @@ import { BaseStyles, PrimaryColor, user } from 'helpers/constants.js';
 import { TOPICS_POST_FETCH } from 'helpers/apicalls.js';
 import { iconsMap } from 'helpers/icons-loader';
 import Modal from 'components/Modal';
-
-const topicOptions = [
-    {
-
-    }
-]
+import ModalOptions from 'components/ModalOptions';
 
 class BBS extends React.Component {
     static navigatorButtons = {
@@ -33,7 +28,9 @@ class BBS extends React.Component {
             searchLoading: false,
             searchDisabled: false,
             newTopicLoading: false,
-            newTopicDisabled: false
+            newTopicDisabled: false,
+
+            selectedTopic: {}
         };
 
         if (this.props.joinStatus === 'none') {
@@ -45,6 +42,8 @@ class BBS extends React.Component {
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
         this.getTopics = this.getTopics.bind(this);
         this.createTopic = this.createTopic.bind(this);
+        this.onModalAction = this.onModalAction.bind(this);
+        this.selectTopic = this.selectTopic.bind(this);
     }
 
     _showModal = () => this.setState({ isModalVisible: true })
@@ -95,16 +94,52 @@ class BBS extends React.Component {
             case 'didAppear':
                 this.props.navigator.screenIsCurrentlyVisible().then((responseJSON) => {
                     isVisible = responseJSON;
-                    console.log('bbs appeared; ' + isVisible);
                 });
                 break;
             case 'didDisappear':
                 this.props.navigator.screenIsCurrentlyVisible().then((responseJSON) => {
                     isVisible = responseJSON;
-                    console.log('bbs disappeared; ' + isVisible);
                 });
                 break;
         }
+    }
+
+    onModalAction(action, selected) {
+        const parts = action.link.split('/');
+        switch (parts[0]) {
+            case 'screen':
+                this.props.navigator.push({
+                    screen: parts[1],
+                    title: action.name,
+                    passProps: { 
+                        selected: selected.user,
+                        group_id: this.props.group.id
+                    }
+                });
+                break;
+            case 'function':
+                switch (parts[1]) {
+                    case 'pin':
+                        this.pinTopic();
+                        break;
+                    case 'delete':
+                        this.deleteTopic();
+                        break;
+                }
+        }
+        this._hideModal();
+    }
+
+    pinTopic(){
+        
+    }
+
+    deleteTopic(){
+    }
+
+    selectTopic(rowData){
+        this.setState({selectedTopic: rowData});
+        this._showModal();
     }
 
     getTopics(page, callback, options) {
@@ -154,6 +189,14 @@ class BBS extends React.Component {
             <Modal
                 onRequestClose={this._hideModal}
                 visible={this.state.isModalVisible}>
+                <View style={BaseStyles.container}>
+                    <Text style={styles.bigFont}>Topic Options</Text>
+                    <ModalOptions
+                        type={'topic'}
+                        callback={this.onModalAction}
+                        selected={this.state.selectedTopic}
+                    />
+                </View>
             </Modal>
         )
     }
@@ -185,7 +228,7 @@ class BBS extends React.Component {
                         type={'topic'}
                         onFetch={this.getTopics}
                         onPress={this.viewTopic}
-                        onLongPress={this._showModal}
+                        onLongPress={this.selectTopic}
                         pagination={true}
                         forceUpdate={this.state.forceUpdate}
                     />
@@ -199,6 +242,11 @@ const styles = StyleSheet.create({
     newTopicButton: {
         flex: 3
     },
+
+    bigFont: {
+        fontSize: 20,
+        fontWeight: 'bold',
+    }
 });
 
 const layout = StyleSheet.create({

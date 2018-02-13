@@ -74,13 +74,11 @@ class ViewPins extends React.Component {
             case 'didAppear':
                 this.props.navigator.screenIsCurrentlyVisible().then((responseJSON) => {
                     isVisible = responseJSON;
-                    console.log('bbs appeared; ' + isVisible);
                 });
                 break;
             case 'didDisappear':
                 this.props.navigator.screenIsCurrentlyVisible().then((responseJSON) => {
                     isVisible = responseJSON;
-                    console.log('bbs disappeared; ' + isVisible);
                 });
                 break;
         }

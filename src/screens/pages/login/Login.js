@@ -7,10 +7,11 @@ import { Fumi } from 'react-native-textinput-effects';
 import { iconsMap, iconsLoaded } from 'helpers/icons-loader';
 import { Navigation } from 'react-native-navigation';
 import Background from 'components/Background';
-import { BaseStyles, PrimaryColor, PrimaryDimmed, NavMenu, ScreenBackgroundColor } from 'helpers/constants';
+import { BaseStyles, PrimaryColor, PrimaryDimmed, NavMenu, ScreenBackgroundColor, ANDROID_ADMOB_AD_UNIT_ID } from 'helpers/constants';
 import { AUTH_POST_SIGN_IN, AUTH_POST } from 'helpers/apicalls';
 import Button from 'components/Button';
 import { goToHome, setAuthData } from 'helpers/constants';
+import { AdMobBanner, AdMobRewarded, PublisherBanner } from 'react-native-admob';
 
 class Login extends React.Component {
 
@@ -44,7 +45,7 @@ class Login extends React.Component {
 
         this.setState({ loginLoading: true, loginDisabled: true, registerDisabled: true })
 
-        AUTH_POST_SIGN_IN('user1@smf.com', '313Ghioio', this.setFirstResponse)
+        AUTH_POST_SIGN_IN('user0@smf.com', '313Ghioio', this.setFirstResponse)
             .then((responseJSON) => {
                 this.validateAuthentication(responseJSON);
             });

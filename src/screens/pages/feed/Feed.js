@@ -12,14 +12,17 @@ class Feed extends React.Component {
   All = () => <PopulatableListView
     type={'feed'}
     onFetch={this.getAllFeeds}
+    onPress={this.navigateToFeed}
     pagination={true} />;
   Follows = () => <PopulatableListView
     type={'feed'}
     onFetch={this.getFollowFeeds}
+    onPress={this.navigateToFeed}
     pagination={true} />;
   Friends = () => <PopulatableListView
     type={'feed'}
     onFetch={this.getFriendFeeds}
+    onPress={this.navigateToFeed}
     pagination={true} />;
   BBS = () => <PopulatableListView
     type={'feed'}
@@ -32,7 +35,7 @@ class Feed extends React.Component {
       routes: [
         { key: '1', title: 'All' },
         { key: '2', title: 'Follow' },
-        { key: '3', title: 'Friends' },
+        { key: '3', title: 'Friend' },
         { key: '4', title: 'BBS' },
       ],
     };
@@ -41,8 +44,17 @@ class Feed extends React.Component {
     this.getFollowFeeds = this.getFollowFeeds.bind(this);
     this.getFriendFeeds = this.getFriendFeeds.bind(this);
     this.getGroupFeeds = this.getGroupFeeds.bind(this);
+    this.navigateToFeed = this.navigateToFeed.bind(this);
 
     this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
+  }
+
+  navigateToFeed(rowData){
+    const parts = rowData.deep_link.split('/');
+    switch(parts[0]){
+      case '':
+      break;
+    }
   }
 
   getAllFeeds(page, callback, options) {
@@ -134,13 +146,11 @@ class Feed extends React.Component {
       case 'didAppear':
         this.props.navigator.screenIsCurrentlyVisible().then((responseJSON) => {
           isVisible = responseJSON;
-          console.log('feed appeared; ' + isVisible);
         });
         break;
       case 'didDisappear':
         this.props.navigator.screenIsCurrentlyVisible().then((responseJSON) => {
           isVisible = responseJSON;
-          console.log('feed disappeared; ' + isVisible);
         });
         break;
     }

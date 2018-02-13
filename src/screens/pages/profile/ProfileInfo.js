@@ -1,11 +1,12 @@
 import React from 'react';
 import { StyleSheet, View, ScrollView, Text } from 'react-native';
-import { BaseStyles, PrimaryColor } from 'helpers/constants.js';
+import { BaseStyles, PrimaryColor, ANDROID_ADMOB_AD_UNIT_ID } from 'helpers/constants.js';
 import LiteProfile from 'components/LiteProfile';
 import Button from 'components/Button';
 import { FRIENDS_POST, FRIENDS_POST_CHECK_REQUEST, FRIENDS_DELETE, FOLLOWS_POST, FOLLOWS_POST_CHECK_REQUEST, FOLLOWS_DELETE } from 'helpers/apicalls';
 import Moment from 'moment';
 import { user } from 'helpers/constants';
+import { AdMobBanner, AdMobRewarded, PublisherBanner } from 'react-native-admob';
 
 class ProfileInfo extends React.Component {
 
@@ -89,24 +90,23 @@ class ProfileInfo extends React.Component {
       })
   }
 
-  viewGroups(){
-    console.log(this.props);
+  viewGroups() {
     this.props.navigator.push({
-        screen: 'smf_frontend.UserGroups',
-        title: this.props.user.name + '\'s groups',
-        passProps: {
-          user: this.props.user
-        }
+      screen: 'smf_frontend.UserGroups',
+      title: this.props.user.name + '\'s groups',
+      passProps: {
+        user: this.props.user
+      }
     });
   }
 
-  viewFollows(){
+  viewFollows() {
     this.props.navigator.push({
-        screen: 'smf_frontend.UserFollows',
-        title: this.props.user.name + '\'s follows',
-        passProps: {
-          user: this.props.user
-        }
+      screen: 'smf_frontend.UserFollows',
+      title: this.props.user.name + '\'s follows',
+      passProps: {
+        user: this.props.user
+      }
     });
   }
 
@@ -194,6 +194,7 @@ class ProfileInfo extends React.Component {
   }
 
   render() {
+    console.log('rerend');
     return (
       <View style={BaseStyles.container}>
         <LiteProfile

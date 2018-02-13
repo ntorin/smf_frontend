@@ -4,9 +4,11 @@ import android.app.Application;
 
 
 import com.facebook.react.ReactApplication;
+import com.sbugert.rnadmob.RNAdMobPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
+import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import com.cmcewen.blurview.BlurViewPackage;
-import com.oblador.vectoricons.VectorIconsPackage;
+import com.sbugert.rnadmob.RNAdMobPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -30,7 +32,9 @@ import java.util.List;
          // No need to add RnnPackage and MainReactPackage
          return Arrays.<ReactPackage>asList(
              new VectorIconsPackage(),
-                 new BlurViewPackage()
+                 new BlurViewPackage(),
+                 new ReactNativePushNotificationPackage(),
+                 new RNAdMobPackage()
          );
      }
 

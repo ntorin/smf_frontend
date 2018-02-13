@@ -14,6 +14,7 @@ class UserGroups extends React.Component {
         }
 
         this.getGroups = this.getGroups.bind(this);
+        this.viewGroup = this.viewGroup.bind(this);
     }
 
     getGroups(page, callback, options) {

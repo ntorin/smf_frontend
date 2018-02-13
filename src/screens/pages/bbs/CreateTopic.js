@@ -17,11 +17,12 @@ class CreateTopic extends React.Component {
             title: '',
             tags: [],
             tagText: '',
-            content: '',
+            content: ' ',
             is_anonymous: false,
         }
         this.createTopic = this.createTopic.bind(this);
         this.labelExtractor = this.labelExtractor.bind(this);
+        this.setState({content: ' '})
     }
 
     createTopic() {
@@ -32,7 +33,7 @@ class CreateTopic extends React.Component {
                 POSTS_POST(this.props.group_id, responseJSON.id, this.state.content, true, this.state.is_anonymous, null)
                     .then((responseJSON) => {
                         this.props.navigator.pop({
-                            animated: true, 
+                            animated: true,
                             animationType: 'fade',
                         });
                     })
@@ -78,7 +79,10 @@ class CreateTopic extends React.Component {
                         onChangeText={this.onChangeText}
                     />
                 </View>
-                <MarkdownEditor onMarkdownChange={(content) => this.setState({ content: content })} />
+                <MarkdownEditor
+                    onMarkdownChange={(content) => this.setState({ content: content })}
+                    showPreview={true}
+                />
 
                 <Button title={"Create New Topic"} onPress={this.createTopic} />
             </View>

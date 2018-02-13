@@ -23,30 +23,69 @@ class Chat extends React.Component {
                 connected() { console.log('connected') },
                 disconnected() { console.log('disconnected') },
 
-                received(msg) {
-                    console.log(msg);
-                    if (msg.message.user_id != user.id) {
-                        var message = {
-                            _id: msg.message.id,
-                            text: msg.message.message,
-                            createdAt: new Date(msg.message.created_at),
-                            user: {
-                                _id: msg.message.user_id,
-                                name: msg.name,
-                                avatar: ''
-                            }
-                        }
-
-                        t.setState((previousState) => ({
-                            messages: GiftedChat.append(previousState.messages, message),
-                        }));
-                        console.log('hm');
+                received(event) {
+                    console.log(event);
+                    switch (event.action) {
+                        case 'conversation_message_after_create':
+                            t.addMessage(event);
+                            break;
+                        case 'conversation_message_after_update':
+                            t.editMessage(event);
+                            break;
+                        case 'conversation_message_after_destroy':
+                            t.deleteMessage(event);
+                            break;
                     }
                 }
             }
         );
 
+        this.addMessage = this.addMessage.bind(this);
+        this.editMessage = this.editMessage.bind(this);
+        this.deleteMessage = this.deleteMessage.bind(this);
+
         this.getConversationMessages();
+    }
+
+    addMessage(event) {
+        if (event.message.user_id != user.id) {
+            var message = {
+                _id: event.message.id,
+                text: event.message.message,
+                createdAt: new Date(event.message.created_at),
+                user: {
+                    _id: event.message.user_id,
+                    name: event.name,
+                    avatar: ''
+                }
+            }
+
+            this.setState((previousState) => ({
+                messages: GiftedChat.append(previousState.messages, message),
+            }));
+        }
+    }
+
+    editMessage(event){
+        messageList = this.state.messages;
+        messageList.forEach(function (msg, index){
+            if(msg._id == event.message.id){
+                messageList[index].text = event.message.message;
+                this.setState({messages: messageList});
+                return;
+            }
+        });
+    }
+
+    deleteMessage(event){
+        messageList = this.state.messages;
+        messageList.forEach(function (msg, index){
+            if(msg._id == event.message.id){
+                messageList.splice(index, 1);
+                this.setState({messages: messageList});
+                return;
+            }
+        });
     }
 
     getConversationMessages(page) {

@@ -6,6 +6,9 @@ import Avatar from 'components/Avatar';
 import { MarkdownView } from 'react-native-markdown-view';
 import { AdMobBanner, AdMobRewarded, PublisherBanner } from 'react-native-admob';
 import Moment from 'moment';
+import Icon from 'react-native-vector-icons/Octicons';
+
+var count = 0;
 
 class ListItem extends React.Component {
 
@@ -82,7 +85,7 @@ class ListItem extends React.Component {
                     testDevices={[AdMobBanner.simulatorId]}
                     onAdFailedToLoad={error => console.error(error)}
                 />
-                </View> */}
+                </View>*/}
             </View>
         );
     }
@@ -130,15 +133,23 @@ class ListItem extends React.Component {
     }
 
     renderUser(rd) {
+        var data = rd;
         if (rd.friend) {
+            data = this.props.rowData.friend;
             rd = this.props.rowData.friend;
+        } else if (rd.user) {
+            data = rd;
+            rd = this.props.rowData.user;
         }
 
         return (
             <View style={styles.container}>
                 <View style={layout.row}>
                     <View style={layout.columnEnd}>
-                        <Text style={styles.bigFont}>{rd.name}</Text>
+                        <View style={layout.row}>
+                            <Text style={styles.bigFont}>{rd.name}</Text>
+                            {data.role !== undefined && <Text style={[styles.smallFont, layout.flexEnd, styles.alignRight]}>{data.role}</Text>}
+                        </View>
                         <Text style={styles.smallFont}>{rd.identifier}</Text>
                         <Text style={styles.dimmedFont}>{rd.blurb}</Text>
                         <View style={layout.row}>
@@ -159,7 +170,10 @@ class ListItem extends React.Component {
 
         return (
             <View style={styles.container}>
-                <Text style={styles.bigFont}>{rd.name}</Text>
+                <View>
+                    <Text style={styles.bigFont}>{rd.name}</Text>
+                    {rd.is_muted && <Icon style={[styles.smallFont, layout.flexEnd, styles.alignRight]} name={"mute"} color={PrimaryColor} />}
+                </View>
                 <View style={layout.row}>
                     <Text style={[styles.smallFont, layout.flexEnd, styles.alignRight]}>last activity {Moment(rd.updated_at).fromNow()}</Text>
                 </View>
@@ -226,7 +240,11 @@ class ListItem extends React.Component {
                 toRender = this.renderNotification(this.props.rowData);
                 break;
             case 'user':
-                toRender = this.renderUser(this.props.rowData);
+                if (this.props.rowData.following_id) {
+                    toRender = this.renderUser(this.props.rowData.following);
+                } else {
+                    toRender = this.renderUser(this.props.rowData);
+                }
                 break;
             case 'conversation':
                 toRender = this.renderConversation(this.props.rowData);
@@ -242,13 +260,28 @@ class ListItem extends React.Component {
     }
 
     render() {
-        return (
-            <View>
-                <Button onPress={() => this.props.onPress(this.props.rowData)} onLongPress={() => this.props.onLongPress(this.props.rowData)}>
-                    {this.renderItem(this.props.type)}
-                </Button>
-            </View>
-        )
+        count++;
+        if (count % 10 == 0) {
+            console.log('ad loading');
+            return (
+                <View>
+                    <AdMobBanner
+                        adSize="fullBanner"
+                        adUnitID={ANDROID_ADMOB_AD_UNIT_ID}
+                        testDevices={[AdMobBanner.simulatorId]}
+                        onAdFailedToLoad={error => console.error(error)}
+                    />
+                </View>
+            )
+        } else {
+            return (
+                <View>
+                    <Button onPress={() => this.props.onPress(this.props.rowData)} onLongPress={() => this.props.onLongPress(this.props.rowData)}>
+                        {this.renderItem(this.props.type)}
+                    </Button>
+                </View>
+            )
+        }
     }
 
 }

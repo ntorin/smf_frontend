@@ -10,6 +10,7 @@ class UserFollows extends React.Component {
         super(props);
         
         this.getFollows = this.getFollows.bind(this);
+        this.viewProfile = this.viewProfile.bind(this);
     }
 
     getFollows(page, callback, options) {
@@ -28,7 +29,7 @@ class UserFollows extends React.Component {
     viewProfile(rowData) {
         this.props.navigator.push({
             screen: 'smf_frontend.Profile',
-            title: rowData.name + "\'s Profile",
+            title: rowData.following.name + "\'s Profile",
             passProps: {
                 user: rowData
             }

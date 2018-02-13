@@ -17,6 +17,8 @@ import CreateTopic from 'pages/bbs/CreateTopic';
 import AdvancedSearch from 'components/AdvancedSearch';
 import ViewPins from 'pages/bbs/ViewPins';
 import ViewTopic from 'pages/bbs/ViewTopic';
+import EditTopic from 'pages/bbs/EditTopic';
+import EditPost from 'pages/bbs/EditPost';
 import ReplyTopic from 'pages/bbs/ReplyTopic';
 import Profile from 'pages/profile/Profile';
 import EditProfile from 'pages/profile/EditProfile';
@@ -26,7 +28,10 @@ import Feed from 'pages/feed/Feed';
 import Groups from 'pages/groups/Groups';
 import ViewGroup from 'pages/groups/ViewGroup';
 import CreateGroup from 'pages/groups/CreateGroup';
+import EditGroup from 'pages/groups/EditGroup';
+import EditGroupUser from 'pages/groups/EditGroupUser';
 import Welcome from 'pages/welcome/Welcome';
+import CreateReport from 'pages/report/CreateReport';
 
 
 export default function () {
@@ -44,6 +49,8 @@ export default function () {
   Navigation.registerComponent('smf_frontend.ViewPins', () => ViewPins);
   Navigation.registerComponent('smf_frontend.ViewTopic', () => ViewTopic);
   Navigation.registerComponent('smf_frontend.ReplyTopic', () => ReplyTopic);
+  Navigation.registerComponent('smf_frontend.EditTopic', () => EditTopic);
+  Navigation.registerComponent('smf_frontend.EditPost', () => EditPost);
   Navigation.registerComponent('smf_frontend.Profile', () => Profile);
   Navigation.registerComponent('smf_frontend.EditProfile', () => EditProfile);
   Navigation.registerComponent('smf_frontend.UserFollows', () => UserFollows);
@@ -51,6 +58,9 @@ export default function () {
   Navigation.registerComponent('smf_frontend.Groups', () => Groups);
   Navigation.registerComponent('smf_frontend.ViewGroup', () => ViewGroup);
   Navigation.registerComponent('smf_frontend.CreateGroup', () => CreateGroup);
+  Navigation.registerComponent('smf_frontend.EditGroup', () => EditGroup);
+  Navigation.registerComponent('smf_frontend.EditGroupUser', () => EditGroupUser);
+  Navigation.registerComponent('smf_frontend.CreateReport', () => CreateReport);
   Navigation.registerComponent('smf_frontend.Feed', () => Feed);
   Navigation.registerComponent('smf_frontend.Chat', () => Chat);
   Navigation.registerComponent('smf_frontend.UserDirectory', () => UserDirectory);

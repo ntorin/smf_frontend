@@ -1,37 +1,45 @@
 import React from 'react';
-import { StyleSheet, View, Text, TextInput} from 'react-native';
+import { StyleSheet, View, Text, TextInput, Alert } from 'react-native';
 import TextField from 'react-native-md-textinput';
 import Button from 'components/Button';
 import DatePicker from 'react-native-datepicker'
-import { BaseStyles,  PrimaryColor, user, editUser } from 'helpers/constants.js';
+import { BaseStyles, PrimaryColor, user, editUser } from 'helpers/constants.js';
 import { USERS_PUT_UPDATE } from 'helpers/apicalls';
 
 class EditProfile extends React.Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
-          name: user.name,
-          blurb: user.blurb,
-          birthday: user.birthday,
+            name: user.name,
+            blurb: user.blurb,
+            birthday: user.birthday,
         }
         this.updateUserInfo = this.updateUserInfo.bind(this);
     }
 
-    updateUserInfo(){
-      USERS_PUT_UPDATE(this.state.name, this.state.blurb, this.state.birthday)
-        .then((responseJSON) => {
-            console.log(responseJSON);
-            editUser(responseJSON);
-            this.props.navigator.pop({
-                animated: true, 
-                animationType: 'fade', 
-            });
-        })
+    updateUserInfo() {
+        USERS_PUT_UPDATE(this.state.name, this.state.blurb, this.state.birthday)
+            .then((responseJSON) => {
+                editUser(responseJSON);
+                this.props.navigator.handleDeepLink({
+                    link: 'user_update',
+                    payload: responseJSON
+                });
+
+                Alert.alert('Edit Successful',
+                    'You have edited your profile. The update will not be visible until the application is restarted.',
+                    [{ text: "OK" }]);
+
+                this.props.navigator.pop({
+                    animated: true,
+                    animationType: 'fade',
+                });
+            })
     }
 
-    render(){
-        return(
+    render() {
+        return (
             <View style={BaseStyles.container}>
                 <View style={layout.textPanel}>
                     <TextInput style={layout.inputBar}
@@ -41,7 +49,7 @@ class EditProfile extends React.Component {
                         highlightColor={PrimaryColor}
                         onChangeText={(text) => this.setState({ name: text })}
                         autoCorrect={false}
-                        autoCapitalize={'none'}/>
+                        autoCapitalize={'none'} />
                 </View>
                 <View style={layout.textPanel}>
                     <TextInput style={layout.inputBar}
@@ -51,7 +59,7 @@ class EditProfile extends React.Component {
                         highlightColor={PrimaryColor}
                         onChangeText={(text) => this.setState({ blurb: text })}
                         autoCorrect={false}
-                        autoCapitalize={'none'}/>
+                        autoCapitalize={'none'} />
                 </View>
                 <View style={layout.textPanel}>
                     <DatePicker
@@ -67,10 +75,10 @@ class EditProfile extends React.Component {
                         onDateChange={(date) => { this.setState({ birthday: date }) }}
                     />
                 </View>
-                <View style={{padding: 8}}>
-                    <Button 
-                    title={"Save"} 
-                    onPress={this.updateUserInfo}/>
+                <View style={{ padding: 8 }}>
+                    <Button
+                        title={"Save"}
+                        onPress={this.updateUserInfo} />
                 </View>
             </View>
         )
@@ -88,7 +96,7 @@ const layout = StyleSheet.create({
     inputBar: {
         flex: 10
     },
-    text:   {
+    text: {
         fontSize: 20,
         flex: 4,
         textAlignVertical: 'center'

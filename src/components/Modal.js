@@ -25,7 +25,7 @@ class Modal extends React.Component {
 const styles = StyleSheet.create({
     modal: {
         width: Dimensions.get('window').width * 0.7,
-        height: Dimensions.get('window').height * 0.3,
+        height: Dimensions.get('window').height * 0.5,
         paddingLeft: 24,
         paddingRight: 24
     }

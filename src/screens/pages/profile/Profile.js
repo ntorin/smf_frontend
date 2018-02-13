@@ -14,7 +14,7 @@ class Profile extends React.Component {
 
     Info = () => <ProfileInfo
         {...this.props}
-        user={this.props.user} />;
+        user={this.state.user} />;
     Activity = () => <View style={{ flex: 1 }}
     ><PopulatableListView
             type={'feed'}
@@ -30,6 +30,7 @@ class Profile extends React.Component {
                 { key: '1', title: 'Info' },
                 { key: '2', title: 'Activity' },
             ],
+            user: this.props.user
         }
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
         this.getActivityFeeds = this.getActivityFeeds.bind(this);
@@ -89,13 +90,11 @@ class Profile extends React.Component {
             case 'didAppear':
                 this.props.navigator.screenIsCurrentlyVisible().then((responseJSON) => {
                     isVisible = responseJSON;
-                    console.log('feed appeared; ' + isVisible);
                 });
                 break;
             case 'didDisappear':
                 this.props.navigator.screenIsCurrentlyVisible().then((responseJSON) => {
                     isVisible = responseJSON;
-                    console.log('feed disappeared; ' + isVisible);
                 });
                 break;
         }

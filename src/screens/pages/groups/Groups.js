@@ -58,13 +58,11 @@ class Groups extends React.Component {
         case 'didAppear':
           this.props.navigator.screenIsCurrentlyVisible().then((responseJSON) => {
             isVisible = responseJSON;
-            console.log('feed appeared; ' + isVisible);
           });
           break;
         case 'didDisappear':
           this.props.navigator.screenIsCurrentlyVisible().then((responseJSON) => {
             isVisible = responseJSON;
-            console.log('feed disappeared; ' + isVisible);
           });
           break;
       }
