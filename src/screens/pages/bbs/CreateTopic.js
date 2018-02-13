@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, TextInput, ScrollView } from 'react-native';
+import { StyleSheet, View, Text, TextInput, ScrollView, Keyboard } from 'react-native';
 import TextField from 'react-native-md-textinput';
 import { GiftedForm, GiftedFormManager } from 'react-native-gifted-form';
 import { Fumi } from 'react-native-textinput-effects';
@@ -19,10 +19,30 @@ class CreateTopic extends React.Component {
             tagText: '',
             content: ' ',
             is_anonymous: false,
+            keyboardVisible: false,
         }
+        this._keyboardDidHide = this._keyboardDidHide.bind(this);
+        this._keyboardDidShow = this._keyboardDidShow.bind(this);
+
+        this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow);
+        this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide);
+
         this.createTopic = this.createTopic.bind(this);
         this.labelExtractor = this.labelExtractor.bind(this);
-        this.setState({content: ' '})
+        this.setState({ content: ' ' })
+    }
+
+    componentWillUnmount() {
+        this.keyboardDidShowListener.remove();
+        this.keyboardDidHideListener.remove();
+    }
+
+    _keyboardDidShow() {
+        this.setState({ keyboardVisible: true });
+    }
+
+    _keyboardDidHide() {
+        this.setState({ keyboardVisible: false });
     }
 
     createTopic() {
@@ -65,26 +85,28 @@ class CreateTopic extends React.Component {
     render() {
         return (
             <View style={BaseStyles.container}>
-                <TextInput
-                    placeholder={'Title'}
-                    highlightColor={PrimaryColor}
-                    onChangeText={(text) => this.setState({ title: text })} />
-                <View style={layout.tags}>
-                    <Text style={styles.tagHeader}>Tags:</Text>
-                    <TagInput
-                        value={this.state.tags}
-                        onChange={this.onChangeTags}
-                        labelExtractor={this.labelExtractor}
-                        text={this.state.tagText}
-                        onChangeText={this.onChangeText}
-                    />
-                </View>
+                {!this.state.keyboardVisible && <View>
+                    <TextInput
+                        placeholder={'Title'}
+                        highlightColor={PrimaryColor}
+                        onChangeText={(text) => this.setState({ title: text })} />
+                    <View style={layout.tags}>
+                        <Text style={styles.tagHeader}>Tags:</Text>
+                        <TagInput
+                            value={this.state.tags}
+                            onChange={this.onChangeTags}
+                            labelExtractor={this.labelExtractor}
+                            text={this.state.tagText}
+                            onChangeText={this.onChangeText}
+                        />
+                    </View>
+                </View>}
                 <MarkdownEditor
                     onMarkdownChange={(content) => this.setState({ content: content })}
                     showPreview={true}
                 />
 
-                <Button title={"Create New Topic"} onPress={this.createTopic} />
+                {!this.state.keyboardVisible && <Button title={"Create New Topic"} onPress={this.createTopic} />}
             </View>
         )
     }
