@@ -1,0 +1,34 @@
+# Uncomment this line to define a global platform for your project
+# platform :ios, '9.0'
+
+target 'smf_frontend' do
+  # Uncomment this line if you're using Swift or would like to use dynamic frameworks
+  # use_frameworks!
+
+  # Pods for smf_frontend
+  pod 'Google-Mobile-Ads-SDK'
+
+  target 'smf_frontend-tvOSTests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+  target 'smf_frontendTests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+end
+
+target 'smf_frontend-tvOS' do
+  # Uncomment this line if you're using Swift or would like to use dynamic frameworks
+  # use_frameworks!
+
+  # Pods for smf_frontend-tvOS
+
+  target 'smf_frontend-tvOSTests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+end

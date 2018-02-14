@@ -9,7 +9,7 @@
   "dependencies": {
     "apsl-react-native-button": "3.1.0",
     "moment": "^2.19.3",
-    "react": "16.0.0-alpha.12",
+    "react": "^16.2.0",
     "react-actioncable-provider": "1.0.2",
     "react-native": "0.46.4",
     "react-native-actioncable": "0.0.3",
