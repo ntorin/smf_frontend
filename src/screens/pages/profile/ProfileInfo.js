@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, ScrollView, Text } from 'react-native';
+import { StyleSheet, View, ScrollView, Text, Alert } from 'react-native';
 import { BaseStyles, PrimaryColor, ANDROID_ADMOB_AD_UNIT_ID } from 'helpers/constants.js';
 import LiteProfile from 'components/LiteProfile';
 import Button from 'components/Button';
@@ -40,6 +40,7 @@ class ProfileInfo extends React.Component {
   checkFriend() {
     FRIENDS_POST_CHECK_REQUEST(this.props.user.id)
       .then((responseJSON) => {
+        console.log(responseJSON);
         this.setState({
           friend: responseJSON.friend,
           friendStatus: responseJSON.status, friendLoading: false, followDisabled: false
@@ -49,23 +50,33 @@ class ProfileInfo extends React.Component {
 
   addFriend() {
     this.setState({ friendLoading: true, followDisabled: true })
-    FRIENDS_POST(this.props.user.id)
+    FRIENDS_POST(user.id, this.props.user.id)
       .then((responseJSON) => {
-        checkFriend();
+        console.log(responseJSON);
+        this.checkFriend();
       })
   }
 
   deleteFriend() {
-    this.setState({ friendLoading: true, followDisabled: true })
-    FRIENDS_DELETE(this.state.friend.id)
-      .then((responseJSON) => {
-        this.checkFriend();
-      })
+    Alert.alert('Remove Friend',
+      'Are you sure you want to remove ' + this.props.user.name + ' from your Friends List?',
+      [{
+        text: 'YES', onPress: () => {
+          this.setState({ friendLoading: true, followDisabled: true })
+          FRIENDS_DELETE(this.state.friend.id)
+            .then((responseJSON) => {
+              console.log(responseJSON);
+              this.checkFriend();
+            })
+        }
+      },
+      { text: 'NO' }]);
   }
 
   checkFollow() {
     FOLLOWS_POST_CHECK_REQUEST(this.props.user.id)
       .then((responseJSON) => {
+        console.log(responseJSON);
         this.setState({
           follow: responseJSON.follow,
           followStatus: responseJSON.status, followLoading: false,
@@ -78,6 +89,7 @@ class ProfileInfo extends React.Component {
     this.setState({ followLoading: true, friendDisabled: true })
     FOLLOWS_POST(this.props.user.id)
       .then((responseJSON) => {
+        console.log(responseJSON);
         this.checkFollow();
       })
   }
@@ -86,6 +98,7 @@ class ProfileInfo extends React.Component {
     this.setState({ followLoading: true, friendDisabled: true })
     FOLLOWS_DELETE(this.state.follow.id)
       .then((responseJSON) => {
+        console.log(responseJSON);
         this.checkFollow();
       })
   }
@@ -116,7 +129,7 @@ class ProfileInfo extends React.Component {
         case 'friends':
           return (
             <Button
-              title={"Unfriend " + this.props.user.name}
+              title={"Unfriend"}
               style={layout.button}
               onPress={this.deleteFriend}
               loading={this.state.friendLoading}

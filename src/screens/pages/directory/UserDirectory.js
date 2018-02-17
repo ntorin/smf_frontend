@@ -91,7 +91,7 @@ class UserDirectory extends React.Component {
 
     render() {
         return (
-            <View style={BaseStyles.container}>
+            <View style={styles.container}>
                 {this.renderModal()}
                 <View>
                     <TextInput
@@ -111,7 +111,7 @@ class UserDirectory extends React.Component {
                         onFetch={this.getUsers}
                         onPress={this.viewProfile}
                         onLongPress={this.selectUser}
-                        pagination={false}
+                        pagination={true}
                         forceUpdate={this.state.forceUpdate}
                     />
                 </View>

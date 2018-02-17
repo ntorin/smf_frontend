@@ -45,7 +45,7 @@ class Login extends React.Component {
 
         this.setState({ loginLoading: true, loginDisabled: true, registerDisabled: true })
 
-        AUTH_POST_SIGN_IN('user0@smf.com', '313Ghioio', this.setFirstResponse)
+        AUTH_POST_SIGN_IN('user1@smf.com', '313Ghioio', this.setFirstResponse)
             .then((responseJSON) => {
                 this.validateAuthentication(responseJSON);
             });

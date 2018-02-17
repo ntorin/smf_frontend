@@ -4,7 +4,7 @@ import Foundation from 'react-native-vector-icons/Foundation';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import { iconsMap, iconsLoaded } from 'helpers/icons-loader';
 import { Navigation } from 'react-native-navigation';
-import { JSON_HEADERS } from 'helpers/apicalls';
+import { JSON_HEADERS, GROUP_USERS_POST_CHECK_REQUEST } from 'helpers/apicalls';
 
 export const WEBSOCKET_URL = 'ws://18.218.93.101/cable';
 
@@ -129,8 +129,8 @@ export const onNavEvent = (event) => { // this is the onPress handler for the tw
     }
 }
 
-export const PrimaryColor = '#73cfc9';
-export const PrimaryDimmed = 'rgba(115, 207, 201, 0.5)';
+export const PrimaryColor = '#73cfdd';
+export const PrimaryDimmed = 'rgba(115, 207, 221, 0.5)';
 export const ScreenBackgroundColor = '#FFFFFF';
 export const BaseStyles = StyleSheet.create({
     container: {
@@ -170,17 +170,17 @@ export const NavNoElevation = {
 export const startApp = () => {
     // this will start our app
     Navigation.startSingleScreenApp({
-      screen: {
-        screen: 'smf_frontend.Login',
-        navigatorStyle: {
-            navBarHidden: true,
-            navBarTransparent: true,
-            drawUnderNavBar: true,
+        screen: {
+            screen: 'smf_frontend.Login',
+            navigatorStyle: {
+                navBarHidden: true,
+                navBarTransparent: true,
+                drawUnderNavBar: true,
+            },
         },
-      },
-      animationType: Platform.OS === 'ios' ? 'slide-down' : 'fade'
+        animationType: Platform.OS === 'ios' ? 'slide-down' : 'fade'
     });
-  }
+}
 
 export const setAuthData = (uid, client, access_token, token_type, expiry, usr) => {
     JSON_HEADERS['access-token'] = access_token;
@@ -192,41 +192,47 @@ export const setAuthData = (uid, client, access_token, token_type, expiry, usr) 
 }
 
 export const goToHome = () => {
-    var props = {
-        user: user,
-        group: {
-            id: 1,
-            name: 'Global BBS',
-            identifier: 'global',
-        },
-        joinStatus: 'joined'
-    }
-    Navigation.startTabBasedApp({
-        tabs,
-        animationType: Platform.OS === 'ios' ? 'slide-down' : 'fade',
-        appStyle: {
-            tabBarBackgroundColor: '#FFFFFF',
-            navBarButtonColor: PrimaryColor,
-            tabBarButtonColor: PrimaryDimmed,
-            navBarTextColor: PrimaryColor,
-            tabBarSelectedButtonColor: PrimaryColor,
-            navigationBarColor: '#000000',
-            navBarBackgroundColor: '#FFFFFF',
-            statusBarColor: '#000000',
-            tabFontFamily: 'BioRhyme-Bold',
-            screenBackgroundColor: ScreenBackgroundColor,
-        },
-        drawer: {
-            left: {
-                screen: 'smf_frontend.Nav',
-                passProps: props
+
+    GROUP_USERS_POST_CHECK_REQUEST(1)
+        .then((responseJSON) => {
+            console.log(responseJSON);
+            var props = {
+                user: user,
+                group: {
+                    id: 1,
+                    name: 'Global BBS',
+                    identifier: 'global',
+                },
+                joinStatus: responseJSON.status,
+                group_user: responseJSON.group_user
             }
-        },
-        passProps: props
-    });
+            Navigation.startTabBasedApp({
+                tabs,
+                animationType: Platform.OS === 'ios' ? 'slide-down' : 'fade',
+                appStyle: {
+                    tabBarBackgroundColor: '#FFFFFF',
+                    navBarButtonColor: PrimaryColor,
+                    tabBarButtonColor: PrimaryDimmed,
+                    navBarTextColor: PrimaryColor,
+                    tabBarSelectedButtonColor: PrimaryColor,
+                    navigationBarColor: '#000000',
+                    navBarBackgroundColor: '#FFFFFF',
+                    statusBarColor: '#000000',
+                    tabFontFamily: 'BioRhyme-Bold',
+                    screenBackgroundColor: ScreenBackgroundColor,
+                },
+                drawer: {
+                    left: {
+                        screen: 'smf_frontend.Nav',
+                        passProps: props
+                    }
+                },
+                passProps: props
+            });
+        })
 }
 
-export const logoutUser = ()  => {
+export const logoutUser = () => {
     user = {};
     JSON_HEADERS['access-token'] = '';
     JSON_HEADERS['token-type'] = '';

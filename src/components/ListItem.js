@@ -6,7 +6,11 @@ import Avatar from 'components/Avatar';
 import { MarkdownView } from 'react-native-markdown-view';
 import { AdMobBanner, AdMobRewarded, PublisherBanner } from 'react-native-admob';
 import Moment from 'moment';
-import Icon from 'react-native-vector-icons/Octicons';
+import OcticonsIcon from 'react-native-vector-icons/Octicons';
+import FoundationIcon from 'react-native-vector-icons/Foundation';
+import MaterialIconsIcon from 'react-native-vector-icons/MaterialIcons';
+import FeatherIcon from 'react-native-vector-icons/Feather';
+import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 var count = 0;
 
@@ -39,7 +43,11 @@ class ListItem extends React.Component {
 
         return (
             <View style={styles.container}>
-                <Text style={styles.bigFont}>{rd.title}</Text>
+                <View style={layout.row}>
+                    <Text style={styles.bigFont}>{rd.title}</Text>
+                    {rd.is_pinned && <OcticonsIcon style={[layout.flexEnd, styles.smallFont, styles.alignRight]} name={"pin"} color={PrimaryColor} />}
+                    {rd.is_locked && <FoundationIcon style={[layout.flexEnd, styles.smallFont, styles.alignRight]} name={"lock"} color={PrimaryColor} />}
+                </View>
                 <View style={layout.row}>
                     <Text style={[layout.name, styles.smallFont, styles.alignLeft]}>by {user.name}</Text>
                     <Text style={[layout.flexEnd, styles.smallFont, styles.alignRight]}>{rd.post_count} posts • {Moment(rd.last_post_date).fromNow()}</Text>
@@ -49,7 +57,7 @@ class ListItem extends React.Component {
                     {this.renderTags(rd.tags)}
                 </View>
                 <View style={[layout.row, layout.flexEnd, layout.stats]}>
-                    <Image source={require('assets/icons/postsmall.png')} />
+                    <FeatherIcon name={"file-text"} color={PrimaryColor} />
                     <Text style={[styles.smallFont, layout.flexEnd]}>{rd.post_count}</Text>
                 </View>
             </View>
@@ -70,22 +78,14 @@ class ListItem extends React.Component {
                         {this.renderTags(rd.tags)}
                     </View>
                     <View style={[layout.row, layout.flexEnd, layout.stats]}>
-                        <Image source={require('assets/icons/membersmall.png')} />
+                        <MaterialIconsIcon name={"people"} color={PrimaryColor} />
                         <Text style={[styles.smallFont, layout.flexEnd]}>{rd.member_count}</Text>
-                        <Image source={require('assets/icons/topicsmall.png')} />
+                        <MaterialIconsIcon name={"chat-bubble"} color={PrimaryColor} />
                         <Text style={[styles.smallFont, layout.flexEnd]}>{rd.topic_count}</Text>
-                        <Image source={require('assets/icons/postsmall.png')} />
+                        <FeatherIcon name={"file-text"} color={PrimaryColor} />
                         <Text style={[styles.smallFont, layout.flexEnd]}>{rd.post_count}</Text>
                     </View>
                 </View>
-                {/*<View style={{flex:1}}>
-                <AdMobBanner
-                    adSize="fullBanner"
-                    adUnitID={ANDROID_ADMOB_AD_UNIT_ID}
-                    testDevices={[AdMobBanner.simulatorId]}
-                    onAdFailedToLoad={error => console.error(error)}
-                />
-                </View>*/}
             </View>
         );
     }
@@ -153,11 +153,11 @@ class ListItem extends React.Component {
                         <Text style={styles.smallFont}>{rd.identifier}</Text>
                         <Text style={styles.dimmedFont}>{rd.blurb}</Text>
                         <View style={layout.row}>
-                            <Image source={require('assets/icons/postsmall.png')} />
+                            <FeatherIcon name={"file-text"} color={PrimaryColor} />
                             <Text style={[styles.smallFont, layout.flexEnd]}>{rd.post_count}</Text>
-                            <Image source={require('assets/icons/topicsmall.png')} />
+                            <MaterialIconsIcon name={"chat-bubble"} color={PrimaryColor} />
                             <Text style={[styles.smallFont, layout.flexEnd]}>{rd.topic_count}</Text>
-                            <Image source={require('assets/icons/followsmall.png')} />
+                            <MaterialIconsIcon name={"group-add"} color={PrimaryColor} />
                             <Text style={[styles.smallFont, layout.flexEnd]}>{rd.follower_count}</Text>
                         </View>
                     </View>
@@ -171,56 +171,83 @@ class ListItem extends React.Component {
         return (
             <View style={styles.container}>
                 <View>
-                    <Text style={styles.bigFont}>{rd.name}</Text>
-                    {rd.is_muted && <Icon style={[styles.smallFont, layout.flexEnd, styles.alignRight]} name={"mute"} color={PrimaryColor} />}
+                    <Text style={styles.bigFont}>{rd.conversation.name}</Text>
+                    {rd.is_muted && <OcticonsIcon style={[styles.smallFont, layout.flexEnd, styles.alignRight]} name={"mute"} color={PrimaryColor} />}
                 </View>
                 <View style={layout.row}>
-                    <Text style={[styles.smallFont, layout.flexEnd, styles.alignRight]}>last activity {Moment(rd.updated_at).fromNow()}</Text>
+                    <Text style={[styles.smallFont, layout.flexEnd, styles.alignRight]}>last activity {Moment(rd.conversation.updated_at).fromNow()}</Text>
                 </View>
-                {this.renderPreview(rd.last_message)}
-                <View style={layout.row}>
+                {this.renderPreview(rd.conversation.last_message)}
+                {/*<View style={layout.row}>
                     <View style={[layout.row, layout.flexEnd, layout.stats]}>
                         <Image source={require('assets/icons/membersmall.png')} />
-                        <Text style={[styles.smallFont, layout.flexEnd]}>{rd.member_count}</Text>
+                        <Text style={[styles.smallFont, layout.flexEnd]}>{rd.conversation.member_count}</Text>
                     </View>
-                </View>
+                </View>*/
+                }
             </View>
         )
     }
 
-    renderFeed() {
-        rd = this.props.rowData;
+    renderFeed(rd) {
         var view;
+        if (rd.feed_type) {
+            switch (rd.feed_type.split('-')[0]) {
+                case 'topic':
+                    view = (
+                        <View style={styles.container}>
+                            <Text style={[styles.medFont]}>{"New Topic"}</Text>
+                            {this.renderTopic(rd.feed, rd.user)}
+                        </View>
+                    )
+                    break;
+                case 'group':
+                    view = (
+                        <View style={styles.container}>
+                            <Text style={[styles.medFont]}>{rd.user.name + " joined a Group"}</Text>
+                            {this.renderGroup(rd.feed)}
+                        </View>
+                    )
+                    break;
+                case 'post':
+                    view = (
+                        <View style={styles.container}>
+                            <Text style={[styles.medFont]}>{"New Post"}</Text>
+                            {this.renderPost(rd.feed, rd.user)}
+                        </View>
+                    )
+                    break;
 
-        switch (rd.feed_type.split('-')[0]) {
-            case 'topic':
-                view = (
-                    <View style={styles.container}>
-                        <Text style={[styles.medFont]}>{"New Topic"}</Text>
-                        {this.renderTopic(rd.feed, rd.user)}
-                    </View>
-                )
-                break;
-            case 'group':
-                view = (
-                    <View style={styles.container}>
-                        <Text style={[styles.medFont]}>{rd.user.name + " joined a Group"}</Text>
-                        {this.renderGroup(rd.feed)}
-                    </View>
-                )
-                break;
-            case 'post':
-                view = (
-                    <View style={styles.container}>
-                        <Text style={[styles.medFont]}>{"New Post"}</Text>
-                        {this.renderPost(rd.feed, rd.user)}
-                    </View>
-                )
-                break;
+            }
 
+            return view;
         }
+    }
 
-        return view;
+    renderActivity(rd) {
+        return (
+            <View style={[styles.container, this.checkCompletion(rd.completed)]}>
+                <Text style={styles.bigFont}>{rd.name}</Text>
+                <Text style={styles.medFont}>{rd.description}</Text>
+                <View style={layout.row}>
+                    <MaterialCommunityIconsIcon
+                        name={"coins"}
+                        color={PrimaryColor}
+                        size={20} />
+                    <Text>{rd.reward}</Text>
+                </View>
+                <Text>{rd.progress + "/" + rd.completion}</Text>
+                <Text style={styles.smallFont}>{rd.reset_time}</Text>
+            </View>
+        )
+    }
+
+    checkCompletion(completed){
+        if(completed){
+            return {
+                backgroundColor: '#ccebd8'
+            }
+        }
     }
 
     renderItem(type) {
@@ -250,7 +277,10 @@ class ListItem extends React.Component {
                 toRender = this.renderConversation(this.props.rowData);
                 break;
             case 'feed':
-                toRender = this.renderFeed();
+                toRender = this.renderFeed(this.props.rowData);
+                break;
+            case 'activity':
+                toRender = this.renderActivity(this.props.rowData);
                 break;
             default:
                 break;
@@ -259,8 +289,7 @@ class ListItem extends React.Component {
         return toRender;
     }
 
-    render() {
-        count++;
+    shouldRenderAd() {
         if (count % 10 == 0) {
             console.log('ad loading');
             return (
@@ -273,18 +302,22 @@ class ListItem extends React.Component {
                     />
                 </View>
             )
-        } else {
-            return (
-                <View>
-                    <Button onPress={() => this.props.onPress(this.props.rowData)} onLongPress={() => this.props.onLongPress(this.props.rowData)}>
-                        {this.renderItem(this.props.type)}
-                    </Button>
-                </View>
-            )
         }
     }
 
+    render() {
+        count++;
+        return (
+            <View>
+                {/*this.shouldRenderAd()*/}
+                <Button onPress={() => this.props.onPress(this.props.rowData)} onLongPress={() => this.props.onLongPress(this.props.rowData)}>
+                    {this.renderItem(this.props.type)}
+                </Button>
+            </View>
+        )
+    }
 }
+
 
 const styles = StyleSheet.create({
     container: {

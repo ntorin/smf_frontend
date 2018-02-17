@@ -1,9 +1,9 @@
 import React from 'react';
-import { StyleSheet, View, Text, TextInput } from 'react-native';
+import { StyleSheet, View, Text, TextInput, Alert } from 'react-native';
 import PopulatableListView from 'components/PopulatableListView';
 import Button from 'components/Button';
 import { BaseStyles, PrimaryColor, user } from 'helpers/constants.js';
-import { TOPICS_POST_FETCH } from 'helpers/apicalls.js';
+import { TOPICS_POST_FETCH, TOPICS_DELETE, TOPICS_PUT_UPDATE } from 'helpers/apicalls.js';
 import { iconsMap } from 'helpers/icons-loader';
 import Modal from 'components/Modal';
 import ModalOptions from 'components/ModalOptions';
@@ -33,7 +33,7 @@ class BBS extends React.Component {
             selectedTopic: {}
         };
 
-        if (this.props.joinStatus === 'none') {
+        if (this.props.joinStatus === 'none' || this.props.group_user.is_banned) {
             this.state.newTopicDisabled = true;
         }
 
@@ -111,7 +111,7 @@ class BBS extends React.Component {
                 this.props.navigator.push({
                     screen: parts[1],
                     title: action.name,
-                    passProps: { 
+                    passProps: {
                         selected: selected.user,
                         group_id: this.props.group.id
                     }
@@ -120,25 +120,101 @@ class BBS extends React.Component {
             case 'function':
                 switch (parts[1]) {
                     case 'pin':
-                        this.pinTopic();
+                        this.pinTopic(selected);
                         break;
+                    case 'unpin':
+                        this.unpinTopic(selected);
+                        break;
+                    case 'lock':
+                        this.lockTopic(selected);
+                        break;
+                    case 'unlock':
+                        this.unlockTopic(selected);
                     case 'delete':
-                        this.deleteTopic();
+                        this.deleteTopic(selected);
                         break;
                 }
         }
         this._hideModal();
     }
 
-    pinTopic(){
-        
+    pinTopic(selected) {
+        Alert.alert('Pin Topic',
+            'Are you sure you want to pin the topic \"' + selected.title + '\"?',
+            [{
+                text: 'YES', onPress: () => {
+                    TOPICS_PUT_UPDATE(selected.id, true, selected.is_locked)
+                        .then((responseJSON) => {
+                            console.log(responseJSON);
+                            this.setState({ forceUpdate: false })
+                        })
+                }
+            },
+            { text: 'NO' }])
     }
 
-    deleteTopic(){
+    unpinTopic(selected) {
+        Alert.alert('Unpin Topic',
+            'Are you sure you want to unpin the topic \"' + selected.title + '\"?',
+            [{
+                text: 'YES', onPress: () => {
+                    TOPICS_PUT_UPDATE(selected.id, false, selected.is_locked)
+                        .then((responseJSON) => {
+                            console.log(responseJSON);
+                            this.setState({ forceUpdate: false })
+                        })
+                }
+            },
+            { text: 'NO' }])
     }
 
-    selectTopic(rowData){
-        this.setState({selectedTopic: rowData});
+    deleteTopic(selected) {
+        Alert.alert('Delete Topic',
+            'Are you sure you want to delete the topic \"' + selected.title + '\"?',
+            [{
+                text: 'YES', onPress: () => {
+                    TOPICS_DELETE(selected.id)
+                        .then((responseJSON) => {
+                            console.log(responseJSON);
+                            this.setState({ forceUpdate: false })
+                        });
+                }
+            },
+            { text: 'NO' }])
+    }
+
+    lockTopic(selected) {
+        Alert.alert('Lock Topic',
+            'Are you sure you want to lock the topic \"' + selected.title + '\"?',
+            [{
+                text: 'YES', onPress: () => {
+                    TOPICS_PUT_UPDATE(selected.id, selected.is_pinned, true)
+                        .then((responseJSON) => {
+                            console.log(responseJSON);
+                            this.setState({ forceUpdate: false })
+                        })
+                }
+            },
+            { text: 'NO' }])
+    }
+
+    unlockTopic(selected) {
+        Alert.alert('Unlock Topic',
+            'Are you sure you want to unlock the topic \"' + selected.title + '\"?',
+            [{
+                text: 'YES', onPress: () => {
+                    TOPICS_PUT_UPDATE(selected.id, selected.is_pinned, false)
+                        .then((responseJSON) => {
+                            console.log(responseJSON);
+                            this.setState({ forceUpdate: false })
+                        })
+                }
+            },
+            { text: 'NO' }])
+    }
+
+    selectTopic(rowData) {
+        this.setState({ selectedTopic: rowData });
         this._showModal();
     }
 
@@ -179,7 +255,8 @@ class BBS extends React.Component {
             title: rowData.title,
             passProps: {
                 topic: rowData,
-                joinStatus: this.props.joinStatus
+                joinStatus: this.props.joinStatus,
+                group_user: this.props.group_user
             }
         });
     }
@@ -194,6 +271,7 @@ class BBS extends React.Component {
                     <ModalOptions
                         type={'topic'}
                         callback={this.onModalAction}
+                        group_user={this.props.group_user}
                         selected={this.state.selectedTopic}
                     />
                 </View>

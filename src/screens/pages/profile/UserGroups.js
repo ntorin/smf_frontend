@@ -47,7 +47,7 @@ class UserGroups extends React.Component {
                     type={'group'}
                     onFetch={this.getGroups}
                     onPress={this.viewGroup}
-                    pagination={false}
+                    pagination={true}
                 />
             </View>
         )

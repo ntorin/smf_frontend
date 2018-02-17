@@ -43,7 +43,7 @@ class UserFollows extends React.Component {
                     type={'user'}
                     onFetch={this.getFollows}
                     onPress={this.viewProfile}
-                    pagination={false}
+                    pagination={true}
                 />
             </View>
         )

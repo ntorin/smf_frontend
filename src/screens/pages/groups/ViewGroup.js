@@ -5,7 +5,7 @@ import Button from 'components/Button';
 import PopulatableListView from 'components/PopulatableListView';
 import GroupInfo from './GroupInfo';
 import { BaseStyles, PrimaryColor, NavNoElevation } from 'helpers/constants';
-import { GROUP_USERS_POST, FEEDS_POST_FETCH, GROUP_USERS_POST_FETCH } from 'helpers/apicalls';
+import { GROUP_USERS_POST, FEEDS_POST_FETCH, GROUP_USERS_POST_FETCH, GROUP_USERS_POST_CHECK_REQUEST } from 'helpers/apicalls';
 import Modal from 'components/Modal';
 import ModalOptions from 'components/ModalOptions';
 
@@ -24,7 +24,7 @@ class ViewGroup extends React.Component {
     type={'user'}
     forceUpdate={true}
     onPress={this.onMemberPress}
-    onLongPress={() => {}}
+    onLongPress={() => { }}
   />;
 
   constructor(props) {
@@ -46,6 +46,9 @@ class ViewGroup extends React.Component {
     this.getMembers = this.getMembers.bind(this);
     this.onMemberPress = this.onMemberPress.bind(this);
     this.editGroupMember = this.editGroupMember.bind(this);
+    this.checkGroup = this.checkGroup.bind(this);
+
+    this.checkGroup();
   }
 
   _showModal = () => this.setState({ isModalVisible: true })
@@ -55,6 +58,7 @@ class ViewGroup extends React.Component {
   checkGroup() {
     GROUP_USERS_POST_CHECK_REQUEST(this.props.group.id)
       .then((responseJSON) => {
+        console.log(responseJSON);
         this.setState({
           groupUser: responseJSON.group_user
         })
@@ -91,29 +95,46 @@ class ViewGroup extends React.Component {
 
   onMemberPress(rowData) {
     this.setState({ selectedMember: rowData.user });
-    //this._showModal();
+    console.log(this.state.groupUser)
 
     switch (this.state.groupUser.role) {
-      case 'creator': case 'admin':
-        Alert.alert('Member Options', 'What would you like to do to ' + this.state.selectedMember.name + '?',
-          [
-            {
-              text: "VIEW PROFILE", onPress: () => {
-                this.viewProfile(rowData);
-              }
-            },
-            {
-              text: "EDIT", onPress: () => {
-                this.editGroupMember(rowData);
-              }
-            },
-
-            { text: "CANCEL" }])
+      case 'creator':
+        switch (rowData.role) {
+          case 'moderator': case 'user': case 'admin':
+            this.editAlert(rowData);
+            break;
+          default: this.viewProfile(rowData);
+        }
+        break;
+      case 'admin':
+        switch (rowData.role) {
+          case 'moderator': case 'user':
+            this.editAlert(rowData);
+            break;
+          default: this.viewProfile(rowData);
+        }
         break;
       default:
         this.viewProfile(rowData);
         break;
     }
+  }
+
+  editAlert(rowData) {
+    Alert.alert('Member Options', 'What would you like to do to ' + rowData.user.name + '?',
+      [
+        {
+          text: "VIEW PROFILE", onPress: () => {
+            this.viewProfile(rowData);
+          }
+        },
+        {
+          text: "EDIT", onPress: () => {
+            this.editGroupMember(rowData);
+          }
+        },
+
+        { text: "CANCEL" }])
   }
 
   _handleIndexChange = index => this.setState({ index });
@@ -145,12 +166,13 @@ class ViewGroup extends React.Component {
     this._hideModal();
   }
 
-  editGroupMember(rowData){
+  editGroupMember(rowData) {
     this.props.navigator.push({
       screen: 'smf_frontend.EditGroupUser',
       title: 'Edit ' + rowData.user.name,
       passProps: {
-        group_user: rowData
+        group_user: rowData,
+        permissions: this.state.groupUser.role
       }
     });
   }

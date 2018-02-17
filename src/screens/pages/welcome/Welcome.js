@@ -4,7 +4,7 @@ import { BaseStyles, goToHome, PrimaryColor } from 'helpers/constants';
 import Button from 'components/Button';
 import { CheckBox, FormLabel, FormInput, FormValidationMessage } from 'react-native-elements';
 import { USERS_POST_VALIDATE_IDENTIFIER, USERS_PUT_CREATE_NAME, USERS_PUT_CREATE_IDENTIFIER } from 'helpers/apicalls';
-import { user } from 'helpers/constants'; 
+import { user } from 'helpers/constants';
 
 class Welcome extends React.Component {
 
@@ -83,9 +83,6 @@ class Welcome extends React.Component {
             .then((responseJSON) => {
                 this.setState({ passed_identifier: true })
             })
-        GROUP_USERS_POST(1) //joining the global BBS
-            .then((responseJSON) => {
-            })
     }
 
     validateName(name) {
@@ -100,6 +97,9 @@ class Welcome extends React.Component {
         USERS_PUT_CREATE_NAME(this.state.name)
             .then((responseJSON) => {
                 this.setState({ passed_name: true });
+            })
+        GROUP_USERS_POST(1) //joining the global BBS
+            .then((responseJSON) => {
             })
     }
 

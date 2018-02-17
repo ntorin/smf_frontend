@@ -3,7 +3,7 @@ import { StyleSheet, View, Text } from 'react-native';
 import PopulatableListView from 'components/PopulatableListView';
 import Button from 'components/Button';
 import { BaseStyles } from 'helpers/constants.js';
-import { POSTS_POST_FETCH } from 'helpers/apicalls.js';
+import { POSTS_POST_FETCH, POSTS_DELETE } from 'helpers/apicalls.js';
 import { MarkdownEditor } from 'react-native-markdown-editor';
 import Modal from 'components/Modal';
 import ModalOptions from 'components/ModalOptions';
@@ -19,7 +19,7 @@ class ViewTopic extends React.Component {
             replyDisabled: false,
         }
 
-        if (this.props.joinStatus === 'none') {
+        if (this.props.joinStatus === 'none' || this.props.group_user.is_banned || this.props.topic.is_locked ) {
             this.state.replyDisabled = true;
         }
 
@@ -43,7 +43,7 @@ class ViewTopic extends React.Component {
                 this.props.navigator.push({
                     screen: parts[1],
                     title: action.name,
-                    passProps: { 
+                    passProps: {
                         selected: selected.user,
                         group_id: this.props.topic.group_id
                     }
@@ -52,15 +52,18 @@ class ViewTopic extends React.Component {
             case 'function':
                 switch (parts[1]) {
                     case 'delete':
-                        this.deletePost();
+                        this.deletePost(selected);
                         break;
                 }
         }
         this._hideModal();
     }
 
-    deletePost() {
-
+    deletePost(selected) {
+        POSTS_DELETE(selected.id)
+            .then((responseJSON) => {
+                console.log(responseJSON);
+            });
     }
 
     getPosts(page, callback, options) {
@@ -100,6 +103,7 @@ class ViewTopic extends React.Component {
                     <ModalOptions
                         type={'post'}
                         callback={this.onModalAction}
+                        group_user={this.props.group_user}
                         selected={this.state.selectedPost}
                     />
                 </View>
@@ -144,7 +148,10 @@ class ViewTopic extends React.Component {
 }
 
 const styles = StyleSheet.create({
-
+    bigFont: {
+        fontSize: 20,
+        fontWeight: 'bold',
+    }
 });
 
 const layout = StyleSheet.create({

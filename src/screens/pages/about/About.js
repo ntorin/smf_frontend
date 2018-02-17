@@ -12,7 +12,7 @@ class About extends React.Component {
         return (
             <View style={layout.container}>
                 <Image style={styles.appIcon} source={require('assets/img/loginicon.png')} />
-                <Text>Version 1.0.0</Text>
+                <Text>Version 0.8.0</Text>
                 <Text>Created by Iris Inami.</Text>
             </View>
         )

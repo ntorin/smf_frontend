@@ -4,7 +4,7 @@ import { BaseStyles } from 'helpers/constants.js';
 import { PrimaryColor, NavNoElevation } from 'helpers/constants';
 import { TabViewAnimated, TabBar, SceneMap } from 'react-native-tab-view';
 import PopulatableListView from 'components/PopulatableListView';
-import { FRIENDS_POST_FETCH, FRIENDS_POST, FRIENDS_POST_ACCEPT_REQUEST } from 'helpers/apicalls';
+import { FRIENDS_POST_FETCH, FRIENDS_POST } from 'helpers/apicalls';
 
 class Friends extends React.Component {
 
@@ -35,8 +35,8 @@ class Friends extends React.Component {
           index: 0,
           routes: [
             { key: '1', title: 'Friends' },
-            { key: '3', title: 'Incoming' },
-            { key: '2', title: 'Outgoing' },
+            { key: '2', title: 'Incoming' },
+            { key: '3', title: 'Outgoing' },
           ],
         };
 

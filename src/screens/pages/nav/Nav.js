@@ -16,6 +16,11 @@ class Nav extends React.Component {
                 screen: 'smf_frontend.UserDirectory'
             },
             {
+                name: 'Activities',
+                icon: require('assets/icons/activities.png'),
+                screen: 'smf_frontend.Activities'
+            },
+            {
                 name: 'Notifications',
                 icon: require('assets/icons/notifications.png'),
                 screen: 'smf_frontend.Notifications'

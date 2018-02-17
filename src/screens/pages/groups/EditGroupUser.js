@@ -40,9 +40,9 @@ class EditGroupUser extends React.Component {
                     selectedValue={this.state.role}
                     onValueChange={(itemValue, itemIndex) => this.setState({ role: itemValue })}
                     prompt={'Role'}>
-                    <Picker.Item label={"Moderator"} value={"moderator"} />
                     <Picker.Item label={"User"} value={"user"} />
-                    <Picker.Item label={"Admin"} value={"admin"} />
+                    <Picker.Item label={"Moderator"} value={"moderator"} />
+                    {this.props.permissions == 'creator' && <Picker.Item label={"Admin"} value={"admin"} />}
                 </Picker>
                 <CheckBox
                     title={"Ban user from group"}

@@ -183,6 +183,23 @@ let CONVERSATION_USERS_POST_FETCH = (conversation_id, page) => {
     });
 }
 
+let CONVERSATION_USERS_PUT_UPDATE = (conversation_user_id, is_muted) => {
+    var body = JSON.stringify({
+        is_muted: is_muted
+    });
+
+    return fetch(
+        CONVERSATION_USERS_URL + "/" + conversation_user_id,
+        {
+            method: PUT,
+            headers: JSON_HEADERS,
+            body: body
+        }
+    ).then((response) => {
+        return (response.json());
+    });
+}
+
 let CONVERSATIONS_URL = BASE_URL + "/conversations";
 
 let CONVERSATIONS_POST = (name, description, is_group) => {
@@ -633,6 +650,24 @@ let GROUP_USERS_DELETE = (group_user_id) => {
 
 let NOTIFICATIONS_URL = BASE_URL + "/notifications";
 
+let NOTIFICATIONS_POST_FETCH = (page) => {
+    var body = JSON.stringify({
+        user_id: user.id,
+        page: page
+    });
+
+    return fetch(
+        NOTIFICATIONS_URL + "/fetch",
+        {
+            method: POST,
+            headers: JSON_HEADERS,
+            body: body
+        }
+    ).then((response) => {
+        return (response.json());
+    });
+}
+
 let POST_LIKES_URL = BASE_URL + "/post_likes";
 
 let POSTS_URL = BASE_URL + "/posts";
@@ -785,7 +820,8 @@ let TOPICS_POST_FETCH = (group_id, sort_by, pinned, query, page) => {
         group_id: group_id,
         sort_by: sort_by,
         query: query,
-        page: page
+        page: page,
+        pinned: pinned,
     });
 
     return fetch(
@@ -844,6 +880,24 @@ let TOPICS_POST = (group_id, title, topic_type, tags) => {
         .then((response) => {
             return (response.json());
         });
+}
+
+let TOPICS_PUT_UPDATE = (topic_id, is_pinned, is_locked) => {
+    var body = JSON.stringify({
+        is_pinned: is_pinned,
+        is_locked: is_locked,
+    });
+
+    return fetch(
+        TOPICS_URL + "/" + topic_id,
+        {
+            method: PUT,
+            headers: JSON_HEADERS,
+            body: body
+        }
+    ).then((response) => {
+        return (response.json());
+    });
 }
 
 /**
@@ -966,6 +1020,7 @@ export {
 
     CONVERSATION_USERS_POST,
     CONVERSATION_USERS_POST_FETCH,
+    CONVERSATION_USERS_PUT_UPDATE,
 
     CONVERSATIONS_POST,
     CONVERSATIONS_POST_FETCH,
@@ -995,13 +1050,18 @@ export {
     GROUPS_POST_MY_GROUPS,
     GROUPS_POST_VALIDATE_IDENTIFIER,
 
+    NOTIFICATIONS_POST_FETCH,
+
     POSTS_POST,
     POSTS_POST_FETCH,
+    POSTS_DELETE,
 
     REPORTS_POST,
 
     TOPICS_POST,
     TOPICS_POST_FETCH,
+    TOPICS_PUT_UPDATE,
+    TOPICS_DELETE,
 
     USERS_POST_FETCH,
     USERS_POST_VALIDATE_IDENTIFIER,

@@ -20,6 +20,7 @@ class CreateTopic extends React.Component {
             content: ' ',
             is_anonymous: false,
             keyboardVisible: false,
+            isEditingContent: false,
         }
         this._keyboardDidHide = this._keyboardDidHide.bind(this);
         this._keyboardDidShow = this._keyboardDidShow.bind(this);
@@ -30,6 +31,7 @@ class CreateTopic extends React.Component {
         this.createTopic = this.createTopic.bind(this);
         this.labelExtractor = this.labelExtractor.bind(this);
         this.setState({ content: ' ' })
+        this.shouldaHide = this.shouldaHide.bind(this);
     }
 
     componentWillUnmount() {
@@ -42,7 +44,7 @@ class CreateTopic extends React.Component {
     }
 
     _keyboardDidHide() {
-        this.setState({ keyboardVisible: false });
+        this.setState({ keyboardVisible: false, isEditingContent: false });
     }
 
     createTopic() {
@@ -82,16 +84,25 @@ class CreateTopic extends React.Component {
         return tag;
     }
 
+    shouldaHide() {
+        //return  ? true : false;
+    }
+
+    submissionIsInvalid() {
+        return this.state.title.trim() === '' || this.state.content.trim() === '' || this.state.tags.length == 0 ? true : false;
+    }
+
     render() {
         return (
             <View style={BaseStyles.container}>
-                {!this.state.keyboardVisible && <View>
+                { !this.state.isEditingContent && <View>
                     <TextInput
                         placeholder={'Title'}
+                        value={this.state.title}
                         highlightColor={PrimaryColor}
                         onChangeText={(text) => this.setState({ title: text })} />
                     <View style={layout.tags}>
-                        <Text style={styles.tagHeader}>Tags:</Text>
+                        <Text style={styles.tagHeader}>Tags (tag1, tag2,...)</Text>
                         <TagInput
                             value={this.state.tags}
                             onChange={this.onChangeTags}
@@ -102,11 +113,14 @@ class CreateTopic extends React.Component {
                     </View>
                 </View>}
                 <MarkdownEditor
-                    onMarkdownChange={(content) => this.setState({ content: content })}
+                    onMarkdownChange={(content) => this.setState({ content: content, isEditingContent: true })}
                     showPreview={true}
                 />
 
-                {!this.state.keyboardVisible && <Button title={"Create New Topic"} onPress={this.createTopic} />}
+                { !this.state.keyboardVisible && <Button
+                    title={"Create New Topic"}
+                    onPress={this.createTopic}
+                    disabled={this.submissionIsInvalid()} />}
             </View>
         )
     }
@@ -114,7 +128,7 @@ class CreateTopic extends React.Component {
 
 const styles = StyleSheet.create({
     tagHeader: {
-        fontSize: 16,
+        fontSize: 12,
         color: PrimaryColor,
     }
 });
@@ -131,7 +145,7 @@ const layout = StyleSheet.create({
     },
 
     tags: {
-        flexDirection: 'row'
+        flexDirection: 'row',
     },
 
     input: {

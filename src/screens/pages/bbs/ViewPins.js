@@ -125,7 +125,7 @@ class ViewPins extends React.Component {
                 <View style={layout.topicList}>
                     <PopulatableListView
                         type={'topic'}
-                        onFetch={this.getPinnedTopics}
+                        onFetch={this.getTopics}
                         onPress={this.viewTopic}
                         onLongPress={this._showModal}
                         pagination={true}

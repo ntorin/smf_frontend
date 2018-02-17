@@ -34,7 +34,8 @@ const layout = StyleSheet.create({
     },
 
     text: {
-        left: 5
+        left: 5,
+        fontSize: 16
     }
 });
 

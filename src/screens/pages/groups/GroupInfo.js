@@ -30,7 +30,8 @@ class GroupInfo extends React.Component {
       title: this.props.group.name,
       passProps: {
         group: this.props.group,
-        joinStatus: this.state.joinStatus
+        joinStatus: this.state.joinStatus,
+        group_user: this.state.groupUser
       }
     });
   }

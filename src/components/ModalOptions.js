@@ -3,107 +3,141 @@ import { StyleSheet, View, Text, ListView } from 'react-native';
 import NavItem from 'components/NavItem';
 import { BaseStyles, user } from 'helpers/constants.js';
 
-const topic = [
-    /* {
+const scr_report = [
+    {
+        name: 'Report',
+        icon: require('assets/icons/directory.png'),
+        link: 'screen/smf_frontend.CreateReport'
+    },
+];
+
+const scr_edit_topic = [
+    {
         name: 'Edit',
         icon: require('assets/icons/directory.png'),
         link: 'screen/smf_frontend.EditTopic'
-    }, */
-    {
-        name: 'Pin',
-        icon: require('assets/icons/directory.png'),
-        link: 'function/pin'
-    },
+    }
+];
+
+const fun_lock = [
     {
         name: 'Lock',
         icon: require('assets/icons/directory.png'),
         link: 'function/lock'
     },
+];
+
+const fun_unlock = [
+    {
+        name: 'Unlock',
+        icon: require('assets/icons/directory.png'),
+        link: 'function/unlock'
+    },
+];
+
+const fun_pin = [
+    {
+        name: 'Pin',
+        icon: require('assets/icons/directory.png'),
+        link: 'function/pin'
+    },
+];
+
+const fun_unpin = [
+    {
+        name: 'Unpin',
+        icon: require('assets/icons/directory.png'),
+        link: 'function/unpin'
+    },
+];
+
+const fun_delete = [
     {
         name: 'Delete',
         icon: require('assets/icons/directory.png'),
         link: 'function/delete'
-    },
-    {
-        name: 'Report',
-        icon: require('assets/icons/directory.png'),
-        link: 'screen/smf_frontend.CreateReport'
-    },
+    }
 ];
 
-const post = [
-    /* {
+const scr_edit_post = [
+    {
         name: 'Edit',
         icon: require('assets/icons/directory.png'),
         link: 'smf_frontend.EditPost'
-    }, */
-    {
-        name: 'Delete',
-        icon: require('assets/icons/directory.png'),
-        link: 'function/delete'
-    },
-    {
-        name: 'Report',
-        icon: require('assets/icons/directory.png'),
-        link: 'screen/smf_frontend.CreateReport'
-    },
+    }
 ];
 
-const group_user = [
+const scr_edit_group_user = [
     {
         name: 'Edit',
         icon: require('assets/icons/directory.png'),
         link: 'screen/smf_frontend.EditGroupUser'
     },
-    {
-        name: 'Report',
-        icon: require('assets/icons/directory.png'),
-        link: 'screen/smf_frontend.CreateReport'
-    },
 ];
-
-const usr = [
-    {
-        name: 'Report',
-        icon: require('assets/icons/directory.png'),
-        link: 'screen/smf_frontend.CreateReport'
-    },
-];
-
-const conversation = [
-    {
-        name: 'Mute',
-        icon: require('assets/icons/directory.png'),
-        link: 'function/mute'
-    },
-]
 
 class ModalOptions extends React.Component {
 
     constructor(props) {
         super(props);
+        console.log(this.props);
         var items = [];
         switch (this.props.type) {
             case 'topic':
-                items = topic;
+                this.topicOptions(items);
                 break;
             case 'post':
-                items = post;
-                break;
-            case 'group_user':
-                items = group_user;
-                break;
-            case 'conversation':
-                items = conversation;
+                this.postOptions(items);
                 break;
             case 'usr':
-                items = usr;
+                this.userOptions(items);
                 break;
         }
         const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
         this.state = {
             menu: ds.cloneWithRows(items),
         };
+
+        this.topicOptions = this.topicOptions.bind(this);
+    }
+
+    topicOptions(items) {
+        role = this.props.group_user.role
+        if (role === 'moderator' || role === 'admin' || role === 'creator') {
+            if (this.props.selected.is_locked) {
+                this.addToArray(items, fun_unlock);
+            } else {
+                this.addToArray(items, fun_lock);
+            }
+
+            if (this.props.selected.is_pinned) {
+                this.addToArray(items, fun_unpin);
+            } else {
+                this.addToArray(items, fun_pin);
+            }
+        }
+        if (this.props.selected.user_id == user.id || role === 'moderator' || role === 'admin' || role === 'creator') {
+            this.addToArray(items, fun_delete);
+        }
+        this.addToArray(items, scr_report);
+    }
+
+    addToArray(mainArray, secondArray) {
+        console.log(secondArray);
+        for (var i = 0; i < secondArray.length; i++) {
+            mainArray.push(secondArray[i]);
+        }
+    }
+
+    postOptions(items) {
+        role = this.props.group_user.role
+        if (role === 'moderator' || role === 'admin' || role === 'creator' || this.props.selected.user_id == user.id) {
+            this.addToArray(items, fun_delete);
+        }
+        this.addToArray(items, scr_report);
+    }
+
+    userOptions(items) {
+        this.addToArray(items, scr_report);
     }
 
     checkValidity() {

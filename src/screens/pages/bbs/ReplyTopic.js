@@ -13,6 +13,7 @@ class ReplyTopic extends React.Component {
         this.state = {
             content: '',
             is_anonymous: false,
+            isEditingContent: false,
         }
 
         this._keyboardDidHide = this._keyboardDidHide.bind(this);
@@ -33,7 +34,7 @@ class ReplyTopic extends React.Component {
     }
 
     _keyboardDidHide() {
-        this.setState({ keyboardVisible: false });
+        this.setState({ keyboardVisible: false, isEditingContent: false });
     }
 
     createPost() {
@@ -46,13 +47,18 @@ class ReplyTopic extends React.Component {
             })
     }
 
+    submissionIsInvalid() {
+        return this.state.content.trim() === '' ? true : false;
+    }
+
     render() {
         return (
             <View style={BaseStyles.container}>
-                <MarkdownEditor onMarkdownChange={(content) => this.setState({ content: content })} />
-                {!this.state.keyboardVisible && <Button title={"Send Reply"} onPress={this.createPost}>
-                    Send Reply
-                </Button>}
+                <MarkdownEditor onMarkdownChange={(content) => this.setState({ content: content, isEditingContent: true })} />
+                {!this.state.keyboardVisible && <Button
+                    title={"Send Reply"}
+                    onPress={this.createPost}
+                    disabled={this.submissionIsInvalid()} />}
             </View>
         )
     }
