@@ -11,7 +11,6 @@ class EditTopic extends React.Component {
             title: this.props.selected.title,
             
         }
-        console.log(this.props.selected);
     }
 
     render() {

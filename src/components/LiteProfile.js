@@ -1,14 +1,44 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import { BaseStyles, PrimaryColor } from 'helpers/constants.js';
+import { BaseStyles, PrimaryColor, WEBSOCKET_URL, user, editUser } from 'helpers/constants.js';
 import Avatar from 'components/Avatar';
 import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import ActionCable from 'react-native-actioncable';
 
+const cable = ActionCable.createConsumer(WEBSOCKET_URL);
 
 class LiteProfile extends React.Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            user: this.props.user
+        }
+        this.updateProfile = this.updateProfile.bind(this);
+        
+        var t = this;
+        cable.subscriptions.create(
+            { channel: "ProfileChannel", room: user.id },
+            {
+                connected() {
+                    console.log('connected to profile');
+                },
+                disconnected() { console.log('disconnected') },
+    
+                received(event) {
+                    switch (event.action) {
+                        case 'profile_update':
+                            t.updateProfile(event);
+                            break;
+                    }
+                }
+            }
+        );
+    }
+
+    updateProfile(event){
+        this.setState({user: event.user})
+        editUser(event.user);
     }
 
     render() {
@@ -16,17 +46,17 @@ class LiteProfile extends React.Component {
             <View style={layout.container}>
                 <View style={layout.userDetails}>
                     <View style={layout.row}>
-                        <Text style={[{ flex: 1 }, styles.username]}>{this.props.user.name}</Text>
+                        <Text style={[{ flex: 1 }, styles.username]}>{this.state.user.name}</Text>
                         <View style={[{ flex: 1, }, layout.row, layout.flexEnd, styles.alignRight]}>
                             <MaterialCommunityIconsIcon
                                 name={"coins"}
                                 color={PrimaryColor}
                                 size={25} />
-                            <Text style={styles.mediumFont}>{this.props.user.credits}</Text>
+                            <Text style={styles.mediumFont}>{this.state.user.credits}</Text>
                         </View>
                     </View>
-                    <Text style={styles.accountid}>{this.props.user.identifier}</Text>
-                    <Text style={styles.description}>{this.props.user.blurb}</Text>
+                    <Text style={styles.accountid}>{this.state.user.identifier}</Text>
+                    <Text style={styles.description}>{this.state.user.blurb}</Text>
                 </View>
             </View>
         )

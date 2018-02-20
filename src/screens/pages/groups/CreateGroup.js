@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, TextInput, ScrollView, Picker } from 'react-native';
+import { StyleSheet, View, Text, TextInput, ScrollView, Picker, Alert } from 'react-native';
 import TextField from 'react-native-md-textinput';
 import { GiftedForm, GiftedFormManager } from 'react-native-gifted-form';
 import { Fumi } from 'react-native-textinput-effects';
@@ -24,26 +24,75 @@ class CreateGroup extends React.Component {
         this.createGroup = this.createGroup.bind(this);
         this.labelExtractor = this.labelExtractor.bind(this);
         this.validateIdentifier = this.validateIdentifier.bind(this);
+
+        this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
+    }
+
+    onNavigatorEvent(event) { // this is the onPress handler for the two buttons together
+        switch (event.type) {
+            case 'NavBarButtonPress':
+                if (event.id == 'menu') { // this is the same id field from the static navigatorButtons definition
+                    this.props.navigator.toggleDrawer({
+                        side: 'left',
+                        animated: true
+                    })
+                }
+                break;
+
+            case 'DeepLink':
+                this.props.navigator.screenIsCurrentlyVisible().then((responseJSON) => {
+                    isVisible = responseJSON
+                    if (isVisible) {
+                        const parts = event.link.split('/'); // Link parts
+                        const payload = event.payload; // (optional) The payload
+                        if (parts[0] == 'nav') {
+                            this.props.navigator.push({
+                                screen: parts[1],
+                                title: payload
+                            });
+                            // handle the link somehow, usually run a this.props.navigator command
+                        }
+                    }
+                });
+                break;
+        }
+
+        switch (event.id) {
+            case 'bottomTabReselected':
+                this.props.navigator.popToRoot({
+                    animated: true, // does the popToRoot have transition animation or does it happen immediately (optional)
+                    animationType: 'fade', // 'fade' (for both) / 'slide-horizontal' (for android) does the popToRoot have different transition animation (optional)
+                });
+                break;
+        }
     }
 
     createGroup() {
-        var tags = this.state.tags.join();
+        Alert.alert('Create Group',
+            'Are you sure you want to create the group ' + this.state.name + ' (' + this.state.identifier + ')?',
+            [{
+                text: 'YES', onPress: () => {
+                    var tags = this.state.tags.join();
 
-        GROUPS_POST(this.state.identifier, this.state.name, this.state.description, this.state.group_type, tags, null)
-            .then((responseJSON) => {
-                GROUP_USERS_POST(responseJSON.id)
-                    .then((responseJSON) => {
-                        this.props.navigator.pop({
-                            animated: true,
-                            animationType: 'fade'
-                        });
-                    })
-            })
+                    GROUPS_POST(this.state.identifier, this.state.name, this.state.description, this.state.group_type, tags, null)
+                        .then((responseJSON) => {
+                            GROUP_USERS_POST(responseJSON.id)
+                                .then((responseJSON) => {
+                                    this.props.navigator.pop({
+                                        animated: true,
+                                        animationType: 'fade'
+                                    });
+                                })
+                        })
+                }
+            }, { text: 'NO' }]);
     }
 
     validateIdentifier() {
         GROUPS_POST_VALIDATE_IDENTIFIER(this.state.identifier, null)
             .then((responseJSON) => {
+                console.log(responseJSON);
+                this.setState({ validation_message: responseJSON.message, valid: responseJSON.valid })
             })
     }
 
@@ -69,6 +118,18 @@ class CreateGroup extends React.Component {
         return tag;
     }
 
+    submissionIsInvalid() {
+        return !this.state.valid || this.state.name.trim() === '' || this.state.tags.length == 0 ? true : false;
+    }
+
+    validationMessageColor() {
+        if (!this.state.valid) {
+            return {
+                color: '#FF0000'
+            }
+        }
+    }
+
     render() {
         return (
             <View style={BaseStyles.container}>
@@ -78,11 +139,12 @@ class CreateGroup extends React.Component {
                         placeholder={'Identifier'}
                         placeholderTextColor={PrimaryColor}
                         underlineColorAndroid={PrimaryColor}
-                        onChangeText={(text) => this.setState({ name: text })} />
-                    <Button title={"Check"}
+                        onChangeText={(text) => this.setState({ identifier: text, valid: false, validation_message: '' })} />
+                    <Button title={"Validate"}
                         onPress={this.validateIdentifier}
                         style={layout.validateIdentifier} />
                 </View>
+                <Text style={this.validationMessageColor()}>{this.state.validation_message}</Text>
                 <TextInput
                     placeholder={'Name'}
                     placeholderTextColor={PrimaryColor}
@@ -101,7 +163,7 @@ class CreateGroup extends React.Component {
                     </ScrollView>
                 </View>
                 <View style={layout.tags}>
-                    <Text style={styles.tagHeader}>Tags:</Text>
+                    <Text style={styles.tagHeader}>Tags (tag1, tag2,...)</Text>
                     <TagInput
                         value={this.state.tags}
                         onChange={this.onChangeTags}
@@ -122,7 +184,10 @@ class CreateGroup extends React.Component {
                         <Picker.Item label={"Apply Only"} value={"apply"} />
                     </Picker>*/ }
                 </View>
-                <Button title={"Create New Group"} onPress={this.createGroup} />
+                <Button
+                    title={"Create New Group"}
+                    onPress={this.createGroup}
+                    disabled={this.submissionIsInvalid()} />
             </View>
         )
     }
@@ -130,7 +195,7 @@ class CreateGroup extends React.Component {
 
 const styles = StyleSheet.create({
     tagHeader: {
-        fontSize: 16,
+        fontSize: 12,
         color: PrimaryColor,
     }
 });

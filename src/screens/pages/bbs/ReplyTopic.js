@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, Keyboard } from 'react-native';
+import { StyleSheet, View, Text, Keyboard, Alert } from 'react-native';
 import LongTextInput from 'components/LongTextInput';
 import Button from 'components/Button';
 import { BaseStyles } from 'helpers/constants.js';
@@ -22,6 +22,47 @@ class ReplyTopic extends React.Component {
         this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow);
         this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide);
         this.createPost = this.createPost.bind(this)
+
+        this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
+    }
+
+    onNavigatorEvent(event) { // this is the onPress handler for the two buttons together
+        switch (event.type) {
+            case 'NavBarButtonPress':
+                if (event.id == 'menu') { // this is the same id field from the static navigatorButtons definition
+                    this.props.navigator.toggleDrawer({
+                        side: 'left',
+                        animated: true
+                    })
+                }
+                break;
+
+            case 'DeepLink':
+                this.props.navigator.screenIsCurrentlyVisible().then((responseJSON) => {
+                    isVisible = responseJSON
+                    if (isVisible) {
+                        const parts = event.link.split('/'); // Link parts
+                        const payload = event.payload; // (optional) The payload
+                        if (parts[0] == 'nav') {
+                            this.props.navigator.push({
+                                screen: parts[1],
+                                title: payload
+                            });
+                            // handle the link somehow, usually run a this.props.navigator command
+                        }
+                    }
+                });
+                break;
+        }
+
+        switch (event.id) {
+            case 'bottomTabReselected':
+                this.props.navigator.popToRoot({
+                    animated: true, // does the popToRoot have transition animation or does it happen immediately (optional)
+                    animationType: 'fade', // 'fade' (for both) / 'slide-horizontal' (for android) does the popToRoot have different transition animation (optional)
+                });
+                break;
+        }
     }
 
     componentWillUnmount() {
@@ -38,13 +79,17 @@ class ReplyTopic extends React.Component {
     }
 
     createPost() {
-        POSTS_POST(this.props.topic.group_id, this.props.topic.id, this.state.content, false, this.state.is_anonymous, null)
-            .then((responseJSON) => {
-                this.props.navigator.pop({
-                    animated: true,
-                    animationType: 'fade'
-                });
-            })
+        Alert.alert('Create Post', 'Are you sure you want to send this message?', [{
+            text: 'YES', onPress: () => {
+                POSTS_POST(this.props.topic.group_id, this.props.topic.id, this.state.content, false, this.state.is_anonymous, null)
+                    .then((responseJSON) => {
+                        this.props.navigator.pop({
+                            animated: true,
+                            animationType: 'fade'
+                        });
+                    })
+            }
+        }, {text: 'NO'}])
     }
 
     submissionIsInvalid() {

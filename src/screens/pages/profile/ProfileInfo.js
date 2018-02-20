@@ -1,12 +1,14 @@
 import React from 'react';
 import { StyleSheet, View, ScrollView, Text, Alert } from 'react-native';
-import { BaseStyles, PrimaryColor, ANDROID_ADMOB_AD_UNIT_ID } from 'helpers/constants.js';
+import { BaseStyles, PrimaryColor, ANDROID_ADMOB_AD_UNIT_ID, WEBSOCKET_URL } from 'helpers/constants.js';
 import LiteProfile from 'components/LiteProfile';
 import Button from 'components/Button';
 import { FRIENDS_POST, FRIENDS_POST_CHECK_REQUEST, FRIENDS_DELETE, FOLLOWS_POST, FOLLOWS_POST_CHECK_REQUEST, FOLLOWS_DELETE } from 'helpers/apicalls';
 import Moment from 'moment';
 import { user } from 'helpers/constants';
 import { AdMobBanner, AdMobRewarded, PublisherBanner } from 'react-native-admob';
+
+const cable = ActionCable.createConsumer(WEBSOCKET_URL);
 
 class ProfileInfo extends React.Component {
 
@@ -19,7 +21,8 @@ class ProfileInfo extends React.Component {
 
       followStatus: '',
       followLoading: true,
-      followDisabled: false
+      followDisabled: false,
+      user: this.props.user
     }
 
     this.viewGroups = this.viewGroups.bind(this);
@@ -40,7 +43,6 @@ class ProfileInfo extends React.Component {
   checkFriend() {
     FRIENDS_POST_CHECK_REQUEST(this.props.user.id)
       .then((responseJSON) => {
-        console.log(responseJSON);
         this.setState({
           friend: responseJSON.friend,
           friendStatus: responseJSON.status, friendLoading: false, followDisabled: false
@@ -52,7 +54,6 @@ class ProfileInfo extends React.Component {
     this.setState({ friendLoading: true, followDisabled: true })
     FRIENDS_POST(user.id, this.props.user.id)
       .then((responseJSON) => {
-        console.log(responseJSON);
         this.checkFriend();
       })
   }
@@ -65,7 +66,6 @@ class ProfileInfo extends React.Component {
           this.setState({ friendLoading: true, followDisabled: true })
           FRIENDS_DELETE(this.state.friend.id)
             .then((responseJSON) => {
-              console.log(responseJSON);
               this.checkFriend();
             })
         }
@@ -76,7 +76,6 @@ class ProfileInfo extends React.Component {
   checkFollow() {
     FOLLOWS_POST_CHECK_REQUEST(this.props.user.id)
       .then((responseJSON) => {
-        console.log(responseJSON);
         this.setState({
           follow: responseJSON.follow,
           followStatus: responseJSON.status, followLoading: false,
@@ -89,7 +88,6 @@ class ProfileInfo extends React.Component {
     this.setState({ followLoading: true, friendDisabled: true })
     FOLLOWS_POST(this.props.user.id)
       .then((responseJSON) => {
-        console.log(responseJSON);
         this.checkFollow();
       })
   }
@@ -98,7 +96,6 @@ class ProfileInfo extends React.Component {
     this.setState({ followLoading: true, friendDisabled: true })
     FOLLOWS_DELETE(this.state.follow.id)
       .then((responseJSON) => {
-        console.log(responseJSON);
         this.checkFollow();
       })
   }
@@ -207,14 +204,13 @@ class ProfileInfo extends React.Component {
   }
 
   render() {
-    console.log('rerend');
     return (
       <View style={BaseStyles.container}>
         <LiteProfile
-          user={this.props.user} />
+          user={this.state.user} />
         <View style={styles.userDetails}>
           <View style={layout.userInformation}>
-            <Text style={layout.counts}>Join Date: {Moment(this.props.user.created_at).format('d MMM YYYY')}</Text>
+            <Text style={layout.counts}>Join Date: {Moment(this.props.user.created_at).format('DD MMM YYYY')}</Text>
             <Text style={layout.counts}>Birthday: {this.props.user.birthday}</Text>
             <Text style={layout.counts}>Posts: {this.props.user.post_count}</Text>
             <Text style={layout.counts}>Topics: {this.props.user.topic_count}</Text>

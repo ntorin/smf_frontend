@@ -1,20 +1,18 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import { BaseStyles } from 'helpers/constants.js';
-import { GROUPS_POST_MY_GROUPS } from 'helpers/apicalls.js';
 import PopulatableListView from 'components/PopulatableListView';
+import { BaseStyles } from 'helpers/constants.js';
+import { CREDIT_HISTORIES_POST_FETCH } from 'helpers/apicalls';
 
-class UserGroups extends React.Component {
+class CreditHistory extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            sort_by: 'recent',
-            query: ''
+            forceUpdate: false
         }
 
-        this.getGroups = this.getGroups.bind(this);
-        this.viewGroup = this.viewGroup.bind(this);
+        this.getHistory = this.getHistory.bind(this);
         
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
     }
@@ -58,8 +56,12 @@ class UserGroups extends React.Component {
         }
     }
 
-    getGroups(page, callback, options) {
-        GROUPS_POST_MY_GROUPS(this.props.user.id, page)
+    viewNotification() {
+
+    }
+
+    getHistory(page, callback, options) {
+        CREDIT_HISTORIES_POST_FETCH(page)
             .then((responseJSON) => {
                 if (responseJSON.length < 1) {
                     callback(responseJSON, {
@@ -68,27 +70,18 @@ class UserGroups extends React.Component {
                 } else {
                     callback(responseJSON)
                 }
-            });
-    }
-
-    viewGroup(rowData) {
-        this.props.navigator.push({
-            screen: 'smf_frontend.ViewGroup',
-            title: rowData.name,
-            passProps: {
-                group: rowData
-            }
-        });
+                this.setState({ forceUpdate: false })
+            })
     }
 
     render() {
         return (
-            <View style={BaseStyles.container}>
+            <View style={styles.container}>
                 <PopulatableListView
-                    type={'group'}
-                    onFetch={this.getGroups}
-                    onPress={this.viewGroup}
+                    type={'credit_history'}
+                    onFetch={this.getHistory}
                     pagination={true}
+                    forceUpdate={this.state.forceUpdate}
                 />
             </View>
         )
@@ -96,11 +89,14 @@ class UserGroups extends React.Component {
 }
 
 const styles = StyleSheet.create({
-
+    container: {
+        flex: 1,
+        backgroundColor: '#ffffff'
+    },
 });
 
 const layout = StyleSheet.create({
 
 });
 
-export default UserGroups;
+export default CreditHistory;

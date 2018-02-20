@@ -1,4 +1,4 @@
-import { Platform, StyleSheet } from 'react-native';
+import { Platform, StyleSheet, AsyncStorage } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Foundation from 'react-native-vector-icons/Foundation';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
@@ -13,6 +13,8 @@ export const ANDROID_ADMOB_AD_UNIT_ID = 'ca-app-pub-3289567150609681/5928312822'
 
 export const IOS_ADMOB_APP_ID = '';
 export const IOS_ADMOB_AD_UNIT_ID = '';
+
+export const APPLICATION_VERSION = 'Version 0.8.0 (Beta)';
 
 export var user = {
     id: 0
@@ -195,7 +197,6 @@ export const goToHome = () => {
 
     GROUP_USERS_POST_CHECK_REQUEST(1)
         .then((responseJSON) => {
-            console.log(responseJSON);
             var props = {
                 user: user,
                 group: {
@@ -239,5 +240,7 @@ export const logoutUser = () => {
     JSON_HEADERS['client'] = '';
     JSON_HEADERS['expiry'] = '';
     JSON_HEADERS['uid'] = '';
+    AsyncStorage.removeItem('smf_frontend.email');
+    AsyncStorage.removeItem('smf_frontend.password');
     startApp();
 }

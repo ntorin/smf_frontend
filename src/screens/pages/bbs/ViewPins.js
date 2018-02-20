@@ -39,17 +39,6 @@ class ViewPins extends React.Component {
                         animated: true
                     })
                 }
-
-                if (event.id == 'pins') {
-                    this.props.navigator.push({
-                        screen: 'smf_frontend.ViewPins',
-                        title: 'Pinned Topics',
-                        passProps: {
-                            group: this.props.group,
-                            joinStatus: this.state.joinStatus
-                        }
-                    });
-                }
                 break;
 
             case 'DeepLink':
@@ -71,14 +60,10 @@ class ViewPins extends React.Component {
         }
 
         switch (event.id) {
-            case 'didAppear':
-                this.props.navigator.screenIsCurrentlyVisible().then((responseJSON) => {
-                    isVisible = responseJSON;
-                });
-                break;
-            case 'didDisappear':
-                this.props.navigator.screenIsCurrentlyVisible().then((responseJSON) => {
-                    isVisible = responseJSON;
+            case 'bottomTabReselected':
+                this.props.navigator.popToRoot({
+                    animated: true, // does the popToRoot have transition animation or does it happen immediately (optional)
+                    animationType: 'fade', // 'fade' (for both) / 'slide-horizontal' (for android) does the popToRoot have different transition animation (optional)
                 });
                 break;
         }

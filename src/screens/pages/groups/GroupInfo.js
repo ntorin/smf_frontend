@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import Button from 'components/Button';
 import PopulatableListView from 'components/PopulatableListView';
-import { BaseStyles, PrimaryColor, NavNoElevation } from 'helpers/constants';
+import { BaseStyles, PrimaryColor, NavNoElevation, user } from 'helpers/constants';
 import { GROUP_USERS_POST, GROUP_USERS_POST_CHECK_REQUEST, GROUP_USERS_DELETE } from 'helpers/apicalls';
 
 class GroupInfo extends React.Component {
@@ -14,6 +14,10 @@ class GroupInfo extends React.Component {
       joinStatus: '',
       joinLoading: true,
       joinDisabled: false,
+    }
+
+    if(user.is_banned){
+      this.state.joinDisabled = true;
     }
 
     this.goToBBS = this.goToBBS.bind(this);

@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, Image } from 'react-native';
+import { StyleSheet, View, Text, Image, Linking } from 'react-native';
 import Button from 'react-native-button';
 import { BaseStyles, PrimaryColor, ScreenBackgroundColor, ANDROID_ADMOB_AD_UNIT_ID } from 'helpers/constants.js';
 import Avatar from 'components/Avatar';
@@ -95,7 +95,9 @@ class ListItem extends React.Component {
             <View style={styles.container}>
                 <View>
                     <View style={layout.row}>
-                        <Text style={styles.bold}>{user.name}</Text>
+                        <Button onPress={() => this.props.onPress(this.props.rowData)} onLongPress={() => this.props.onLongPress(this.props.rowData)}>
+                            <Text style={styles.bold}>{user.name}</Text>
+                        </Button>
                         <Text style={[layout.flexEnd, styles.alignRight]}>{Moment(rd.created_at).fromNow()}</Text>
                     </View>
                     <View style={layout.row}>
@@ -103,34 +105,29 @@ class ListItem extends React.Component {
                         <Text style={[layout.flexEnd, styles.alignRight, styles.smallFont]}>{rd.id}</Text>
                     </View>
                 </View>
-                <MarkdownView>{rd.content}</MarkdownView>
+                <MarkdownView onLinkPress={(url) => this.handleURL(url)}>{rd.content}</MarkdownView>
             </View>
         )
     }
 
-    renderNotification(rd) {
-
-        if (rd.is_seen) {
-            return (
-                <View style={styles.container}>
-                    <View style={styles.textContainer}>
-                        <Text style={layout.title}>{rd.title}</Text>
-                        <Text>{rd.description}</Text>
-                    </View>
-                </View>
-            )
-        }
-        else {
-            return (
-                <View style={styles.containerBlue}>
-                    <View style={styles.textContainer}>
-                        <Text style={layout.title}>{rd.title}</Text>
-                        <Text>{rd.description}</Text>
-                    </View>
-                </View>
-            )
-        }
+    handleURL(url) {
+        Linking.canOpenURL(url).then(supported => {
+            if (!supported) {
+            } else {
+                return Linking.openURL(url);
+            }
+        });
     }
+
+    renderNotification(rd) {
+        return (
+            <View style={styles.container} >
+                <Text style={[layout.flexEnd, styles.alignRight]}>{Moment(rd.created_at).fromNow()}</Text>
+                <Text style={[styles.medFont]}>{rd.description}</Text>
+            </View>
+        );
+    }
+
 
     renderUser(rd) {
         var data = rd;
@@ -143,7 +140,7 @@ class ListItem extends React.Component {
         }
 
         return (
-            <View style={styles.container}>
+            <View style={styles.container} >
                 <View style={layout.row}>
                     <View style={layout.columnEnd}>
                         <View style={layout.row}>
@@ -155,9 +152,9 @@ class ListItem extends React.Component {
                         <View style={layout.row}>
                             <FeatherIcon name={"file-text"} color={PrimaryColor} />
                             <Text style={[styles.smallFont, layout.flexEnd]}>{rd.post_count}</Text>
-                            <MaterialIconsIcon name={"chat-bubble"} color={PrimaryColor} />
+                            <MaterialIconsIcon name={"chat-bubble"} color={PrimaryColor} size={15} />
                             <Text style={[styles.smallFont, layout.flexEnd]}>{rd.topic_count}</Text>
-                            <MaterialIconsIcon name={"group-add"} color={PrimaryColor} />
+                            <MaterialIconsIcon name={"group-add"} color={PrimaryColor} size={15} />
                             <Text style={[styles.smallFont, layout.flexEnd]}>{rd.follower_count}</Text>
                         </View>
                     </View>
@@ -169,7 +166,7 @@ class ListItem extends React.Component {
     renderConversation(rd) {
 
         return (
-            <View style={styles.container}>
+            <View style={styles.container} >
                 <View>
                     <Text style={styles.bigFont}>{rd.conversation.name}</Text>
                     {rd.is_muted && <OcticonsIcon style={[styles.smallFont, layout.flexEnd, styles.alignRight]} name={"mute"} color={PrimaryColor} />}
@@ -178,13 +175,6 @@ class ListItem extends React.Component {
                     <Text style={[styles.smallFont, layout.flexEnd, styles.alignRight]}>last activity {Moment(rd.conversation.updated_at).fromNow()}</Text>
                 </View>
                 {this.renderPreview(rd.conversation.last_message)}
-                {/*<View style={layout.row}>
-                    <View style={[layout.row, layout.flexEnd, layout.stats]}>
-                        <Image source={require('assets/icons/membersmall.png')} />
-                        <Text style={[styles.smallFont, layout.flexEnd]}>{rd.conversation.member_count}</Text>
-                    </View>
-                </View>*/
-                }
             </View>
         )
     }
@@ -226,7 +216,7 @@ class ListItem extends React.Component {
 
     renderActivity(rd) {
         return (
-            <View style={[styles.container, this.checkCompletion(rd.completed)]}>
+            <View style={[styles.container, this.checkCompletion(rd.completed)]} >
                 <Text style={styles.bigFont}>{rd.name}</Text>
                 <Text style={styles.medFont}>{rd.description}</Text>
                 <View style={layout.row}>
@@ -242,12 +232,28 @@ class ListItem extends React.Component {
         )
     }
 
-    checkCompletion(completed){
-        if(completed){
+    checkCompletion(completed) {
+        if (completed) {
             return {
                 backgroundColor: '#ccebd8'
             }
         }
+    }
+
+    renderCreditHistory(rd) {
+        return (
+            <View style={styles.container} >
+                <Text style={[layout.flexEnd, styles.alignRight]}>{Moment(rd.created_at).fromNow()}</Text>
+                <Text style={[styles.medFont]}>{rd.description}</Text>
+                <View style={layout.row}>
+                    <MaterialCommunityIconsIcon
+                        name={"coins"}
+                        color={PrimaryColor}
+                        size={20} />
+                    <Text>{rd.credit_transaction}</Text>
+                </View>
+            </View>
+        );
     }
 
     renderItem(type) {
@@ -282,6 +288,8 @@ class ListItem extends React.Component {
             case 'activity':
                 toRender = this.renderActivity(this.props.rowData);
                 break;
+            case 'credit_history':
+                toRender = this.renderCreditHistory(this.props.rowData);
             default:
                 break;
         }
@@ -291,7 +299,6 @@ class ListItem extends React.Component {
 
     shouldRenderAd() {
         if (count % 10 == 0) {
-            console.log('ad loading');
             return (
                 <View>
                     <AdMobBanner
@@ -305,14 +312,24 @@ class ListItem extends React.Component {
         }
     }
 
+    renderListItem() {
+        if (this.props.type == 'post') {
+            return (this.renderPost(this.props.rowData, this.props.rowData.user))
+        } else {
+            return (
+                <Button onPress={() => this.props.onPress(this.props.rowData)} onLongPress={() => this.props.onLongPress(this.props.rowData)}>
+                    {this.renderItem(this.props.type)}
+                </Button>
+            )
+        }
+    }
+
     render() {
         count++;
         return (
             <View>
                 {/*this.shouldRenderAd()*/}
-                <Button onPress={() => this.props.onPress(this.props.rowData)} onLongPress={() => this.props.onLongPress(this.props.rowData)}>
-                    {this.renderItem(this.props.type)}
-                </Button>
+                {this.renderListItem()}
             </View>
         )
     }

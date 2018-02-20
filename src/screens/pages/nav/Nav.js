@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, ListView, Dimensions } from 'react-native';
+import { StyleSheet, View, Text, ListView, Dimensions, Alert } from 'react-native';
 import Button from 'apsl-react-native-button';
 import NavItem from 'components/NavItem';
 import LiteProfile from 'components/LiteProfile';
@@ -26,9 +26,19 @@ class Nav extends React.Component {
                 screen: 'smf_frontend.Notifications'
             },
             {
+                name: 'Credit History',
+                icon: require('assets/icons/credit_history.png'),
+                screen: 'smf_frontend.CreditHistory'
+            },
+            {
                 name: 'Friends',
                 icon: require('assets/icons/friends.png'),
                 screen: 'smf_frontend.Friends'
+            },
+            {
+                name: 'Help',
+                icon: require('assets/icons/help.png'),
+                screen: 'smf_frontend.Help'
             },
             {
                 name: 'About',
@@ -58,18 +68,24 @@ class Nav extends React.Component {
     }
 
     goToPage(rowData) {
-        if(rowData.screen === 'logout'){
-            logoutUser();
-        }else{
+        if (rowData.screen === 'logout') {
+            Alert.alert('Logging Out',
+                'Are you sure you wish to log out?',
+                [{
+                    text: 'YES', onPress: () => {
+                        logoutUser();
+                    }
+                }, {text: 'NO'}])
+        } else {
             this.props.navigator.handleDeepLink({
                 link: 'nav/' + rowData.screen,
                 payload: rowData.name
             });
-    
+
             this.props.navigator.toggleDrawer({
-              side: 'left',
-              animated: true,
-              to: 'closed'
+                side: 'left',
+                animated: true,
+                to: 'closed'
             })
         }
     }

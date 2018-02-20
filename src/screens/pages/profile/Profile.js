@@ -87,14 +87,10 @@ class Profile extends React.Component {
         }
 
         switch (event.id) {
-            case 'didAppear':
-                this.props.navigator.screenIsCurrentlyVisible().then((responseJSON) => {
-                    isVisible = responseJSON;
-                });
-                break;
-            case 'didDisappear':
-                this.props.navigator.screenIsCurrentlyVisible().then((responseJSON) => {
-                    isVisible = responseJSON;
+            case 'bottomTabReselected':
+                this.props.navigator.popToRoot({
+                    animated: true, // does the popToRoot have transition animation or does it happen immediately (optional)
+                    animationType: 'fade', // 'fade' (for both) / 'slide-horizontal' (for android) does the popToRoot have different transition animation (optional)
                 });
                 break;
         }

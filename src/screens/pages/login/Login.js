@@ -1,13 +1,12 @@
 import React from 'react';
-import { StyleSheet, View, Text, Dimensions, Image, TextInput, Platform, ScrollView, Alert } from 'react-native';
+import { StyleSheet, View, Text, Dimensions, Image, TextInput, Platform, ScrollView, Alert, AsyncStorage } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Foundation from 'react-native-vector-icons/Foundation';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import { Fumi } from 'react-native-textinput-effects';
 import { iconsMap, iconsLoaded } from 'helpers/icons-loader';
 import { Navigation } from 'react-native-navigation';
-import Background from 'components/Background';
-import { BaseStyles, PrimaryColor, PrimaryDimmed, NavMenu, ScreenBackgroundColor, ANDROID_ADMOB_AD_UNIT_ID } from 'helpers/constants';
+import { BaseStyles, PrimaryColor, PrimaryDimmed, NavMenu, ScreenBackgroundColor, ANDROID_ADMOB_AD_UNIT_ID, APPLICATION_VERSION } from 'helpers/constants';
 import { AUTH_POST_SIGN_IN, AUTH_POST } from 'helpers/apicalls';
 import Button from 'components/Button';
 import { goToHome, setAuthData } from 'helpers/constants';
@@ -30,6 +29,16 @@ class Login extends React.Component {
             registerDisabled: false,
         };
 
+        AsyncStorage.getItem('smf_frontend.email').then((email) => {
+            if(email){
+                AsyncStorage.getItem('smf_frontend.password').then((password) => {
+                    this.state.email = email;
+                    this.state.password = password;
+                    this.loginUser();
+                })
+            }
+        })
+
         this.loginUser = this.loginUser.bind(this);
         this.registerUser = this.registerUser.bind(this);
         this.validateAuthentication = this.validateAuthentication.bind(this);
@@ -45,7 +54,7 @@ class Login extends React.Component {
 
         this.setState({ loginLoading: true, loginDisabled: true, registerDisabled: true })
 
-        AUTH_POST_SIGN_IN('user1@smf.com', '313Ghioio', this.setFirstResponse)
+        AUTH_POST_SIGN_IN(email, password, this.setFirstResponse)
             .then((responseJSON) => {
                 this.validateAuthentication(responseJSON);
             });
@@ -84,10 +93,20 @@ class Login extends React.Component {
                     title: 'Welcome'
                 });
             } else {
+                AsyncStorage.setItem('smf_frontend.email', this.state.email);
+                AsyncStorage.setItem('smf_frontend.password', this.state.password);
                 goToHome();
             }
         } else {
-            Alert.alert('Login Error', "Please make sure your email and password are correct, and try again.", [{ text: "OK", }])
+            if(responseJSON.errors.full_messages){
+                var errormsgs = '';
+                for(var i = 0; i < responseJSON.errors.full_messages.length; i++){
+                    errormsgs += responseJSON.errors.full_messages[i] + '; ';
+                }
+                Alert.alert('Registration Error', "There were problems with your account registration. (" + errormsgs + ")", [{ text: "OK", }])
+            }else{
+                Alert.alert('Login Error', "Please make sure your email and password are correct, and try again.", [{ text: "OK", }])
+            }
             this.setState({ loginLoading: false, loginDisabled: false, registerLoading: false, registerDisabled: false })
         }
     }
@@ -113,7 +132,7 @@ class Login extends React.Component {
                     />
                     <Fumi
                         style={layout.password}
-                        label={'Password'}
+                        label={'Password (min. 8 characters)'}
                         iconClass={Foundation}
                         iconName={'key'}
                         iconColor={PrimaryColor}

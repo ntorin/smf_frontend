@@ -9,12 +9,10 @@ import Modal from 'components/Modal';
 import ModalOptions from 'components/ModalOptions';
 
 class BBS extends React.Component {
-    static navigatorButtons = {
-        rightButtons: [{
+        rightButton = {
             icon: iconsMap['pin'],
             id: 'pins',
-        }]
-    };
+        }
 
     constructor(props) {
         super(props);
@@ -32,8 +30,10 @@ class BBS extends React.Component {
 
             selectedTopic: {}
         };
+        
+        this.props.navigator.setButtons({rightButtons:[this.rightButton]});
 
-        if (this.props.joinStatus === 'none' || this.props.group_user.is_banned) {
+        if (this.props.joinStatus === 'none' || this.props.group_user.is_banned || user.is_banned) {
             this.state.newTopicDisabled = true;
         }
 
@@ -50,6 +50,7 @@ class BBS extends React.Component {
 
     _hideModal = () => this.setState({ isModalVisible: false })
 
+
     onNavigatorEvent(event) { // this is the onPress handler for the two buttons together
         switch (event.type) {
             case 'NavBarButtonPress':
@@ -63,7 +64,7 @@ class BBS extends React.Component {
                 if (event.id == 'pins') {
                     this.props.navigator.push({
                         screen: 'smf_frontend.ViewPins',
-                        title: 'Pinned Topics for ' + this.props.group.name,
+                        title: this.props.group.name + '\'s Pins',
                         passProps: {
                             group: this.props.group,
                             joinStatus: this.state.joinStatus
@@ -91,14 +92,10 @@ class BBS extends React.Component {
         }
 
         switch (event.id) {
-            case 'didAppear':
-                this.props.navigator.screenIsCurrentlyVisible().then((responseJSON) => {
-                    isVisible = responseJSON;
-                });
-                break;
-            case 'didDisappear':
-                this.props.navigator.screenIsCurrentlyVisible().then((responseJSON) => {
-                    isVisible = responseJSON;
+            case 'bottomTabReselected':
+                this.props.navigator.popToRoot({
+                    animated: true, // does the popToRoot have transition animation or does it happen immediately (optional)
+                    animationType: 'fade', // 'fade' (for both) / 'slide-horizontal' (for android) does the popToRoot have different transition animation (optional)
                 });
                 break;
         }
@@ -145,7 +142,6 @@ class BBS extends React.Component {
                 text: 'YES', onPress: () => {
                     TOPICS_PUT_UPDATE(selected.id, true, selected.is_locked)
                         .then((responseJSON) => {
-                            console.log(responseJSON);
                             this.setState({ forceUpdate: false })
                         })
                 }
@@ -160,7 +156,6 @@ class BBS extends React.Component {
                 text: 'YES', onPress: () => {
                     TOPICS_PUT_UPDATE(selected.id, false, selected.is_locked)
                         .then((responseJSON) => {
-                            console.log(responseJSON);
                             this.setState({ forceUpdate: false })
                         })
                 }
@@ -175,7 +170,6 @@ class BBS extends React.Component {
                 text: 'YES', onPress: () => {
                     TOPICS_DELETE(selected.id)
                         .then((responseJSON) => {
-                            console.log(responseJSON);
                             this.setState({ forceUpdate: false })
                         });
                 }
@@ -190,7 +184,6 @@ class BBS extends React.Component {
                 text: 'YES', onPress: () => {
                     TOPICS_PUT_UPDATE(selected.id, selected.is_pinned, true)
                         .then((responseJSON) => {
-                            console.log(responseJSON);
                             this.setState({ forceUpdate: false })
                         })
                 }
@@ -205,7 +198,6 @@ class BBS extends React.Component {
                 text: 'YES', onPress: () => {
                     TOPICS_PUT_UPDATE(selected.id, selected.is_pinned, false)
                         .then((responseJSON) => {
-                            console.log(responseJSON);
                             this.setState({ forceUpdate: false })
                         })
                 }

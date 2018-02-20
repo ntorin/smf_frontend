@@ -30,12 +30,11 @@ class Messages extends React.Component {
             { channel: "ConversationChannel", room: 'uid_' + user.id },
             {
                 connected() {
-                    console.log('connected');
+                    console.log('connected to conversation');
                 },
                 disconnected() { console.log('disconnected') },
 
                 received(event) {
-                    console.log(event);
                     switch (event.action) {
                         case 'conversation_message_after_create':
                             t.sendMessageNotification(event);
@@ -50,6 +49,8 @@ class Messages extends React.Component {
         this.onModalAction = this.onModalAction.bind(this);
         this.selectConversation = this.selectConversation.bind(this);
         this.muteConversation = this.muteConversation.bind(this);
+        this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
+
     }
 
     _showModal = () => this.setState({ isModalVisible: true })
@@ -73,10 +74,10 @@ class Messages extends React.Component {
         }
     }
 
-    onNavigatorEvent(event) {
+    onNavigatorEvent(event) { // this is the onPress handler for the two buttons together
         switch (event.type) {
             case 'NavBarButtonPress':
-                if (event.id == 'menu') {
+                if (event.id == 'menu') { // this is the same id field from the static navigatorButtons definition
                     this.props.navigator.toggleDrawer({
                         side: 'left',
                         animated: true
@@ -88,13 +89,14 @@ class Messages extends React.Component {
                 this.props.navigator.screenIsCurrentlyVisible().then((responseJSON) => {
                     isVisible = responseJSON
                     if (isVisible) {
-                        const parts = event.link.split('/');
-                        const payload = event.payload;
+                        const parts = event.link.split('/'); // Link parts
+                        const payload = event.payload; // (optional) The payload
                         if (parts[0] == 'nav') {
                             this.props.navigator.push({
                                 screen: parts[1],
                                 title: payload
                             });
+                            // handle the link somehow, usually run a this.props.navigator command
                         }
                     }
                 });
@@ -102,14 +104,10 @@ class Messages extends React.Component {
         }
 
         switch (event.id) {
-            case 'didAppear':
-                this.props.navigator.screenIsCurrentlyVisible().then((responseJSON) => {
-                    isVisible = responseJSON;
-                });
-                break;
-            case 'didDisappear':
-                this.props.navigator.screenIsCurrentlyVisible().then((responseJSON) => {
-                    isVisible = responseJSON;
+            case 'bottomTabReselected':
+                this.props.navigator.popToRoot({
+                    animated: true, // does the popToRoot have transition animation or does it happen immediately (optional)
+                    animationType: 'fade', // 'fade' (for both) / 'slide-horizontal' (for android) does the popToRoot have different transition animation (optional)
                 });
                 break;
         }
@@ -136,7 +134,6 @@ class Messages extends React.Component {
     }
 
     selectConversation(rowData) {
-        console.log(rowData);
         this.setState({ selectedConversation: rowData });
         this.muteConversation();
     }
@@ -148,7 +145,6 @@ class Messages extends React.Component {
                     text: "YES", onPress: () => {
                         CONVERSATION_USERS_PUT_UPDATE(this.state.selectedConversation.id, true)
                             .then((responseJSON) => {
-                                console.log(responseJSON);
                                 this.setState({ forceUpdate: true })
                             })
                     }
@@ -160,7 +156,6 @@ class Messages extends React.Component {
                     text: "YES", onPress: () => {
                         CONVERSATION_USERS_PUT_UPDATE(this.state.selectedConversation.id, false)
                             .then((responseJSON) => {
-                                console.log(responseJSON);
                                 this.setState({ forceUpdate: true })
                             })
                     }

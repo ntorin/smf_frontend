@@ -260,6 +260,24 @@ let CONVERSATIONS_PUT_UPDATE = (conversation_id, is_muted) => {
 
 let CREDIT_HISTORIES_URL = BASE_URL + "/credit_histories";
 
+let CREDIT_HISTORIES_POST_FETCH = (page) => {
+    var body = JSON.stringify({
+        user_id: user.id,
+        page: page
+    });
+
+    return fetch(
+        CREDIT_HISTORIES_URL + "/fetch",
+        {
+            method: POST,
+            headers: JSON_HEADERS,
+            body: body
+        }
+    ).then((response) => {
+        return (response.json());
+    });
+}
+
 let FEEDS_URL = BASE_URL + "/feeds";
 
 let FEEDS_POST_FETCH = (fetch_type, activity_id, page) => {
@@ -766,7 +784,7 @@ let REFERRALS_POST = (referrer_id) => {
 
 let REFERRALS_POST_CHECK_USER = (referrer) => {
     var body = JSON.stringify({
-        referrer: referrer_id
+        referrer: referrer
     });
 
     return fetch(
@@ -973,6 +991,23 @@ let USERS_PUT_UPDATE = (name, blurb, birthday) => {
     });
 }
 
+let USERS_PUT_ACCEPT_TOS = () => {
+    var body = JSON.stringify({
+        accepted_tos: true
+    });
+
+    return fetch(
+        USERS_URL + "/" + user.id,
+        {
+            method: PUT,
+            headers: JSON_HEADERS,
+            body: body
+        }
+    ).then((response) => {
+        return (response.json());
+    });
+}
+
 let USERS_PUT_CREATE_IDENTIFIER = (identifier) => {
     var body = JSON.stringify({
         identifier: identifier
@@ -1026,6 +1061,8 @@ export {
     CONVERSATIONS_POST_FETCH,
     CONVERSATIONS_PUT_UPDATE,
 
+    CREDIT_HISTORIES_POST_FETCH,
+
     FEEDS_POST_FETCH,
 
     FOLLOWS_POST,
@@ -1058,6 +1095,10 @@ export {
 
     REPORTS_POST,
 
+    REFERRALS_POST_CHECK_USER,
+    REFERRALS_POST,
+
+    TOPICS_GET_SINGLE,
     TOPICS_POST,
     TOPICS_POST_FETCH,
     TOPICS_PUT_UPDATE,
@@ -1065,7 +1106,8 @@ export {
 
     USERS_POST_FETCH,
     USERS_POST_VALIDATE_IDENTIFIER,
-    USERS_PUT_UPDATE,
+    USERS_PUT_ACCEPT_TOS,
     USERS_PUT_CREATE_IDENTIFIER,
-    USERS_PUT_CREATE_NAME
+    USERS_PUT_CREATE_NAME,
+    USERS_PUT_UPDATE
 }

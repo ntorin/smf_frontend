@@ -3,7 +3,7 @@ import { View, StyleSheet } from 'react-native';
 import { TabViewAnimated, TabBar, SceneMap } from 'react-native-tab-view';
 import PopulatableListView from 'components/PopulatableListView';
 import { PrimaryColor, NavNoElevation, user } from 'helpers/constants';
-import { FEEDS_POST_FETCH } from 'helpers/apicalls';
+import { FEEDS_POST_FETCH, TOPICS_GET_SINGLE, GROUP_USERS_POST_CHECK_REQUEST } from 'helpers/apicalls';
 
 
 class Feed extends React.Component {
@@ -26,6 +26,8 @@ class Feed extends React.Component {
     pagination={true} />;
   BBS = () => <PopulatableListView
     type={'feed'}
+    onFetch={this.getGroupFeeds}
+    onPress={this.navigateToFeed}
     pagination={true} />;
 
   constructor(props) {
@@ -49,11 +51,11 @@ class Feed extends React.Component {
     this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
   }
 
-  navigateToFeed(rowData){
+  navigateToFeed(rowData) {
     const parts = rowData.deep_link.split('/');
-    switch(parts[0]){
+    switch (parts[0]) {
       case '':
-      break;
+        break;
     }
   }
 
@@ -143,14 +145,10 @@ class Feed extends React.Component {
     }
 
     switch (event.id) {
-      case 'didAppear':
-        this.props.navigator.screenIsCurrentlyVisible().then((responseJSON) => {
-          isVisible = responseJSON;
-        });
-        break;
-      case 'didDisappear':
-        this.props.navigator.screenIsCurrentlyVisible().then((responseJSON) => {
-          isVisible = responseJSON;
+      case 'bottomTabReselected':
+        this.props.navigator.popToRoot({
+          animated: true, // does the popToRoot have transition animation or does it happen immediately (optional)
+          animationType: 'fade', // 'fade' (for both) / 'slide-horizontal' (for android) does the popToRoot have different transition animation (optional)
         });
         break;
     }
@@ -171,6 +169,66 @@ class Feed extends React.Component {
     '3': this.Friends,
     '4': this.BBS,
   });
+
+  viewGroup(rowData) {
+    this.props.navigator.push({
+      screen: 'smf_frontend.ViewGroup',
+      title: rowData.feed.name,
+      passProps: {
+        group: rowData.feed
+      }
+    });
+  }
+
+  viewTopic(rowData) {
+    GROUP_USERS_POST_CHECK_REQUEST(rowData.feed.group_id)
+      .then((responseJSON) => {
+        this.props.navigator.push({
+          screen: 'smf_frontend.ViewTopic',
+          title: rowData.feed.title,
+          passProps: {
+            topic: rowData.feed,
+            group_user: responseJSON.group_user,
+            joinStatus: responseJSON.status,
+          }
+        });
+      });
+  }
+
+  viewPost(rowData) {
+    GROUP_USERS_POST_CHECK_REQUEST(rowData.feed.group_id)
+      .then((responseJSON) => {
+        TOPICS_GET_SINGLE(rowData.feed.topic_id)
+          .then((responseJSON2) => {
+            this.props.navigator.push({
+              screen: 'smf_frontend.ViewTopic',
+              title: responseJSON2.title,
+              passProps: {
+                topic: responseJSON2,
+                group_user: responseJSON.group_user,
+                joinStatus: responseJSON.status,
+
+                jump_to: rowData.feed.id
+              }
+            });
+          })
+      });
+  }
+
+  navigateToFeed(rowData) {
+    switch (rowData.feed_type.split('-')[0]) {
+      case 'topic':
+        this.viewTopic(rowData);
+        break;
+      case 'group':
+        this.viewGroup(rowData);
+        break;
+      case 'post':
+        this.viewPost(rowData);
+        break;
+
+    }
+  }
 
   render() {
     return (

@@ -3,8 +3,9 @@ import { StyleSheet, View, Text, ScrollView } from 'react-native';
 import { BaseStyles, goToHome, PrimaryColor } from 'helpers/constants';
 import Button from 'components/Button';
 import { CheckBox, FormLabel, FormInput, FormValidationMessage } from 'react-native-elements';
-import { USERS_POST_VALIDATE_IDENTIFIER, USERS_PUT_CREATE_NAME, USERS_PUT_CREATE_IDENTIFIER } from 'helpers/apicalls';
+import { USERS_POST_VALIDATE_IDENTIFIER, USERS_PUT_ACCEPT_TOS, USERS_PUT_CREATE_NAME, USERS_PUT_CREATE_IDENTIFIER, GROUP_USERS_POST, REFERRALS_POST, REFERRALS_POST_CHECK_USER } from 'helpers/apicalls';
 import { user } from 'helpers/constants';
+import TermsOfService from 'components/TermsOfService';
 
 class Welcome extends React.Component {
 
@@ -33,7 +34,7 @@ class Welcome extends React.Component {
             checkDisabled: false,
             checkLoading: false,
 
-            passed_tos: true,
+            passed_tos: false,
             passed_identifier: false,
             passed_name: false,
             passed_referral: false
@@ -53,6 +54,7 @@ class Welcome extends React.Component {
         this.goToMenu = this.goToMenu.bind(this);
         this.checkUser = this.checkUser.bind(this);
         this.addReferral = this.addReferral.bind(this);
+        this.acceptTOS = this.acceptTOS.bind(this);
     }
 
     goToMenu() {
@@ -60,6 +62,13 @@ class Welcome extends React.Component {
         if (this.state.passed_identifier) {
             goToHome();
         }
+    }
+
+    acceptTOS() {
+        USERS_PUT_ACCEPT_TOS()
+            .then((responseJSON) => {
+                this.setState({ passed_tos: true });
+            })
     }
 
     checkIdentifierRegex(text) {
@@ -105,7 +114,7 @@ class Welcome extends React.Component {
 
     checkUser() {
         this.setState({ referrer: this.state.referrer_field, checkDisabled: true, checkLoading: true })
-        REFERRALS_POST_CHECK_USER(this.state.referrer)
+        REFERRALS_POST_CHECK_USER(this.state.referrer_field)
             .then((responseJSON) => {
                 this.setState({ referral_message: responseJSON.message, referral_valid: responseJSON.valid })
                 if (!responseJSON.valid) {
@@ -120,7 +129,7 @@ class Welcome extends React.Component {
     addReferral() {
         REFERRALS_POST(this.state.referrer_id)
             .then((responseJSON) => {
-                goToMenu();
+                this.goToMenu();
             });
     }
 
@@ -130,14 +139,9 @@ class Welcome extends React.Component {
             <View style={BaseStyles.container}>
                 <View style={layout.subContainer}>
                     {!this.state.passed_tos &&
-                        <View>
-                            <Text>TERMS OF SERVICE</Text>
+                        <View >
                             <View >
-                                <ScrollView>
-                                    <Text>
-                                        {"TERMS OF SERVICE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"}
-                                    </Text>
-                                </ScrollView>
+                                <TermsOfService  />
                             </View>
                             <View style={[layout.row]}>
                                 <CheckBox
@@ -149,7 +153,7 @@ class Welcome extends React.Component {
                                 <Button
                                     title={"Next"}
                                     disabled={!this.state.tos_accepted}
-                                    onPress={() => this.setState({ passed_tos: true })} />
+                                    onPress={this.acceptTOS} />
                             </View>
                         </View>
                     }
@@ -204,7 +208,7 @@ class Welcome extends React.Component {
                             </View>
                         </View>
                     }
-                    {(this.state.passed_tos && this.state.passed_identifier && this.state.passed_name && this.state.passed_referral) &&
+                    {(this.state.passed_tos && this.state.passed_identifier && this.state.passed_name && !this.state.passed_referral) &&
                         <View>
                             <Text>Referrals</Text>
                             <Text>
@@ -213,8 +217,9 @@ class Welcome extends React.Component {
                             </Text>
                             <View style={{ padding: 15 }}>
                                 <FormLabel>Email or Identifier</FormLabel>
-                                <FormInput onChangeText={(text) => this.setState({ referrer_field: false, referral_message: '', referrer_field: text, referrer: '' })} />
+                                <FormInput onChangeText={(text) => this.setState({ referrer_valid: false, referral_message: '', referrer_field: text, referrer: '' })} />
                                 {!this.state.referral_valid && <FormValidationMessage>{this.state.referral_message}</FormValidationMessage>}
+                                {this.state.referral_valid && <Text>{this.state.referral_message}</Text>}
                             </View>
                             <Button
                                 title={"Check"}

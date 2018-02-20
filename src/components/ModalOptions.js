@@ -6,7 +6,7 @@ import { BaseStyles, user } from 'helpers/constants.js';
 const scr_report = [
     {
         name: 'Report',
-        icon: require('assets/icons/directory.png'),
+        icon: require('assets/icons/report.png'),
         link: 'screen/smf_frontend.CreateReport'
     },
 ];
@@ -14,7 +14,7 @@ const scr_report = [
 const scr_edit_topic = [
     {
         name: 'Edit',
-        icon: require('assets/icons/directory.png'),
+        icon: require('assets/icons/edit.png'),
         link: 'screen/smf_frontend.EditTopic'
     }
 ];
@@ -22,7 +22,7 @@ const scr_edit_topic = [
 const fun_lock = [
     {
         name: 'Lock',
-        icon: require('assets/icons/directory.png'),
+        icon: require('assets/icons/lock.png'),
         link: 'function/lock'
     },
 ];
@@ -30,7 +30,7 @@ const fun_lock = [
 const fun_unlock = [
     {
         name: 'Unlock',
-        icon: require('assets/icons/directory.png'),
+        icon: require('assets/icons/unlock.png'),
         link: 'function/unlock'
     },
 ];
@@ -38,7 +38,7 @@ const fun_unlock = [
 const fun_pin = [
     {
         name: 'Pin',
-        icon: require('assets/icons/directory.png'),
+        icon: require('assets/icons/pin.png'),
         link: 'function/pin'
     },
 ];
@@ -46,7 +46,7 @@ const fun_pin = [
 const fun_unpin = [
     {
         name: 'Unpin',
-        icon: require('assets/icons/directory.png'),
+        icon: require('assets/icons/unpin.png'),
         link: 'function/unpin'
     },
 ];
@@ -54,7 +54,7 @@ const fun_unpin = [
 const fun_delete = [
     {
         name: 'Delete',
-        icon: require('assets/icons/directory.png'),
+        icon: require('assets/icons/delete.png'),
         link: 'function/delete'
     }
 ];
@@ -62,7 +62,7 @@ const fun_delete = [
 const scr_edit_post = [
     {
         name: 'Edit',
-        icon: require('assets/icons/directory.png'),
+        icon: require('assets/icons/edit.png'),
         link: 'smf_frontend.EditPost'
     }
 ];
@@ -70,7 +70,7 @@ const scr_edit_post = [
 const scr_edit_group_user = [
     {
         name: 'Edit',
-        icon: require('assets/icons/directory.png'),
+        icon: require('assets/icons/edit.png'),
         link: 'screen/smf_frontend.EditGroupUser'
     },
 ];
@@ -79,7 +79,6 @@ class ModalOptions extends React.Component {
 
     constructor(props) {
         super(props);
-        console.log(this.props);
         var items = [];
         switch (this.props.type) {
             case 'topic':
@@ -122,7 +121,6 @@ class ModalOptions extends React.Component {
     }
 
     addToArray(mainArray, secondArray) {
-        console.log(secondArray);
         for (var i = 0; i < secondArray.length; i++) {
             mainArray.push(secondArray[i]);
         }
