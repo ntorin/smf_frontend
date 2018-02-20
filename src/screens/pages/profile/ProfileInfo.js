@@ -221,7 +221,7 @@ class ProfileInfo extends React.Component {
           {this.renderFollowButton()}
           {this.renderFriendButton()}
         </View>
-        <View style={layout.row}>
+        <View style={[layout.row, {marginTop: 5}]}>
           <View style={{ flex: 1 }}>
             <Button
               title={"View Groups"}

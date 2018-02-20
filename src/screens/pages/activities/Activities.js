@@ -65,7 +65,7 @@ class Activities extends React.Component {
                 progress: user.daily_post_count,
                 completion: 1,
                 completed: this.checkCompletion(user.daily_post_count, 1),
-                reset_time: 'Activity resets daily at 12:00AM Pacific Time.'
+                reset_time: 'Activity resets daily at 8:00AM UTC.'
             },
             {
                 name: 'Weekly 10 Posts',
@@ -74,7 +74,7 @@ class Activities extends React.Component {
                 progress: user.weekly_post_count,
                 completion: 10,
                 completed: this.checkCompletion(user.weekly_post_count, 10),
-                reset_time: 'Activity resets every Sunday at 12:00AM Pacific Time.'
+                reset_time: 'Activity resets every Sunday at 8:00AM UTC.'
             },
             {
                 name: 'Monthly 100 Posts',
@@ -83,7 +83,7 @@ class Activities extends React.Component {
                 progress: user.monthly_post_count,
                 completion: 100,
                 completed: this.checkCompletion(user.monthly_post_count, 100),
-                reset_time: 'Activity resets on the 1st of every month at 12:00AM Pacific Time.'
+                reset_time: 'Activity resets on the 1st of every month at 8:00AM UTC.'
             },
             {
                 name: 'Refer Friends',

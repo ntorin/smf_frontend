@@ -142,7 +142,7 @@ class BBS extends React.Component {
                 text: 'YES', onPress: () => {
                     TOPICS_PUT_UPDATE(selected.id, true, selected.is_locked)
                         .then((responseJSON) => {
-                            this.setState({ forceUpdate: false })
+                            this.setState({ forceUpdate: true })
                         })
                 }
             },
@@ -156,7 +156,7 @@ class BBS extends React.Component {
                 text: 'YES', onPress: () => {
                     TOPICS_PUT_UPDATE(selected.id, false, selected.is_locked)
                         .then((responseJSON) => {
-                            this.setState({ forceUpdate: false })
+                            this.setState({ forceUpdate: true })
                         })
                 }
             },
@@ -170,7 +170,7 @@ class BBS extends React.Component {
                 text: 'YES', onPress: () => {
                     TOPICS_DELETE(selected.id)
                         .then((responseJSON) => {
-                            this.setState({ forceUpdate: false })
+                            this.setState({ forceUpdate: true })
                         });
                 }
             },
@@ -184,7 +184,7 @@ class BBS extends React.Component {
                 text: 'YES', onPress: () => {
                     TOPICS_PUT_UPDATE(selected.id, selected.is_pinned, true)
                         .then((responseJSON) => {
-                            this.setState({ forceUpdate: false })
+                            this.setState({ forceUpdate: true })
                         })
                 }
             },
@@ -198,7 +198,7 @@ class BBS extends React.Component {
                 text: 'YES', onPress: () => {
                     TOPICS_PUT_UPDATE(selected.id, selected.is_pinned, false)
                         .then((responseJSON) => {
-                            this.setState({ forceUpdate: false })
+                            this.setState({ forceUpdate: true })
                         })
                 }
             },

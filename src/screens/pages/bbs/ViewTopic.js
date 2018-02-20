@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import PopulatableListView from 'components/PopulatableListView';
 import Button from 'components/Button';
-import { BaseStyles } from 'helpers/constants.js';
+import { BaseStyles, user } from 'helpers/constants.js';
 import { POSTS_POST_FETCH, POSTS_DELETE } from 'helpers/apicalls.js';
 import { MarkdownEditor } from 'react-native-markdown-editor';
 import Modal from 'components/Modal';
@@ -15,12 +15,18 @@ class ViewTopic extends React.Component {
         this.state = {
             isModalVisible: false,
 
+            replyButtonText: 'Reply',
+
             replyLoading: false,
             replyDisabled: false,
         }
 
-        if (this.props.joinStatus === 'none' || this.props.group_user.is_banned || this.props.topic.is_locked || user.role == 'banned') {
+        if (this.props.joinStatus === 'none' || this.props.group_user.is_banned || this.props.topic.is_locked || user.is_banned) {
             this.state.replyDisabled = true;
+        }
+
+        if(this.props.topic.is_locked){
+            this.state.replyButtonText = 'Locked Topic';
         }
 
 
@@ -177,7 +183,7 @@ class ViewTopic extends React.Component {
                     onLongPress={this.selectPost}
                 />
                 <Button
-                    title={"Reply"}
+                    title={this.state.replyButtonText}
                     style={layout.newTopicButton}
                     disabled={this.state.replyDisabled}
                     loading={this.state.replyLoading}

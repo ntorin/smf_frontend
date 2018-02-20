@@ -141,7 +141,7 @@ class Welcome extends React.Component {
                     {!this.state.passed_tos &&
                         <View >
                             <View >
-                                <TermsOfService  />
+                                <TermsOfService />
                             </View>
                             <View style={[layout.row]}>
                                 <CheckBox
@@ -213,7 +213,7 @@ class Welcome extends React.Component {
                             <Text>Referrals</Text>
                             <Text>
                                 {"If another user brought you here, type their email or identifier.\n\n Both you and the referrer will be rewarded "
-                                    + "with credits, which can be used to personalize your account in the future."}
+                                    + "with credits, which are normally gained each time you post and can be used to personalize your account in the future."}
                             </Text>
                             <View style={{ padding: 15 }}>
                                 <FormLabel>Email or Identifier</FormLabel>
@@ -221,12 +221,17 @@ class Welcome extends React.Component {
                                 {!this.state.referral_valid && <FormValidationMessage>{this.state.referral_message}</FormValidationMessage>}
                                 {this.state.referral_valid && <Text>{this.state.referral_message}</Text>}
                             </View>
-                            <Button
-                                title={"Check"}
-                                loading={this.state.checkLoading}
-                                disabled={this.state.checkDisabled}
-                                onPress={this.checkUser} />
-                            <View style={layout.row}>
+                            <View
+                                style={{ marginBottom: 5 }} >
+                                <Button
+                                    title={"Check"}
+                                    loading={this.state.checkLoading}
+                                    disabled={this.state.checkDisabled}
+                                    onPress={this.checkUser} />
+                            </View>
+                            <View
+                                style={{ marginTop: 5 }}
+                                style={layout.row}>
                                 <Button
                                     title={"Skip"}
                                     onPress={this.goToMenu} />

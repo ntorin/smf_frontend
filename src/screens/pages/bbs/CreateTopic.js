@@ -130,7 +130,7 @@ class CreateTopic extends React.Component {
     }
 
     submissionIsInvalid() {
-        return this.state.title.trim() === '' || this.state.content.trim() === '' || this.state.tags.length == 0 ? true : false;
+        return this.state.title.trim() === '' || this.state.title.length > 50 || this.state.content.trim() === '' || this.state.tags.length == 0 ? true : false;
     }
 
     render() {
@@ -138,7 +138,7 @@ class CreateTopic extends React.Component {
             <View style={BaseStyles.container}>
                 { !this.state.isEditingContent && <View>
                     <TextInput
-                        placeholder={'Title'}
+                        placeholder={'Title (max. 50 characters)'}
                         value={this.state.title}
                         highlightColor={PrimaryColor}
                         onChangeText={(text) => this.setState({ title: text })} />

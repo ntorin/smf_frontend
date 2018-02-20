@@ -16,7 +16,7 @@ class GroupInfo extends React.Component {
       joinDisabled: false,
     }
 
-    if(user.is_banned){
+    if (user.is_banned) {
       this.state.joinDisabled = true;
     }
 
@@ -96,22 +96,17 @@ class GroupInfo extends React.Component {
     }
   }
 
-  kek() {
-    if (this.state.joinStatus === 'none') {
-      return (<View>
-        <Text>{"You have not joined " + this.props.group.name + " yet. You will not be able to make any topics or posts until you do so."}</Text>
-      </View>)
-    } else {
-      return (<View />)
-    }
-  }
-
   render() {
     return (
       <View style={BaseStyles.container}>
-        {this.renderJoinButton()}
-        <Button title={"View " + this.props.group.name + "\'s BBS"}
-          onPress={this.goToBBS} />
+        <View>
+          {this.renderJoinButton()}
+        </View>
+        <View style={{ marginTop: 5 }}>
+          <Button
+            title={"View " + this.props.group.name + "\'s BBS"}
+            onPress={this.goToBBS} />
+        </View>
         {this.state.joinStatus === 'none' &&
           <View>
             <Text>{"You have not joined " + this.props.group.name + " yet. You will not be able to make any topics or posts until you do so."}</Text>

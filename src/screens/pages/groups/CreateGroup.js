@@ -119,7 +119,7 @@ class CreateGroup extends React.Component {
     }
 
     submissionIsInvalid() {
-        return !this.state.valid || this.state.name.trim() === '' || this.state.tags.length == 0 ? true : false;
+        return !this.state.valid || this.state.name.length < 1 || this.state.name.length > 16|| this.state.name.trim() === '' || this.state.tags.length == 0 ? true : false;
     }
 
     validationMessageColor() {
@@ -136,7 +136,7 @@ class CreateGroup extends React.Component {
                 <View style={layout.identifierRow}>
                     <TextInput
                         style={layout.identifier}
-                        placeholder={'Identifier'}
+                        placeholder={'Identifier (a-z, 0-9, _ only)'}
                         placeholderTextColor={PrimaryColor}
                         underlineColorAndroid={PrimaryColor}
                         onChangeText={(text) => this.setState({ identifier: text, valid: false, validation_message: '' })} />
@@ -146,7 +146,7 @@ class CreateGroup extends React.Component {
                 </View>
                 <Text style={this.validationMessageColor()}>{this.state.validation_message}</Text>
                 <TextInput
-                    placeholder={'Name'}
+                    placeholder={'Name (max. 16 characters)'}
                     placeholderTextColor={PrimaryColor}
                     underlineColorAndroid={PrimaryColor}
                     onChangeText={(text) => this.setState({ name: text })} />
