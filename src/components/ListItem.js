@@ -304,7 +304,6 @@ class ListItem extends React.Component {
                     <AdMobBanner
                         adSize="fullBanner"
                         adUnitID={ANDROID_ADMOB_AD_UNIT_ID}
-                        testDevices={[AdMobBanner.simulatorId]}
                         onAdFailedToLoad={error => console.error(error)}
                     />
                 </View>
@@ -328,7 +327,7 @@ class ListItem extends React.Component {
         count++;
         return (
             <View>
-                {/*this.shouldRenderAd()*/}
+                {this.shouldRenderAd()}
                 {this.renderListItem()}
             </View>
         )
