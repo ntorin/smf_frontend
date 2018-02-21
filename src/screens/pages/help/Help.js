@@ -1,6 +1,7 @@
 import React from 'react';
-import { StyleSheet, View, Text, ScrollView } from 'react-native';
+import { StyleSheet, View, Text, ScrollView, Linking } from 'react-native';
 import { BaseStyles } from 'helpers/constants.js';
+import Button from 'react-native-button';
 
 class Help extends React.Component {
 
@@ -49,6 +50,15 @@ class Help extends React.Component {
         }
     }
 
+    handleURL(url) {
+        Linking.canOpenURL(url).then(supported => {
+            if (!supported) {
+            } else {
+                return Linking.openURL(url);
+            }
+        });
+    }
+
     render() {
         return (
             <ScrollView contentContainerStyle={layout.container}>
@@ -66,6 +76,15 @@ class Help extends React.Component {
                 </Text>
                 <Text>No spamming, and no illegal content. Disobeying either of these rules will result in your account being suspended.</Text>
                 <Text style={styles.question}>
+                    {"How do I add special formatting to my posts (bold, italic, underline, etc.)?"}
+                </Text>
+                <View>
+                    <Text>Citru.me uses Markdown for formatting posts. a full guide on Markdown can be found </Text>
+                    <Button onPress={() => this.handleURL('https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet')} >
+                        <Text style={styles.link}>here.</Text>
+                    </Button>
+                </View>
+                <Text style={styles.question}>
                     {"I want to create my own group. How can I do that?"}
                 </Text>
                 <Text>Go to the "Groups" tab, and select "New Group" in the top right. Groups must have a unique identifier, a name, and at least one tag to help describe the group. (NOTE: none of this is currently editable, but this will change later on)</Text>
@@ -76,7 +95,7 @@ class Help extends React.Component {
                 <Text style={styles.question}>
                     {"I want to gain more credits. Is there any alternative method to gain credits aside from posting?"}
                 </Text>
-                <Text>Currently, there are three methods of gaining credits; posting (1000 credits per post), completing activities (daily/weekly/monthly activities; check the "Activities" tab in the navigation menu), and referring friends to Citru.me (1000 credits per post the new user makes, up to 100).</Text>
+                <Text>Currently, there are three methods of gaining credits; posting (10 credits per post), completing activities (daily/weekly/monthly activities; check the "Activities" tab in the navigation menu), and referring friends to Citru.me (10 credits per post the new user makes, up to 100).</Text>
                 <Text style={styles.question}>
                     {"I want to connect to Citru.me on other devices. Where can I find the website to Citru.me?"}
                 </Text>
@@ -100,6 +119,10 @@ const styles = StyleSheet.create({
 
     bold: {
         fontWeight: 'bold',
+    },
+
+    link: {
+        color: '#0366de'
     }
 });
 
@@ -107,6 +130,10 @@ const layout = StyleSheet.create({
     container: {
         padding: 15,
     },
+
+    row: {
+        flexDirection: 'row'
+    }
 });
 
 export default Help;

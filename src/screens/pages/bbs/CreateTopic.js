@@ -30,9 +30,7 @@ class CreateTopic extends React.Component {
 
         this.createTopic = this.createTopic.bind(this);
         this.labelExtractor = this.labelExtractor.bind(this);
-        this.setState({ content: ' ' })
-        this.shouldaHide = this.shouldaHide.bind(this);
-        
+
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
     }
 
@@ -95,6 +93,7 @@ class CreateTopic extends React.Component {
             .then((responseJSON) => {
                 POSTS_POST(this.props.group_id, responseJSON.id, this.state.content, true, this.state.is_anonymous, null)
                     .then((responseJSON) => {
+                        this.props.callback();
                         this.props.navigator.pop({
                             animated: true,
                             animationType: 'fade',
@@ -125,25 +124,21 @@ class CreateTopic extends React.Component {
         return tag;
     }
 
-    shouldaHide() {
-        //return  ? true : false;
-    }
-
     submissionIsInvalid() {
-        return this.state.title.trim() === '' || this.state.title.length > 50 || this.state.content.trim() === '' || this.state.tags.length == 0 ? true : false;
+        return this.state.title.trim() === '' || this.state.content.length > 5000 || this.state.title.length > 50 || this.state.content.trim() === '' || this.state.tags.length == 0 ? true : false;
     }
 
     render() {
         return (
             <View style={BaseStyles.container}>
-                { !this.state.isEditingContent && <View>
+                {!this.state.isEditingContent && <View>
                     <TextInput
-                        placeholder={'Title (max. 50 characters)'}
+                        placeholder={'Title (max. 50 characters; required)'}
                         value={this.state.title}
                         highlightColor={PrimaryColor}
                         onChangeText={(text) => this.setState({ title: text })} />
-                    <View style={layout.tags}>
-                        <Text style={styles.tagHeader}>Tags (tag1, tag2,...)</Text>
+                    <Text style={styles.tagHeader}>Tags separated by commas (tag1, tag2, ...); required</Text>
+                    <View style={layout.row}>
                         <TagInput
                             value={this.state.tags}
                             onChange={this.onChangeTags}
@@ -155,10 +150,15 @@ class CreateTopic extends React.Component {
                 </View>}
                 <MarkdownEditor
                     onMarkdownChange={(content) => this.setState({ content: content, isEditingContent: true })}
-                    showPreview={true}
                 />
+                <View style={layout.row}>
+                    <Text>{this.state.content.length + "/5000 characters"}</Text>
+                    {this.state.isEditingContent && <Button
+                        title={"Show Title/Tags"}
+                        onPress={() => this.setState({ isEditingContent: false })} />}
+                </View>
 
-                { !this.state.keyboardVisible && <Button
+                {!this.state.keyboardVisible && <Button
                     title={"Create New Topic"}
                     onPress={this.createTopic}
                     disabled={this.submissionIsInvalid()} />}
@@ -185,7 +185,7 @@ const layout = StyleSheet.create({
         backgroundColor: ScreenBackgroundColor
     },
 
-    tags: {
+    row: {
         flexDirection: 'row',
     },
 

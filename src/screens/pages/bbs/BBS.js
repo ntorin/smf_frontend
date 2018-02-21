@@ -44,11 +44,16 @@ class BBS extends React.Component {
         this.createTopic = this.createTopic.bind(this);
         this.onModalAction = this.onModalAction.bind(this);
         this.selectTopic = this.selectTopic.bind(this);
+        this.refresh = this.refresh.bind(this);
     }
 
     _showModal = () => this.setState({ isModalVisible: true })
 
     _hideModal = () => this.setState({ isModalVisible: false })
+
+    refresh(){
+        this.setState({forceUpdate: true})
+    }
 
 
     onNavigatorEvent(event) { // this is the onPress handler for the two buttons together
@@ -231,7 +236,8 @@ class BBS extends React.Component {
             screen: 'smf_frontend.CreateTopic',
             title: 'Create Topic',
             passProps: {
-                group_id: this.props.group.id
+                group_id: this.props.group.id,
+                callback: this.refresh
             }
         });
 

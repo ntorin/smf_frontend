@@ -83,6 +83,7 @@ class ReplyTopic extends React.Component {
             text: 'YES', onPress: () => {
                 POSTS_POST(this.props.topic.group_id, this.props.topic.id, this.state.content, false, this.state.is_anonymous, null)
                     .then((responseJSON) => {
+                        this.props.callback();
                         this.props.navigator.pop({
                             animated: true,
                             animationType: 'fade'
@@ -93,13 +94,14 @@ class ReplyTopic extends React.Component {
     }
 
     submissionIsInvalid() {
-        return this.state.content.trim() === '' ? true : false;
+        return this.state.content.trim() === '' || this.state.content.length > 5000 ? true : false;
     }
 
     render() {
         return (
             <View style={BaseStyles.container}>
                 <MarkdownEditor onMarkdownChange={(content) => this.setState({ content: content, isEditingContent: true })} />
+                <Text>{this.state.content.length + "/5000 characters"}</Text>
                 {!this.state.keyboardVisible && <Button
                     title={"Send Reply"}
                     onPress={this.createPost}

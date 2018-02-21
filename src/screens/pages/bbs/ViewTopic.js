@@ -14,6 +14,7 @@ class ViewTopic extends React.Component {
         super(props);
         this.state = {
             isModalVisible: false,
+            forceUpdate: false,
 
             replyButtonText: 'Reply',
 
@@ -36,8 +37,15 @@ class ViewTopic extends React.Component {
         this.selectPost = this.selectPost.bind(this);
         this.deletePost = this.deletePost.bind(this);
         this.onModalAction = this.onModalAction.bind(this);
+        this.refresh = this.refresh.bind(this);
 
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
+    }
+
+    
+
+    refresh(){
+        this.setState({forceUpdate: true})
     }
 
     onNavigatorEvent(event) { // this is the onPress handler for the two buttons together
@@ -122,6 +130,7 @@ class ViewTopic extends React.Component {
                 } else {
                     callback(responseJSON)
                 }
+                this.setState({ forceUpdate: false })
             });
     }
     replyTopic() {
@@ -130,7 +139,8 @@ class ViewTopic extends React.Component {
             screen: 'smf_frontend.ReplyTopic',
             title: 'Reply to ' + this.props.topic.title,
             passProps: {
-                topic: this.props.topic
+                topic: this.props.topic,
+                callback: this.refresh
             }
         });
         var t = this;
@@ -181,6 +191,7 @@ class ViewTopic extends React.Component {
                     onFetch={this.getPosts}
                     onPress={this.viewProfile}
                     onLongPress={this.selectPost}
+                    forceUpdate={this.state.forceUpdate}
                 />
                 <Button
                     title={this.state.replyButtonText}

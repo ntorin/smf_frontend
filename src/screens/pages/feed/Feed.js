@@ -34,6 +34,7 @@ class Feed extends React.Component {
     super(props);
     this.state = {
       index: 0,
+      visible: true,
       routes: [
         { key: '1', title: 'All' },
         { key: '2', title: 'Follow' },
@@ -145,6 +146,16 @@ class Feed extends React.Component {
     }
 
     switch (event.id) {
+      case 'willAppear':
+          this.setState({
+              visible: true
+          });
+          break;
+      case 'willDisappear':
+          this.setState({
+              visible: false
+          });
+          break;
       case 'bottomTabReselected':
         this.props.navigator.popToRoot({
           animated: true, // does the popToRoot have transition animation or does it happen immediately (optional)
@@ -233,9 +244,10 @@ class Feed extends React.Component {
   render() {
     return (
       <TabViewAnimated
-        style={layout.container}
+        style={[layout.container, { flex: this.state.visible ? 1 : 0 }]}
         navigationState={this.state}
         renderScene={this._renderScene}
+        renderPager={this._renderPager}
         renderHeader={this._renderHeader}
         onIndexChange={this._handleIndexChange}
       />

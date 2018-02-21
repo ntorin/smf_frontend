@@ -29,6 +29,8 @@ build/
 .gradle
 local.properties
 *.iml
+app/
+smf_frontend-key.keystore
 
 # node.js
 #

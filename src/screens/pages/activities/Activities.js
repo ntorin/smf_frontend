@@ -61,7 +61,7 @@ class Activities extends React.Component {
             {
                 name: 'Daily Post',
                 description: 'Reply to any topic 1 time.',
-                reward: '1000',
+                reward: '10',
                 progress: user.daily_post_count,
                 completion: 1,
                 completed: this.checkCompletion(user.daily_post_count, 1),
@@ -70,7 +70,7 @@ class Activities extends React.Component {
             {
                 name: 'Weekly 10 Posts',
                 description: 'Reply to any topic 10 times.',
-                reward: '10000',
+                reward: '100',
                 progress: user.weekly_post_count,
                 completion: 10,
                 completed: this.checkCompletion(user.weekly_post_count, 10),
@@ -79,7 +79,7 @@ class Activities extends React.Component {
             {
                 name: 'Monthly 100 Posts',
                 description: 'Reply to any topic 100 times.',
-                reward: '100000',
+                reward: '1000',
                 progress: user.monthly_post_count,
                 completion: 100,
                 completed: this.checkCompletion(user.monthly_post_count, 100),
@@ -88,7 +88,7 @@ class Activities extends React.Component {
             {
                 name: 'Refer Friends',
                 description: 'Refer a friend to Citru.me by giving them the e-mail or identifier associated with your account when they sign up.',
-                reward: '1000 per post the new user makes (up to 100 posts)',
+                reward: '10 per post the new user makes (up to 100 posts)',
                 progress: user.referral_count,
                 completion: 1,
                 completed: this.checkCompletion(user.referral_count, 1),

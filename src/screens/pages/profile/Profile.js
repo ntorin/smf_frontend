@@ -26,6 +26,7 @@ class Profile extends React.Component {
         super(props);
         this.state = {
             index: 0,
+            visible: true,
             routes: [
                 { key: '1', title: 'Info' },
                 { key: '2', title: 'Activity' },
@@ -87,6 +88,16 @@ class Profile extends React.Component {
         }
 
         switch (event.id) {
+            case 'willAppear':
+                this.setState({
+                    visible: true
+                });
+                break;
+            case 'willDisappear':
+                this.setState({
+                    visible: false
+                });
+                break;
             case 'bottomTabReselected':
                 this.props.navigator.popToRoot({
                     animated: true, // does the popToRoot have transition animation or does it happen immediately (optional)
@@ -114,6 +125,7 @@ class Profile extends React.Component {
     render() {
         return (
             <TabViewAnimated
+                style={{ flex: this.state.visible ? 1 : 0 }}
                 navigationState={this.state}
                 renderScene={this._renderScene}
                 renderHeader={this._renderHeader}

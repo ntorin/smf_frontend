@@ -249,6 +249,9 @@ class Welcome extends React.Component {
 }
 
 const styles = StyleSheet.create({
+    bold: {
+        fontWeight: 'bold'
+    }
 });
 
 const layout = StyleSheet.create({

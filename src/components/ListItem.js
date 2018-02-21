@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, Image, Linking } from 'react-native';
+import { StyleSheet, View, Text, Image, Linking, Alert } from 'react-native';
 import Button from 'react-native-button';
 import { BaseStyles, PrimaryColor, ScreenBackgroundColor, ANDROID_ADMOB_AD_UNIT_ID } from 'helpers/constants.js';
 import Avatar from 'components/Avatar';
@@ -111,12 +111,16 @@ class ListItem extends React.Component {
     }
 
     handleURL(url) {
-        Linking.canOpenURL(url).then(supported => {
-            if (!supported) {
-            } else {
-                return Linking.openURL(url);
+        Alert.alert('Opening Link', 'Are you sure you want to go to ' + url + '?', [{
+            text: 'YES', onPress: () => {
+                Linking.canOpenURL(url).then(supported => {
+                    if (!supported) {
+                    } else {
+                        return Linking.openURL(url);
+                    }
+                });
             }
-        });
+        }, { text: 'NO' }])
     }
 
     renderNotification(rd) {
