@@ -11,7 +11,7 @@
 
 #import <React/RCTBundleURLProvider.h>
 
-#import "RCCManager.h"
+#import "../../node_modules/react-native-navigation/ios/RCCManager.h"
 
 #import <React/RCTRootView.h>
 
