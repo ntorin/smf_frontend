@@ -160,6 +160,8 @@ class ListItem extends React.Component {
                             <Text style={[styles.smallFont, layout.flexEnd]}>{rd.topic_count}</Text>
                             <MaterialIconsIcon name={"group-add"} color={PrimaryColor} size={15} />
                             <Text style={[styles.smallFont, layout.flexEnd]}>{rd.follower_count}</Text>
+                            <MaterialCommunityIconsIcon name={"coins"} color={PrimaryColor} size={20} />
+                            <Text style={[styles.smallFont, layout.flexEnd]}>{rd.credits}</Text>
                         </View>
                     </View>
                 </View>

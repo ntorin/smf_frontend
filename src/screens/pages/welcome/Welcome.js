@@ -1,11 +1,12 @@
 import React from 'react';
-import { StyleSheet, View, Text, ScrollView } from 'react-native';
+import { StyleSheet, View, Text, ScrollView, AsyncStorage } from 'react-native';
 import { BaseStyles, goToHome, PrimaryColor } from 'helpers/constants';
 import Button from 'components/Button';
 import { CheckBox, FormLabel, FormInput, FormValidationMessage } from 'react-native-elements';
 import { USERS_POST_VALIDATE_IDENTIFIER, USERS_PUT_ACCEPT_TOS, USERS_PUT_CREATE_NAME, USERS_PUT_CREATE_IDENTIFIER, GROUP_USERS_POST, REFERRALS_POST, REFERRALS_POST_CHECK_USER } from 'helpers/apicalls';
-import { user } from 'helpers/constants';
+import { user, editUser } from 'helpers/constants';
 import TermsOfService from 'components/TermsOfService';
+import { MarkdownView } from 'react-native-markdown-view';
 
 class Welcome extends React.Component {
 
@@ -60,6 +61,9 @@ class Welcome extends React.Component {
     goToMenu() {
         this.setState({ passed_name: true })
         if (this.state.passed_identifier) {
+            AsyncStorage.setItem('smf_frontend.email', this.state.email);
+            AsyncStorage.setItem('smf_frontend.password', this.state.password);
+            editUser(this.state.user);
             goToHome();
         }
     }
@@ -105,7 +109,7 @@ class Welcome extends React.Component {
     setName() {
         USERS_PUT_CREATE_NAME(this.state.name)
             .then((responseJSON) => {
-                this.setState({ passed_name: true });
+                this.setState({ passed_name: true, user: responseJSON });
             })
         GROUP_USERS_POST(1) //joining the global BBS
             .then((responseJSON) => {
@@ -159,12 +163,12 @@ class Welcome extends React.Component {
                     }
                     {(this.state.passed_tos && !this.state.passed_identifier) &&
                         <View>
-                            <Text>Create Your Identifier</Text>
-                            <Text>
-                                {"Identifiers let other users find and recognize you more easily.\n\n Your identifier can only contain letters, numbers and underscores, "
-                                    + "and must be 1-16 characters long.\n\n Identifiers cannot be changed in the future; "
-                                    + "You will be able to create a non-unique, editable account name on the next page."}
-                            </Text>
+                            <MarkdownView>
+                                {"__Create Your Identifier__\n\nIdentifiers let other users find and recognize you more easily.\n\n Your identifier can only contain letters, numbers and underscores, "
+                                    + "and must be 1-16 characters long.\n\n"
+                                    + "You will be able to create a non-unique, editable screen name on the next page."}
+                            </MarkdownView>
+                            <Text style={styles.important}>WARNING: Identifiers cannot be changed in the future. Make sure you are happy with your identifier.</Text>
                             <View style={[{ padding: 15 }]}>
                                 <View>
                                     <FormLabel>Identifier</FormLabel>
@@ -189,11 +193,10 @@ class Welcome extends React.Component {
                     }
                     {(this.state.passed_tos && this.state.passed_identifier && !this.state.passed_name) &&
                         <View>
-                            <Text>Pick a Name</Text>
-                            <Text>
-                                {"Your name is what you want other users to call you.\n\n Your name can contain special characters, "
-                                    + "and must be between 1-16 characters.\n\n Names can be altered at any time from your profile."}
-                            </Text>
+                            <MarkdownView>
+                                {"__Pick a Name__\n\nYour name is what you want other users to call you.\n\n Your name can contain special characters, "
+                                    + "and must be between 1-16 characters.\n\n **Names can be altered at any time from your profile.**"}
+                            </MarkdownView>
                             <View style={{ padding: 15 }}>
                                 <FormLabel>Name</FormLabel>
                                 <FormInput onChangeText={(text) => this.validateName(text)} />
@@ -210,11 +213,10 @@ class Welcome extends React.Component {
                     }
                     {(this.state.passed_tos && this.state.passed_identifier && this.state.passed_name && !this.state.passed_referral) &&
                         <View>
-                            <Text>Referrals</Text>
-                            <Text>
-                                {"If another user brought you here, type their email or identifier.\n\n Both you and the referrer will be rewarded "
+                            <MarkdownView>
+                                {"__Referrals__\n\nIf another user brought you here, type their email or identifier.\n\n Both you and the referrer will be rewarded "
                                     + "with credits, which are normally gained each time you post and can be used to personalize your account in the future."}
-                            </Text>
+                            </MarkdownView>
                             <View style={{ padding: 15 }}>
                                 <FormLabel>Email or Identifier</FormLabel>
                                 <FormInput onChangeText={(text) => this.setState({ referrer_valid: false, referral_message: '', referrer_field: text, referrer: '' })} />
@@ -251,6 +253,11 @@ class Welcome extends React.Component {
 const styles = StyleSheet.create({
     bold: {
         fontWeight: 'bold'
+    },
+
+    important: {
+        fontSize: 16,
+        color: '#FF0000'
     }
 });
 

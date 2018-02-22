@@ -76,13 +76,15 @@ class GroupInfo extends React.Component {
         )
         break;
       case 'joined':
-        return (
-          <Button
-            title={"Leave " + this.props.group.name}
-            onPress={this.leaveGroup}
-            loading={this.state.joinLoading}
-            disabled={this.state.joinDisabled} />
-        )
+        if (this.props.group.id != 1) {
+          return (
+            <Button
+              title={"Leave " + this.props.group.name}
+              onPress={this.leaveGroup}
+              loading={this.state.joinLoading}
+              disabled={this.state.joinDisabled} />
+          )
+        }
         break;
       case 'none':
         return (

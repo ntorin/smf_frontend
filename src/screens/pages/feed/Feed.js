@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, AsyncStorage, Alert } from 'react-native';
 import { TabViewAnimated, TabBar, SceneMap } from 'react-native-tab-view';
 import PopulatableListView from 'components/PopulatableListView';
 import { PrimaryColor, NavNoElevation, user } from 'helpers/constants';
@@ -48,6 +48,15 @@ class Feed extends React.Component {
     this.getFriendFeeds = this.getFriendFeeds.bind(this);
     this.getGroupFeeds = this.getGroupFeeds.bind(this);
     this.navigateToFeed = this.navigateToFeed.bind(this);
+
+    AsyncStorage.getItem('smf_frontend.newUser').then((newUser) => {
+      console.log('in storage');
+      if (!newUser) {
+        console.log('in no new user');
+        this.showIntro();
+        AsyncStorage.setItem('smf_frontend.newUser', 'complete');
+      }
+    });
 
     this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
   }
@@ -147,15 +156,15 @@ class Feed extends React.Component {
 
     switch (event.id) {
       case 'willAppear':
-          this.setState({
-              visible: true
-          });
-          break;
+        this.setState({
+          visible: true
+        });
+        break;
       case 'willDisappear':
-          this.setState({
-              visible: false
-          });
-          break;
+        this.setState({
+          visible: false
+        });
+        break;
       case 'bottomTabReselected':
         this.props.navigator.popToRoot({
           animated: true, // does the popToRoot have transition animation or does it happen immediately (optional)
@@ -189,6 +198,17 @@ class Feed extends React.Component {
         group: rowData.feed
       }
     });
+  }
+
+  showIntro(){
+    console.log('in intro');
+    this.props.navigator.toggleDrawer({
+      side: 'left', // the side of the drawer since you can have two, 'left' / 'right'
+      animated: true, // does the toggle have transition animation or does it happen immediately (optional)
+      to: 'open' // optional, 'open' = open the drawer, 'closed' = close it, missing = the opposite of current state
+    });
+    Alert.alert('Welcome!', 'Your account\'s credits are visible in the top-right of the side menu.\n\n' + 
+    'Create posts and topics to gain more credits!\n\nView \'Activities\' to see how you can gain credits faster.', [{text: 'OK'}]);
   }
 
   viewTopic(rowData) {

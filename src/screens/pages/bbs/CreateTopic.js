@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Text, TextInput, ScrollView, Keyboard } from 'react-native';
 import TextField from 'react-native-md-textinput';
+import RNButton from 'react-native-button';
 import { GiftedForm, GiftedFormManager } from 'react-native-gifted-form';
 import { Fumi } from 'react-native-textinput-effects';
 import TagInput from 'react-native-tag-input';
@@ -83,7 +84,12 @@ class CreateTopic extends React.Component {
     }
 
     _keyboardDidHide() {
-        this.setState({ keyboardVisible: false, isEditingContent: false });
+        this.setState({ keyboardVisible: false, isEditingContent: false, });
+        if(this.state.isEditingTags){
+            //this.setState({tagText: this.state.tagText += ','})
+            this.setState({isEditingTags: false})
+            this.onChangeText(this.state.tagText);
+        }
     }
 
     createTopic() {
@@ -107,9 +113,18 @@ class CreateTopic extends React.Component {
     }
 
     onChangeText = (text) => {
-        this.setState({ tagText: text });
+        var editing;
+        var t = text;
+        if(this.state.tagText.length > 0 && !this.state.isEditingTags){
+            editing = true;
+        }
+        this.setState({ tagText: text, isEditingTags: true });
 
-        const lastTyped = text.charAt(text.length - 1);
+        if(editing){
+            t += ',';
+        }
+
+        const lastTyped = t.charAt(t.length - 1);
         const parseWhen = [',', '\n'];
 
         if (parseWhen.indexOf(lastTyped) > -1) {
@@ -137,7 +152,10 @@ class CreateTopic extends React.Component {
                         value={this.state.title}
                         highlightColor={PrimaryColor}
                         onChangeText={(text) => this.setState({ title: text })} />
-                    <Text style={styles.tagHeader}>Tags separated by commas (tag1, tag2, ...); required</Text>
+                    <View>
+                    <Text style={styles.tagHeader}>{"Tags separated by commas (tag1, tag2, ...); "}</Text>
+                    {this.state.tags.length == 0 && <Text style={styles.important}>you must have at least 1 tag to create a topic.</Text>}
+                    </View>
                     <View style={layout.row}>
                         <TagInput
                             value={this.state.tags}
@@ -152,10 +170,9 @@ class CreateTopic extends React.Component {
                     onMarkdownChange={(content) => this.setState({ content: content, isEditingContent: true })}
                 />
                 <View style={layout.row}>
-                    <Text>{this.state.content.length + "/5000 characters"}</Text>
-                    {this.state.isEditingContent && <Button
-                        title={"Show Title/Tags"}
-                        onPress={() => this.setState({ isEditingContent: false })} />}
+                    <Text style={{flex: 1}}>{this.state.content.length + "/5000 characters"}</Text>
+                    {this.state.isEditingContent && <RNButton style={layout.showTitleTags}
+                        onPress={() => this.setState({ isEditingContent: false })}><Text style={[styles.showTitleTags]}>Show Title/Tags</Text></RNButton>}
                 </View>
 
                 {!this.state.keyboardVisible && <Button
@@ -171,6 +188,17 @@ const styles = StyleSheet.create({
     tagHeader: {
         fontSize: 12,
         color: PrimaryColor,
+    },
+
+    showTitleTags: {
+        fontWeight: 'bold',
+        color: PrimaryColor,
+        textAlign: 'right'
+    },
+
+    important: {
+        fontSize: 12,
+        fontWeight: 'bold',
     }
 });
 
@@ -187,6 +215,12 @@ const layout = StyleSheet.create({
 
     row: {
         flexDirection: 'row',
+    },
+
+    showTitleTags: {
+        flex: 1,
+        alignContent: 'flex-end',
+        alignItems: 'flex-end',
     },
 
     input: {

@@ -93,6 +93,10 @@ class Help extends React.Component {
                 </Text>
                 <Text>Yes. Select your group in the groups tab, and press & hold any member in the "Members" tab. If your permissions are sufficient, you will be able to edit the role of that user. Moderators are able to pin, lock, and delete topics and posts, while Admins can do the same and promote or ban other users in the group.</Text>
                 <Text style={styles.question}>
+                    {"Is there a way to directly message other users?"}
+                </Text>
+                <Text>If you go to a user's profile and add them as a friend, you will be able to message them directly. Conversations are stored in the "Messages" tab.</Text>
+                <Text style={styles.question}>
                     {"I want to gain more credits. Is there any alternative method to gain credits aside from posting?"}
                 </Text>
                 <Text>Currently, there are three methods of gaining credits; posting (10 credits per post), completing activities (daily/weekly/monthly activities; check the "Activities" tab in the navigation menu), and referring friends to Citru.me (10 credits per post the new user makes, up to 100).</Text>

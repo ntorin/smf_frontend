@@ -90,7 +90,9 @@ class Login extends React.Component {
             if (this.isNewUser()) {
                 this.props.navigator.push({
                     screen: 'smf_frontend.Welcome',
-                    title: 'Welcome'
+                    title: 'Welcome',
+                    email: this.state.email,
+                    password: this.state.password
                 });
             } else {
                 AsyncStorage.setItem('smf_frontend.email', this.state.email);
@@ -103,12 +105,12 @@ class Login extends React.Component {
                 for(var i = 0; i < responseJSON.errors.full_messages.length; i++){
                     errormsgs += responseJSON.errors.full_messages[i] + '; ';
                 }
-                Alert.alert('Registration Error', "There were problems with your account registration. (" + errormsgs + ")", [{ text: "OK", }])
+                Alert.alert('Registration Error', "Please fill out the Email and Password fields above to register.", [{ text: "OK", }])
             }else{
                 Alert.alert('Login Error', "Please make sure your email and password are correct, and try again.", [{ text: "OK", }])
             }
-            this.setState({ loginLoading: false, loginDisabled: false, registerLoading: false, registerDisabled: false })
         }
+        this.setState({ loginLoading: false, loginDisabled: false, registerLoading: false, registerDisabled: false })
     }
 
     render() {

@@ -47,7 +47,7 @@ class LiteProfile extends React.Component {
                 <View style={layout.userDetails}>
                     <View style={layout.row}>
                         <Text style={[{ flex: 1 }, styles.username]}>{this.state.user.name}</Text>
-                        <View style={[{ flex: 1, }, layout.row, layout.flexEnd, styles.alignRight]}>
+                        <View style={[{ flex: 1, }, layout.row, layout.flexEnd]}>
                             <MaterialCommunityIconsIcon
                                 name={"coins"}
                                 color={PrimaryColor}

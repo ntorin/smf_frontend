@@ -119,7 +119,7 @@ class CreateGroup extends React.Component {
     }
 
     submissionIsInvalid() {
-        return !this.state.valid || this.state.name.length < 1 || this.state.name.length > 16|| this.state.name.trim() === '' || this.state.tags.length == 0 ? true : false;
+        return !this.state.valid || this.state.description.length > 50 || this.state.name.length < 1 || this.state.name.length > 16 || this.state.name.trim() === '' || this.state.tags.length == 0 ? true : false;
     }
 
     validationMessageColor() {
@@ -136,7 +136,7 @@ class CreateGroup extends React.Component {
                 <View style={layout.identifierRow}>
                     <TextInput
                         style={layout.identifier}
-                        placeholder={'Identifier (a-z, 0-9, _ only)'}
+                        placeholder={'Identifier (1-16 chars); required'}
                         placeholderTextColor={PrimaryColor}
                         underlineColorAndroid={PrimaryColor}
                         onChangeText={(text) => this.setState({ identifier: text, valid: false, validation_message: '' })} />
@@ -146,24 +146,13 @@ class CreateGroup extends React.Component {
                 </View>
                 <Text style={this.validationMessageColor()}>{this.state.validation_message}</Text>
                 <TextInput
-                    placeholder={'Name (max. 16 characters)'}
+                    placeholder={'Name (1-16 chars); required'}
                     placeholderTextColor={PrimaryColor}
                     underlineColorAndroid={PrimaryColor}
                     onChangeText={(text) => this.setState({ name: text })} />
-                <View>
-                    <ScrollView>
-                        <TextInput
-                            placeholder={'Description'}
-                            placeholderTextColor={PrimaryColor}
-                            underlineColorAndroid={PrimaryColor}
-                            selectionColor={PrimaryColor}
-                            multiline={true}
-                            onChangeText={(text) => this.setState({ description: text })}
-                            autoCorrect={true} />
-                    </ScrollView>
-                </View>
+                <Text style={styles.tagHeader}>{"Tags separated by commas (tag1, tag2, ...); "}</Text>
+                {this.state.tags.length == 0 && <Text style={styles.important}>you must have at least 1 tag to create a group.</Text>}
                 <View style={layout.tags}>
-                    <Text style={styles.tagHeader}>Tags (tag1, tag2,...)</Text>
                     <TagInput
                         value={this.state.tags}
                         onChange={this.onChangeTags}
@@ -171,6 +160,17 @@ class CreateGroup extends React.Component {
                         text={this.state.tagText}
                         onChangeText={this.onChangeText}
                     />
+                </View>
+                <View>
+                    <TextInput
+                        placeholder={'Description (max. 50 chars)'}
+                        placeholderTextColor={PrimaryColor}
+                        underlineColorAndroid={PrimaryColor}
+                        selectionColor={PrimaryColor}
+                        multiline={true}
+                        onChangeText={(text) => this.setState({ description: text })}
+                        autoCorrect={true} />
+                    <Text style={{ flex: 1 }}>{this.state.description.length + "/50 characters"}</Text>
                 </View>
                 <View style={{ flexDirection: 'row' }}>
                     { /* <Text style={styles.privacyText}>Privacy</Text>
@@ -197,6 +197,11 @@ const styles = StyleSheet.create({
     tagHeader: {
         fontSize: 12,
         color: PrimaryColor,
+    },
+
+    important: {
+        fontSize: 12,
+        color: '#FF0000'
     }
 });
 
@@ -225,11 +230,11 @@ const layout = StyleSheet.create({
     },
 
     identifier: {
-        flex: 7
+        flex: 9
     },
 
     validateIdentifier: {
-        flex: 3
+        flex: 1
     }
 });
 

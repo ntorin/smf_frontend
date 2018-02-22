@@ -11,6 +11,45 @@ import ModalOptions from 'components/ModalOptions';
 
 const cable = ActionCable.createConsumer(WEBSOCKET_URL);
 
+PushNotification.configure({
+
+    // (optional) Called when Token is generated (iOS and Android)
+    onRegister: function(token) {
+        console.log( 'TOKEN:', token );
+    },
+
+    // (required) Called when a remote or local notification is opened or received
+    onNotification: function(notification) {
+        console.log( 'NOTIFICATION:', notification );
+
+        // process the notification
+        
+        // required on iOS only (see fetchCompletionHandler docs: https://facebook.github.io/react-native/docs/pushnotificationios.html)
+        notification.finish(PushNotificationIOS.FetchResult.NoData);
+    },
+
+    // ANDROID ONLY: GCM Sender ID (optional - not required for local notifications, but is need to receive remote push notifications)
+    senderID: "YOUR GCM SENDER ID",
+
+    // IOS ONLY (optional): default: all - Permissions to register.
+    permissions: {
+        alert: true,
+        badge: true,
+        sound: true
+    },
+
+    // Should the initial notification be popped automatically
+    // default: true
+    popInitialNotification: true,
+
+    /**
+      * (optional) default: true
+      * - Specified if permissions (ios) and token (android and ios) will requested or not,
+      * - if not, you must call PushNotificationsHandler.requestPermissions() later
+      */
+    requestPermissions: true,
+});
+
 class Messages extends React.Component {
 
     constructor(props) {
@@ -35,9 +74,13 @@ class Messages extends React.Component {
                 disconnected() { console.log('disconnected') },
 
                 received(event) {
+                    console.log(event);
                     switch (event.action) {
                         case 'conversation_message_after_create':
                             t.sendMessageNotification(event);
+                            break;
+                        case 'create_conversation':
+                            t.refreshConversations()
                             break;
                     }
                 }
@@ -50,12 +93,18 @@ class Messages extends React.Component {
         this.selectConversation = this.selectConversation.bind(this);
         this.muteConversation = this.muteConversation.bind(this);
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
+        this.refreshConversations = this.refreshConversations.bind(this);
 
     }
 
     _showModal = () => this.setState({ isModalVisible: true })
 
     _hideModal = () => this.setState({ isModalVisible: false })
+
+    refreshConversations(){
+        console.log('refreshing');
+        this.setState({forceUpdate: true});
+    }
 
     sendMessageNotification(event) {
         if (event.sender_id != user.id) {
@@ -71,6 +120,7 @@ class Messages extends React.Component {
                 number: parseInt(event.conversation.id), // (optional) Valid 32 bit integer specified as string. default: none (Cannot be zero)
                 playSound: false, // (optional) default: true
             });
+            this.setState({forceUpdate: true})
         }
     }
 
@@ -179,10 +229,11 @@ class Messages extends React.Component {
     }
 
     goToChat(rowData) {
+        console.log(rowData);
         this.props.navigator.push({
             screen: 'smf_frontend.Chat',
-            title: rowData.name,
-            passProps: { conversation: rowData }
+            title: rowData.conversation.name,
+            passProps: { conversation: rowData.conversation }
         });
     }
 
