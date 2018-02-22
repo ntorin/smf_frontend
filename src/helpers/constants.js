@@ -131,8 +131,8 @@ export const onNavEvent = (event) => { // this is the onPress handler for the tw
     }
 }
 
-export const PrimaryColor = '#73cfdd';
-export const PrimaryDimmed = 'rgba(115, 207, 221, 0.5)';
+export const PrimaryColor = '#219591';
+export const PrimaryDimmed = 'rgba(33, 149, 145, 0.5)';
 export const ScreenBackgroundColor = '#FFFFFF';
 export const BaseStyles = StyleSheet.create({
     container: {
