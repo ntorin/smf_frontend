@@ -36,10 +36,10 @@ class Feed extends React.Component {
       index: 0,
       visible: true,
       routes: [
-        { key: '1', title: 'All' },
+        { key: '1', title: 'BBS' },
         { key: '2', title: 'Follow' },
         { key: '3', title: 'Friend' },
-        { key: '4', title: 'BBS' },
+        { key: '4', title: 'All' },
       ],
     };
 
@@ -121,6 +121,7 @@ class Feed extends React.Component {
   onNavigatorEvent(event) { // this is the onPress handler for the two buttons together
     switch (event.type) {
       case 'NavBarButtonPress':
+      console.log('NavBarButtonPress')
         if (event.id == 'menu') { // this is the same id field from the static navigatorButtons definition
           this.props.navigator.toggleDrawer({
             side: 'left',
@@ -130,6 +131,7 @@ class Feed extends React.Component {
         break;
 
       case 'DeepLink':
+      console.log('DeepLink')
         this.props.navigator.screenIsCurrentlyVisible().then((responseJSON) => {
           isVisible = responseJSON
           if (isVisible) {
@@ -149,16 +151,19 @@ class Feed extends React.Component {
 
     switch (event.id) {
       case 'willAppear':
+      console.log('willAppear')
         this.setState({
           visible: true
         });
         break;
       case 'willDisappear':
+      console.log('willAppear')
         this.setState({
           visible: false
         });
         break;
       case 'bottomTabReselected':
+      console.log('bottomTabReselected')
         this.props.navigator.popToRoot({
           animated: true, // does the popToRoot have transition animation or does it happen immediately (optional)
           animationType: 'fade', // 'fade' (for both) / 'slide-horizontal' (for android) does the popToRoot have different transition animation (optional)
@@ -177,10 +182,10 @@ class Feed extends React.Component {
   />;
 
   _renderScene = SceneMap({
-    '1': this.All,
+    '1': this.BBS,
     '2': this.Follows,
     '3': this.Friends,
-    '4': this.BBS,
+    '4': this.All,
   });
 
   showIntro(){

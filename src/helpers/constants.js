@@ -14,7 +14,7 @@ export const ANDROID_ADMOB_AD_UNIT_ID = 'ca-app-pub-3289567150609681/5928312822'
 export const IOS_ADMOB_APP_ID = '';
 export const IOS_ADMOB_AD_UNIT_ID = '';
 
-export const APPLICATION_VERSION = 'Version 0.8.0 (Beta)';
+export const APPLICATION_VERSION = 'Version 0.5.0 (Alpha)';
 
 export var user = {
     id: 0
@@ -210,6 +210,12 @@ export const goToHome = () => {
             Navigation.startTabBasedApp({
                 tabs,
                 animationType: Platform.OS === 'ios' ? 'slide-down' : 'fade',
+                tabsStyle: { // optional, add this if you want to style the tab bar beyond the defaults
+                    tabBarButtonColor: PrimaryDimmed,
+                    tabBarSelectedButtonColor: PrimaryColor,
+                    tabBarBackgroundColor: '#FFFFFF',
+                    initialTabIndex: 1, // optional, the default selected bottom tab. Default: 0. On Android, add this to appStyle
+                },
                 appStyle: {
                     tabBarBackgroundColor: '#FFFFFF',
                     navBarButtonColor: PrimaryColor,

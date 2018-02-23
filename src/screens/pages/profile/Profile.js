@@ -5,7 +5,7 @@ import PopulatableListView from 'components/PopulatableListView';
 import { iconsMap } from 'helpers/icons-loader';
 import { BaseStyles, PrimaryColor, NavNoElevation, user } from 'helpers/constants.js';
 import ProfileInfo from './ProfileInfo';
-import { FEEDS_POST_FETCH } from 'helpers/apicalls';
+import { FEEDS_POST_FETCH, TOPICS_GET_SINGLE, GROUP_USERS_POST_CHECK_REQUEST } from 'helpers/apicalls';
 
 class Profile extends React.Component {
 
@@ -36,6 +36,7 @@ class Profile extends React.Component {
         }
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
         this.getActivityFeeds = this.getActivityFeeds.bind(this);
+        this.navigateToFeed = this.navigateToFeed.bind(this);
     };
 
     getActivityFeeds(page, callback, options) {

@@ -332,7 +332,8 @@ const layout = StyleSheet.create({
 
     searchPanel: {
         flexDirection: 'row',
-        padding: 15
+        marginTop: 15,
+        marginBottom: 15
     },
     searchBar: {
         flex: 7

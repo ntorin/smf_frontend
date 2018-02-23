@@ -5,7 +5,7 @@ import Button from 'components/Button';
 import PopulatableListView from 'components/PopulatableListView';
 import GroupInfo from './GroupInfo';
 import { BaseStyles, PrimaryColor, NavNoElevation } from 'helpers/constants';
-import { GROUP_USERS_POST, FEEDS_POST_FETCH, GROUP_USERS_POST_FETCH, GROUP_USERS_POST_CHECK_REQUEST } from 'helpers/apicalls';
+import { GROUP_USERS_POST, FEEDS_POST_FETCH, GROUP_USERS_POST_FETCH, GROUP_USERS_POST_CHECK_REQUEST, TOPICS_GET_SINGLE } from 'helpers/apicalls';
 import Modal from 'components/Modal';
 import ModalOptions from 'components/ModalOptions';
 
