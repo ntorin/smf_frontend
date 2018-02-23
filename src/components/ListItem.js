@@ -1,7 +1,7 @@
 import React from 'react';
-import { StyleSheet, View, Text, Image, Linking, Alert } from 'react-native';
+import { StyleSheet, View, Text, Image, Linking, Alert, Platform } from 'react-native';
 import Button from 'react-native-button';
-import { BaseStyles, PrimaryColor, ScreenBackgroundColor, ANDROID_ADMOB_AD_UNIT_ID } from 'helpers/constants.js';
+import { BaseStyles, PrimaryColor, ScreenBackgroundColor, ANDROID_ADMOB_AD_UNIT_ID, IOS_ADMOB_AD_UNIT_ID } from 'helpers/constants.js';
 import Avatar from 'components/Avatar';
 import { MarkdownView } from 'react-native-markdown-view';
 import { AdMobBanner, AdMobRewarded, PublisherBanner } from 'react-native-admob';
@@ -309,7 +309,7 @@ class ListItem extends React.Component {
                 <View>
                     <AdMobBanner
                         adSize="fullBanner"
-                        adUnitID={ANDROID_ADMOB_AD_UNIT_ID}
+                        adUnitID={Platform.OS === 'ios' ? IOS_ADMOB_AD_UNIT_ID : ANDROID_ADMOB_AD_UNIT_ID}
                         onAdFailedToLoad={error => console.error(error)}
                     />
                 </View>

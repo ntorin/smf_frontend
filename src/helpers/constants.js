@@ -8,11 +8,9 @@ import { JSON_HEADERS, GROUP_USERS_POST_CHECK_REQUEST } from 'helpers/apicalls';
 
 export const WEBSOCKET_URL = 'ws://18.218.93.101/cable';
 
-export const ANDROID_ADMOB_APP_ID = 'ca-app-pub-3289567150609681~2704928270';
 export const ANDROID_ADMOB_AD_UNIT_ID = 'ca-app-pub-3289567150609681/5928312822';
 
-export const IOS_ADMOB_APP_ID = '';
-export const IOS_ADMOB_AD_UNIT_ID = '';
+export const IOS_ADMOB_AD_UNIT_ID = 'ca-app-pub-3289567150609681/2356914659';
 
 export const APPLICATION_VERSION = 'Version 0.5.0 (Alpha)';
 
