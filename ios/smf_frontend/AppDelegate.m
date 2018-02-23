@@ -32,7 +32,7 @@
 #endif
   
   [GADMobileAds configureWithApplicationID:@"ca-app-pub-3289567150609681~7016136975"];
-
+  
   self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
   self.window.backgroundColor = [UIColor whiteColor];
   [[RCCManager sharedInstance] initBridgeWithBundleURL:jsCodeLocation launchOptions:launchOptions];

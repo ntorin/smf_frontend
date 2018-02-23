@@ -36,7 +36,6 @@ class PopulatableListView extends React.Component {
         console.log('rendering list')
         return (
             <GiftedListView
-                paginationFetchingView={this.paginationFetchingView}
                 rowView={this.renderRowView}
                 onFetch={this.props.onFetch}
                 firstLoader={true} // display a loader for the first fetching
