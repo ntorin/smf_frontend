@@ -91,8 +91,10 @@ class Login extends React.Component {
                 this.props.navigator.push({
                     screen: 'smf_frontend.Welcome',
                     title: 'Welcome',
-                    email: this.state.email,
-                    password: this.state.password
+                    passProps:{
+                        email: this.state.email,
+                        password: this.state.password
+                    }
                 });
             } else {
                 AsyncStorage.setItem('smf_frontend.email', this.state.email);

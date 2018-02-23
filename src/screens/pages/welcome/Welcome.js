@@ -61,8 +61,8 @@ class Welcome extends React.Component {
     goToMenu() {
         this.setState({ passed_name: true })
         if (this.state.passed_identifier) {
-            AsyncStorage.setItem('smf_frontend.email', this.state.email);
-            AsyncStorage.setItem('smf_frontend.password', this.state.password);
+            AsyncStorage.setItem('smf_frontend.email', this.props.email);
+            AsyncStorage.setItem('smf_frontend.password', this.props.password);
             editUser(this.state.user);
             goToHome();
         }

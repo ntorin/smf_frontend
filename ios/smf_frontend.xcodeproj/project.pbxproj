@@ -41,7 +41,6 @@
 		6A9BA0BCC65C40F1B49E221C /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E45ECEE29E4D46B8B99CCE8A /* Entypo.ttf */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		890E5C1A8BF34E2195D198F8 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0C94CD35675E4EB3AD5AD989 /* MaterialIcons.ttf */; };
-		8E53D3EF9C3D40309830694F /* libReactNativeNavigation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 88EEF050C9E24A899E34947F /* libReactNativeNavigation.a */; };
 		AEE4745669B34CFBBB9C9CDD /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C5F43CD86DBE45C8876D50FA /* Zocial.ttf */; };
 		C1B26747800147DA961F5EE3 /* libRNVectorIcons.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D869C4F65D6C43B3BBA4AC9A /* libRNVectorIcons.a */; };
 		D1AB4C4702A943C5986B1553 /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A99B5A20708045908A7EA459 /* EvilIcons.ttf */; };
@@ -51,6 +50,7 @@
 		F0A2BF6188AB46B6A8CA77F4 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EF97696CDD48488A9E6ABADB /* FontAwesome.ttf */; };
 		F1851DE2204029CF00B3C18B /* libRCTPushNotification.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F1851DDF204029C000B3C18B /* libRCTPushNotification.a */; };
 		F1851DE520402A0C00B3C18B /* GoogleMobileAds.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1851DE420402A0C00B3C18B /* GoogleMobileAds.framework */; };
+		F1851E172040995B00B3C18B /* libReactNativeNavigation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F1851DD2204028FF00B3C18B /* libReactNativeNavigation.a */; };
 		FC533C184715403E95CDCB27 /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8F3F7011A5044D66A932A586 /* Feather.ttf */; };
 /* End PBXBuildFile section */
 
@@ -340,7 +340,6 @@
 		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
-		88EEF050C9E24A899E34947F /* libReactNativeNavigation.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libReactNativeNavigation.a; sourceTree = "<group>"; };
 		8F3F7011A5044D66A932A586 /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Feather.ttf"; sourceTree = "<group>"; };
 		A99B5A20708045908A7EA459 /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
 		B68A8C1A674249059CB9BAE9 /* RNAdMobManager.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNAdMobManager.xcodeproj; path = "../node_modules/react-native-admob/ios/RNAdMobManager.xcodeproj"; sourceTree = "<group>"; };
@@ -381,8 +380,8 @@
 				832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */,
 				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
+				F1851E172040995B00B3C18B /* libReactNativeNavigation.a in Frameworks */,
 				EB8B1C8C77FE4BF5B338A91A /* libRNAdMobManager.a in Frameworks */,
-				8E53D3EF9C3D40309830694F /* libReactNativeNavigation.a in Frameworks */,
 				C1B26747800147DA961F5EE3 /* libRNVectorIcons.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -742,6 +741,9 @@
 					00E356ED1AD99517003FC87E = {
 						CreatedOnToolsVersion = 6.2;
 						TestTargetID = 13B07F861A680F5B00A75B9A;
+					};
+					13B07F861A680F5B00A75B9A = {
+						DevelopmentTeam = RSR9EN5246;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -1284,6 +1286,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
+				DEVELOPMENT_TEAM = RSR9EN5246;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -1311,6 +1314,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = RSR9EN5246;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
