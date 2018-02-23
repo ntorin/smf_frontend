@@ -68,41 +68,37 @@ class ViewGroup extends React.Component {
         }
         break;
 
-      case 'DeepLink':
-        this.props.navigator.screenIsCurrentlyVisible().then((responseJSON) => {
-          isVisible = responseJSON
-          if (isVisible) {
-            const parts = event.link.split('/'); // Link parts
-            const payload = event.payload; // (optional) The payload
-            if (parts[0] == 'nav') {
-              this.props.navigator.push({
-                screen: parts[1],
-                title: payload
-              });
-              // handle the link somehow, usually run a this.props.navigator command
+        case 'DeepLink':
+            if (this.state.visible) {
+                const parts = event.link.split('/'); // Link parts
+                const payload = event.payload; // (optional) The payload
+                if (parts[0] == 'nav') {
+                    this.props.navigator.push({
+                        screen: parts[1],
+                        title: payload
+                    });
+                }
             }
-          }
-        });
-        break;
+            break;
     }
 
     switch (event.id) {
-      case 'willAppear':
-        this.setState({
-          visible: true
-        });
-        break;
-      case 'willDisappear':
-        this.setState({
-          visible: false
-        });
-        break;
-      case 'bottomTabReselected':
-        this.props.navigator.popToRoot({
-          animated: true, // does the popToRoot have transition animation or does it happen immediately (optional)
-          animationType: 'fade', // 'fade' (for both) / 'slide-horizontal' (for android) does the popToRoot have different transition animation (optional)
-        });
-        break;
+        case 'willAppear':
+            this.setState({
+                visible: true
+            });
+            break;
+        case 'willDisappear':
+            this.setState({
+                visible: false
+            });
+            break;
+        case 'bottomTabReselected':
+            this.props.navigator.popToRoot({
+                animated: true, // does the popToRoot have transition animation or does it happen immediately (optional)
+                animationType: 'fade', // 'fade' (for both) / 'slide-horizontal' (for android) does the popToRoot have different transition animation (optional)
+            });
+            break;
     }
   }
 

@@ -121,7 +121,7 @@ class Feed extends React.Component {
   onNavigatorEvent(event) { // this is the onPress handler for the two buttons together
     switch (event.type) {
       case 'NavBarButtonPress':
-      console.log('NavBarButtonPress')
+        console.log('NavBarButtonPress')
         if (event.id == 'menu') { // this is the same id field from the static navigatorButtons definition
           this.props.navigator.toggleDrawer({
             side: 'left',
@@ -131,52 +131,31 @@ class Feed extends React.Component {
         break;
 
       case 'DeepLink':
-      console.log('DeepLink: ' + event.link)
-        if(this.state.visible){
+        if (this.state.visible) {
           const parts = event.link.split('/'); // Link parts
           const payload = event.payload; // (optional) The payload
           if (parts[0] == 'nav') {
-            console.log('navigating')
             this.props.navigator.push({
               screen: parts[1],
               title: payload
             });
           }
         }
-        
-        this.props.navigator.screenIsCurrentlyVisible().then((responseJSON) => {
-          isVisible = responseJSON
-          if (isVisible) {
-            const parts = event.link.split('/'); // Link parts
-            const payload = event.payload; // (optional) The payload
-            if (parts[0] == 'nav') {
-              console.log('navigating')
-              this.props.navigator.push({
-                screen: parts[1],
-                title: payload
-              });
-              // handle the link somehow, usually run a this.props.navigator command
-            }
-          }
-        });
         break;
     }
 
     switch (event.id) {
       case 'willAppear':
-      console.log('willAppear')
         this.setState({
           visible: true
         });
         break;
       case 'willDisappear':
-      console.log('willAppear')
         this.setState({
           visible: false
         });
         break;
       case 'bottomTabReselected':
-      console.log('bottomTabReselected')
         this.props.navigator.popToRoot({
           animated: true, // does the popToRoot have transition animation or does it happen immediately (optional)
           animationType: 'fade', // 'fade' (for both) / 'slide-horizontal' (for android) does the popToRoot have different transition animation (optional)
@@ -201,15 +180,15 @@ class Feed extends React.Component {
     '4': this.All,
   });
 
-  showIntro(){
+  showIntro() {
     console.log('in intro');
     this.props.navigator.toggleDrawer({
       side: 'left', // the side of the drawer since you can have two, 'left' / 'right'
       animated: true, // does the toggle have transition animation or does it happen immediately (optional)
       to: 'open' // optional, 'open' = open the drawer, 'closed' = close it, missing = the opposite of current state
     });
-    Alert.alert('Welcome!', 'Your account\'s credits are visible in the top-right of the side menu.\n\n' + 
-    'Create posts and topics to gain more credits!\n\nView \'Activities\' to see how you can gain credits faster.', [{text: 'OK'}]);
+    Alert.alert('Welcome!', 'Your account\'s credits are visible in the top-right of the side menu.\n\n' +
+      'Create posts and topics to gain more credits!\n\nView \'Activities\' to see how you can gain credits faster.', [{ text: 'OK' }]);
   }
 
   viewGroup(rowData) {

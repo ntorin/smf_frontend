@@ -28,10 +28,8 @@ class CreditHistory extends React.Component {
                 }
                 break;
 
-            case 'DeepLink':
-                this.props.navigator.screenIsCurrentlyVisible().then((responseJSON) => {
-                    isVisible = responseJSON
-                    if (isVisible) {
+                case 'DeepLink':
+                    if (this.state.visible) {
                         const parts = event.link.split('/'); // Link parts
                         const payload = event.payload; // (optional) The payload
                         if (parts[0] == 'nav') {
@@ -39,21 +37,29 @@ class CreditHistory extends React.Component {
                                 screen: parts[1],
                                 title: payload
                             });
-                            // handle the link somehow, usually run a this.props.navigator command
                         }
                     }
-                });
-                break;
-        }
-
-        switch (event.id) {
-            case 'bottomTabReselected':
-                this.props.navigator.popToRoot({
-                    animated: true, // does the popToRoot have transition animation or does it happen immediately (optional)
-                    animationType: 'fade', // 'fade' (for both) / 'slide-horizontal' (for android) does the popToRoot have different transition animation (optional)
-                });
-                break;
-        }
+                    break;
+            }
+    
+            switch (event.id) {
+                case 'willAppear':
+                    this.setState({
+                        visible: true
+                    });
+                    break;
+                case 'willDisappear':
+                    this.setState({
+                        visible: false
+                    });
+                    break;
+                case 'bottomTabReselected':
+                    this.props.navigator.popToRoot({
+                        animated: true, // does the popToRoot have transition animation or does it happen immediately (optional)
+                        animationType: 'fade', // 'fade' (for both) / 'slide-horizontal' (for android) does the popToRoot have different transition animation (optional)
+                    });
+                    break;
+            }
     }
 
     viewNotification() {
