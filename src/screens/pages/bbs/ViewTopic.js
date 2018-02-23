@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, Alert } from 'react-native';
 import PopulatableListView from 'components/PopulatableListView';
 import Button from 'components/Button';
 import { BaseStyles, user } from 'helpers/constants.js';
@@ -26,7 +26,7 @@ class ViewTopic extends React.Component {
             this.state.replyDisabled = true;
         }
 
-        if(this.props.topic.is_locked){
+        if (this.props.topic.is_locked) {
             this.state.replyButtonText = 'Locked Topic';
         }
 
@@ -42,10 +42,10 @@ class ViewTopic extends React.Component {
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
     }
 
-    
 
-    refresh(){
-        this.setState({forceUpdate: true})
+
+    refresh() {
+        this.setState({ forceUpdate: true })
     }
 
     onNavigatorEvent(event) { // this is the onPress handler for the two buttons together
@@ -115,9 +115,15 @@ class ViewTopic extends React.Component {
     }
 
     deletePost(selected) {
-        POSTS_DELETE(selected.id)
-            .then((responseJSON) => {
-            });
+        Alert.alert('Deleting Post', 'Are you sure you want to delete this post?', [{
+            text: 'YES', onPress: () => {
+                POSTS_DELETE(selected.id)
+                    .then((responseJSON) => {
+                        this.setState({ forceUpdate: true })
+                        console.log(responseJSON);
+                    });
+            }
+        }, { text: 'NO' }])
     }
 
     getPosts(page, callback, options) {

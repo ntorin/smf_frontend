@@ -19,6 +19,7 @@ class Profile extends React.Component {
     ><PopulatableListView
             type={'feed'}
             onFetch={this.getActivityFeeds}
+            onPress={this.navigateToFeed}
             pagination={true} />
     </View>;
 
@@ -104,6 +105,66 @@ class Profile extends React.Component {
                     animationType: 'fade', // 'fade' (for both) / 'slide-horizontal' (for android) does the popToRoot have different transition animation (optional)
                 });
                 break;
+        }
+    }
+
+    viewGroup(rowData) {
+        this.props.navigator.push({
+            screen: 'smf_frontend.ViewGroup',
+            title: rowData.feed.name,
+            passProps: {
+                group: rowData.feed
+            }
+        });
+    }
+
+    viewTopic(rowData) {
+        GROUP_USERS_POST_CHECK_REQUEST(rowData.feed.group_id)
+            .then((responseJSON) => {
+                this.props.navigator.push({
+                    screen: 'smf_frontend.ViewTopic',
+                    title: rowData.feed.title,
+                    passProps: {
+                        topic: rowData.feed,
+                        group_user: responseJSON.group_user,
+                        joinStatus: responseJSON.status,
+                    }
+                });
+            });
+    }
+
+    viewPost(rowData) {
+        GROUP_USERS_POST_CHECK_REQUEST(rowData.feed.group_id)
+            .then((responseJSON) => {
+                TOPICS_GET_SINGLE(rowData.feed.topic_id)
+                    .then((responseJSON2) => {
+                        this.props.navigator.push({
+                            screen: 'smf_frontend.ViewTopic',
+                            title: responseJSON2.title,
+                            passProps: {
+                                topic: responseJSON2,
+                                group_user: responseJSON.group_user,
+                                joinStatus: responseJSON.status,
+
+                                jump_to: rowData.feed.id
+                            }
+                        });
+                    })
+            });
+    }
+
+    navigateToFeed(rowData) {
+        switch (rowData.feed_type.split('-')[0]) {
+            case 'topic':
+                this.viewTopic(rowData);
+                break;
+            case 'group':
+                this.viewGroup(rowData);
+                break;
+            case 'post':
+                this.viewPost(rowData);
+                break;
+
         }
     }
 

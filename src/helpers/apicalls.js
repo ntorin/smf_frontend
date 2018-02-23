@@ -754,7 +754,7 @@ let POSTS_POST = (group_id, topic_id, content, is_op, is_anonymous) => {
 let POSTS_DELETE = (post_id) => {
 
     return fetch(
-        BASE_URL + "/" + post_id,
+        POSTS_URL + "/" + post_id,
         {
             method: DELETE,
             headers: JSON_HEADERS,

@@ -164,9 +164,9 @@ class Welcome extends React.Component {
                     {(this.state.passed_tos && !this.state.passed_identifier) &&
                         <View>
                             <MarkdownView>
-                                {"__Create Your Identifier__\n\nIdentifiers let other users find and recognize you more easily.\n\n Your identifier can only contain letters, numbers and underscores, "
+                                {"__Create Your Identifier__\n\nYour identifier is your account name; it lets other users find and recognize you.\n\n Your identifier must be unique, and can only contain letters, numbers and underscores, "
                                     + "and must be 1-16 characters long.\n\n"
-                                    + "You will be able to create a non-unique, editable screen name on the next page."}
+                                    + "**You will be able to create a non-unique, editable screen name on the next page.**"}
                             </MarkdownView>
                             <Text style={styles.important}>WARNING: Identifiers cannot be changed in the future. Make sure you are happy with your identifier.</Text>
                             <View style={[{ padding: 15 }]}>

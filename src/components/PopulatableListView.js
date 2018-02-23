@@ -30,6 +30,8 @@ class PopulatableListView extends React.Component {
         return (<View />);
     }
 
+    paginationFetchingView() { return (<View><Text>{'Loading...'}</Text></View>); }
+
     render() {
         return (
             <GiftedListView

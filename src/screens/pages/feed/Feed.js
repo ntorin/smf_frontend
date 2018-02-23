@@ -52,7 +52,7 @@ class Feed extends React.Component {
     AsyncStorage.getItem('smf_frontend.newUser').then((newUser) => {
       console.log('in storage');
       if (!newUser) {
-        console.log('in no new user');
+        console.log('in new user');
         this.showIntro();
         AsyncStorage.setItem('smf_frontend.newUser', 'complete');
       }
@@ -61,17 +61,10 @@ class Feed extends React.Component {
     this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
   }
 
-  navigateToFeed(rowData) {
-    const parts = rowData.deep_link.split('/');
-    switch (parts[0]) {
-      case '':
-        break;
-    }
-  }
-
   getAllFeeds(page, callback, options) {
     FEEDS_POST_FETCH('all', null, page)
       .then((responseJSON) => {
+        console.log(responseJSON);
         if (responseJSON.length < 1) {
           callback(responseJSON, {
             allLoaded: true
@@ -190,16 +183,6 @@ class Feed extends React.Component {
     '4': this.BBS,
   });
 
-  viewGroup(rowData) {
-    this.props.navigator.push({
-      screen: 'smf_frontend.ViewGroup',
-      title: rowData.feed.name,
-      passProps: {
-        group: rowData.feed
-      }
-    });
-  }
-
   showIntro(){
     console.log('in intro');
     this.props.navigator.toggleDrawer({
@@ -209,6 +192,16 @@ class Feed extends React.Component {
     });
     Alert.alert('Welcome!', 'Your account\'s credits are visible in the top-right of the side menu.\n\n' + 
     'Create posts and topics to gain more credits!\n\nView \'Activities\' to see how you can gain credits faster.', [{text: 'OK'}]);
+  }
+
+  viewGroup(rowData) {
+    this.props.navigator.push({
+      screen: 'smf_frontend.ViewGroup',
+      title: rowData.feed.name,
+      passProps: {
+        group: rowData.feed
+      }
+    });
   }
 
   viewTopic(rowData) {
