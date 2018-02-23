@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, TextInput, ScrollView, Picker, Alert } from 'react-native';
+import { StyleSheet, View, Text, TextInput, ScrollView, Picker, Alert, Keyboard } from 'react-native';
 import TextField from 'react-native-md-textinput';
 import { GiftedForm, GiftedFormManager } from 'react-native-gifted-form';
 import { Fumi } from 'react-native-textinput-effects';
@@ -20,7 +20,13 @@ class CreateGroup extends React.Component {
             description: '',
             tags: [],
             tagText: '',
-        }
+        }        
+        this._keyboardDidHide = this._keyboardDidHide.bind(this);
+        this._keyboardDidShow = this._keyboardDidShow.bind(this);
+
+        this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow);
+        this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide);
+
         this.createGroup = this.createGroup.bind(this);
         this.labelExtractor = this.labelExtractor.bind(this);
         this.validateIdentifier = this.validateIdentifier.bind(this);
@@ -67,6 +73,24 @@ class CreateGroup extends React.Component {
         }
     }
 
+    componentWillUnmount() {
+        this.keyboardDidShowListener.remove();
+        this.keyboardDidHideListener.remove();
+    }
+
+    _keyboardDidShow() {
+        this.setState({ keyboardVisible: true });
+    }
+
+    _keyboardDidHide() {
+        this.setState({ keyboardVisible: false, isEditingContent: false, });
+        if(this.state.isEditingTags){
+            //this.setState({tagText: this.state.tagText += ','})
+            this.setState({isEditingTags: false})
+            this.onChangeText(this.state.tagText);
+        }
+    }
+
     createGroup() {
         Alert.alert('Create Group',
             'Are you sure you want to create the group ' + this.state.name + ' (' + this.state.identifier + ')?',
@@ -101,9 +125,18 @@ class CreateGroup extends React.Component {
     }
 
     onChangeText = (text) => {
-        this.setState({ tagText: text });
+        var editing;
+        var t = text;
+        if(this.state.tagText.length > 0 && !this.state.isEditingTags){
+            editing = true;
+        }
+        this.setState({ tagText: text, isEditingTags: true });
 
-        const lastTyped = text.charAt(text.length - 1);
+        if(editing){
+            t += ',';
+        }
+
+        const lastTyped = t.charAt(t.length - 1);
         const parseWhen = [',', '\n'];
 
         if (parseWhen.indexOf(lastTyped) > -1) {
@@ -133,18 +166,20 @@ class CreateGroup extends React.Component {
     render() {
         return (
             <View style={BaseStyles.container}>
-                <View style={layout.identifierRow}>
+                <View style={layout.row}>
+                <View style={layout.identifier}>
                     <TextInput
-                        style={layout.identifier}
                         placeholder={'Identifier (1-16 chars); required'}
                         placeholderTextColor={PrimaryColor}
                         underlineColorAndroid={PrimaryColor}
                         onChangeText={(text) => this.setState({ identifier: text, valid: false, validation_message: '' })} />
+                        <Text style={this.validationMessageColor()}>{this.state.validation_message}</Text>
+                    </View>
                     <Button title={"Validate"}
                         onPress={this.validateIdentifier}
                         style={layout.validateIdentifier} />
+
                 </View>
-                <Text style={this.validationMessageColor()}>{this.state.validation_message}</Text>
                 <TextInput
                     placeholder={'Name (1-16 chars); required'}
                     placeholderTextColor={PrimaryColor}
@@ -201,7 +236,7 @@ const styles = StyleSheet.create({
 
     important: {
         fontSize: 12,
-        color: '#FF0000'
+        fontWeight: 'bold',
     }
 });
 
@@ -225,7 +260,7 @@ const layout = StyleSheet.create({
         flexDirection: 'row'
     },
 
-    identifierRow: {
+    row: {
         flexDirection: 'row'
     },
 

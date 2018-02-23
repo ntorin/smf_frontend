@@ -134,6 +134,7 @@ class Groups extends React.Component {
                         type={'group'}
                         onFetch={this.getGroups}
                         onPress={this.viewGroup}
+                        pagination={true}
                         forceUpdate={this.state.forceUpdate}
                     />
                 </View>
@@ -155,6 +156,7 @@ const layout = StyleSheet.create({
 
     searchPanel: {
         flexDirection: 'row',
+        flex: 1,
         marginTop: 15,
         marginBottom: 15
     },
@@ -163,9 +165,8 @@ const layout = StyleSheet.create({
     },
 
     groupList: {
-        flex: 1
-
-    }
+        flex: 9
+    },
 });
 
 export default Groups;

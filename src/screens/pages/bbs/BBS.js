@@ -332,6 +332,7 @@ const layout = StyleSheet.create({
 
     searchPanel: {
         flexDirection: 'row',
+        flex: 1,
         marginTop: 15,
         marginBottom: 15
     },
@@ -340,7 +341,7 @@ const layout = StyleSheet.create({
     },
 
     topicList: {
-        flex: 1
+        flex: 9
     },
 });
 

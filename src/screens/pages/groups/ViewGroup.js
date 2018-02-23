@@ -24,6 +24,7 @@ class ViewGroup extends React.Component {
     onFetch={this.getMembers}
     type={'user'}
     forceUpdate={true}
+    pagination={true}
     onPress={this.onMemberPress}
     onLongPress={() => { }}
   />;

@@ -197,6 +197,7 @@ class ViewTopic extends React.Component {
                     onFetch={this.getPosts}
                     onPress={this.viewProfile}
                     onLongPress={this.selectPost}
+                    pagination={true}
                     forceUpdate={this.state.forceUpdate}
                 />
                 <Button

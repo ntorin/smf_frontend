@@ -131,13 +131,26 @@ class Feed extends React.Component {
         break;
 
       case 'DeepLink':
-      console.log('DeepLink')
+      console.log('DeepLink: ' + event.link)
+        if(this.state.visible){
+          const parts = event.link.split('/'); // Link parts
+          const payload = event.payload; // (optional) The payload
+          if (parts[0] == 'nav') {
+            console.log('navigating')
+            this.props.navigator.push({
+              screen: parts[1],
+              title: payload
+            });
+          }
+        }
+        
         this.props.navigator.screenIsCurrentlyVisible().then((responseJSON) => {
           isVisible = responseJSON
           if (isVisible) {
             const parts = event.link.split('/'); // Link parts
             const payload = event.payload; // (optional) The payload
             if (parts[0] == 'nav') {
+              console.log('navigating')
               this.props.navigator.push({
                 screen: parts[1],
                 title: payload

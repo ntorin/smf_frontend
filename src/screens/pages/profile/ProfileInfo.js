@@ -175,27 +175,23 @@ class ProfileInfo extends React.Component {
       switch (this.state.followStatus) {
         case 'followed':
           return (
-            <View style={{ flex: 1 }}>
               <Button
                 title={"Unfollow"}
                 style={layout.button}
                 onPress={this.unfollowUser}
                 loading={this.state.followLoading}
                 disabled={this.state.followDisabled} />
-            </View>
           )
           break;
 
         case 'none':
           return (
-            <View style={{ flex: 1 }}>
               <Button
                 title={"Follow"}
                 style={layout.button}
                 onPress={this.followUser}
                 loading={this.state.followLoading}
                 disabled={this.state.followDisabled} />
-            </View>
           )
           break;
       }
@@ -206,6 +202,7 @@ class ProfileInfo extends React.Component {
   render() {
     return (
       <View style={BaseStyles.container}>
+      <View style={{flex:1}}>
         <LiteProfile
           user={this.state.user} />
         <View style={styles.userDetails}>
@@ -217,23 +214,22 @@ class ProfileInfo extends React.Component {
             <Text style={layout.counts}>Referrals: {this.props.user.referral_count}</Text>
           </View>
         </View>
-        <View style={layout.row}>
-          {this.renderFollowButton()}
-          {this.renderFriendButton()}
         </View>
-        <View style={[layout.row, {marginTop: 5}]}>
-          <View style={{ flex: 1 }}>
+        <View style={{flex:1, alignContent: 'flex-start', alignItems: 'flex-start'}}>
+        <View style={[layout.row, {flex:1, marginTop: 5}]}>
             <Button
               title={"View Groups"}
               style={layout.button}
               onPress={this.viewGroups} />
-          </View>
-          <View style={{ flex: 1 }}>
             <Button
               title={"View Follows"}
               style={layout.button}
               onPress={this.viewFollows} />
-          </View>
+        </View>
+        <View style={[layout.row, {flex: 1}]}>
+          {this.renderFollowButton()}
+          {this.renderFriendButton()}
+        </View>
         </View>
       </View>
     )

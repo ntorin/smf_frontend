@@ -214,7 +214,7 @@ export const goToHome = () => {
                     tabBarButtonColor: PrimaryDimmed,
                     tabBarSelectedButtonColor: PrimaryColor,
                     tabBarBackgroundColor: '#FFFFFF',
-                    initialTabIndex: 1, // optional, the default selected bottom tab. Default: 0. On Android, add this to appStyle
+                    initialTabIndex: 0, // optional, the default selected bottom tab. Default: 0. On Android, add this to appStyle
                 },
                 appStyle: {
                     tabBarBackgroundColor: '#FFFFFF',
