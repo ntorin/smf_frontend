@@ -208,8 +208,8 @@ class ListItem extends React.Component {
                 case 'post':
                     view = (
                         <View style={styles.container}>
-                            <Text style={[styles.medFont]}>{"New Post"}</Text>
-                            {this.renderPost(rd.feed, rd.user)}
+                            <Text style={[styles.medFont]}>{"New Post in " + rd.feed.title + " (" + rd.feed.group_name + ")"}</Text>
+                            {this.renderPost(rd.feed.post, rd.user)}
                         </View>
                     )
                     break;

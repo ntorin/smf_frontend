@@ -107,7 +107,7 @@ class Login extends React.Component {
                 for(var i = 0; i < responseJSON.errors.full_messages.length; i++){
                     errormsgs += responseJSON.errors.full_messages[i] + '; ';
                 }
-                Alert.alert('Registration Error', "Please fill out the Email and Password fields above to register.", [{ text: "OK", }])
+                Alert.alert('Registration Error', "Please fill out the Email and Password fields above to register. (errors: " + errormsgs + ")", [{ text: "OK", }])
             }else{
                 Alert.alert('Login Error', "Please make sure your email and password are correct, and try again.", [{ text: "OK", }])
             }
