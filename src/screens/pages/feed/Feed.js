@@ -217,9 +217,9 @@ class Feed extends React.Component {
   }
 
   viewPost(rowData) {
-    GROUP_USERS_POST_CHECK_REQUEST(rowData.feed.group_id)
+    GROUP_USERS_POST_CHECK_REQUEST(rowData.feed.post.group_id)
       .then((responseJSON) => {
-        TOPICS_GET_SINGLE(rowData.feed.topic_id)
+        TOPICS_GET_SINGLE(rowData.feed.post.topic_id)
           .then((responseJSON2) => {
             this.props.navigator.push({
               screen: 'smf_frontend.ViewTopic',
