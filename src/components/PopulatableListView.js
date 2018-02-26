@@ -30,11 +30,26 @@ class PopulatableListView extends React.Component {
         return (<View />);
     }
 
+    scrollToLocation(location){
+        console.log('location: ' + location);
+        console.log(this.refs.giftedlistview.getScrollPosY());
+        this.refs.giftedlistview.scrollToLocation(location);
+    }
+
+    getYPos(){
+        return this.refs.giftedlistview.getScrollPosY();
+    }
+
+    resetYPos(){
+        this.refs.giftedlistview.resetScrollPosY();
+    }
+
     paginationFetchingView() { return (<View><Text>{'Loading...'}</Text></View>); }
 
     render() {
         return (
             <GiftedListView
+                ref={'giftedlistview'}
                 rowView={this.renderRowView}
                 onFetch={this.props.onFetch}
                 firstLoader={true} // display a loader for the first fetching

@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, Alert } from 'react-native';
+import { StyleSheet, View, Text, Alert, AsyncStorage } from 'react-native';
 import PopulatableListView from 'components/PopulatableListView';
 import Button from 'components/Button';
 import { BaseStyles, user } from 'helpers/constants.js';
@@ -30,7 +30,6 @@ class ViewTopic extends React.Component {
             this.state.replyButtonText = 'Locked Topic';
         }
 
-
         this.replyTopic = this.replyTopic.bind(this);
         this.getPosts = this.getPosts.bind(this);
         this.viewProfile = this.viewProfile.bind(this);
@@ -40,6 +39,15 @@ class ViewTopic extends React.Component {
         this.refresh = this.refresh.bind(this);
 
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
+    }
+
+    componentWillUnmount() {
+        var yPos = this.refs.populatable.getYPos();
+        if (yPos) {
+            AsyncStorage.setItem('smf_frontend.topic_' + this.props.topic.id + '_yPos', yPos.toString());
+            console.log('saving yPos: ' + yPos.toString());
+            this.refs.populatable.resetYPos();
+        }
     }
 
 
@@ -59,38 +67,39 @@ class ViewTopic extends React.Component {
                 }
                 break;
 
-                case 'DeepLink':
-                    if (this.state.visible) {
-                        const parts = event.link.split('/'); // Link parts
-                        const payload = event.payload; // (optional) The payload
-                        if (parts[0] == 'nav') {
-                            this.props.navigator.push({
-                                screen: parts[1],
-                                title: payload
-                            });
-                        }
+            case 'DeepLink':
+                if (this.state.visible) {
+                    const parts = event.link.split('/'); // Link parts
+                    const payload = event.payload; // (optional) The payload
+                    if (parts[0] == 'nav') {
+                        this.props.navigator.push({
+                            screen: parts[1],
+                            title: payload
+                        });
                     }
-                    break;
-            }
-    
-            switch (event.id) {
-                case 'willAppear':
-                    this.setState({
-                        visible: true
-                    });
-                    break;
-                case 'willDisappear':
-                    this.setState({
-                        visible: false
-                    });
-                    break;
-                case 'bottomTabReselected':
-                    this.props.navigator.popToRoot({
-                        animated: true, // does the popToRoot have transition animation or does it happen immediately (optional)
-                        animationType: 'fade', // 'fade' (for both) / 'slide-horizontal' (for android) does the popToRoot have different transition animation (optional)
-                    });
-                    break;
-            }
+                }
+                break;
+        }
+
+        switch (event.id) {
+            case 'willAppear':
+                this.setState({
+                    visible: true
+                });
+                break;
+            case 'willDisappear':
+                this.setState({
+                    visible: false
+                });
+                //this.setYPos();
+                break;
+            case 'bottomTabReselected':
+                this.props.navigator.popToRoot({
+                    animated: true, // does the popToRoot have transition animation or does it happen immediately (optional)
+                    animationType: 'fade', // 'fade' (for both) / 'slide-horizontal' (for android) does the popToRoot have different transition animation (optional)
+                });
+                break;
+        }
     }
 
     _showModal = () => this.setState({ isModalVisible: true })
@@ -138,11 +147,20 @@ class ViewTopic extends React.Component {
                 if (responseJSON.length < 1) {
                     callback(responseJSON, {
                         allLoaded: true
-                    })
+                    });
+                    this.setState({ allLoaded: true })
                 } else {
                     callback(responseJSON)
                 }
                 this.setState({ forceUpdate: false })
+                AsyncStorage.getItem('smf_frontend.topic_' + this.props.topic.id + '_yPos').then((yPos) => {
+                    console.log('yPos: ' + yPos);
+                    console.log(this.refs.populatable.getYPos());
+                    if (this.refs.populatable.getYPos() < yPos) {
+                        console.log('scrolling');
+                        this.refs.populatable.scrollToLocation(parseInt(yPos));
+                    }
+                });
             });
     }
     replyTopic() {
@@ -199,6 +217,7 @@ class ViewTopic extends React.Component {
             <View style={layout.container}>
                 {this.renderModal()}
                 <PopulatableListView
+                    ref={'populatable'}
                     type={'post'}
                     onFetch={this.getPosts}
                     onPress={this.viewProfile}
