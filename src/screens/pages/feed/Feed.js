@@ -50,9 +50,7 @@ class Feed extends React.Component {
     this.navigateToFeed = this.navigateToFeed.bind(this);
 
     AsyncStorage.getItem('smf_frontend.newUser').then((newUser) => {
-      console.log('in storage');
       if (!newUser) {
-        console.log('in new user');
         this.showIntro();
         AsyncStorage.setItem('smf_frontend.newUser', 'complete');
       }
@@ -64,7 +62,6 @@ class Feed extends React.Component {
   getAllFeeds(page, callback, options) {
     FEEDS_POST_FETCH('all', null, page)
       .then((responseJSON) => {
-        console.log(responseJSON);
         if (responseJSON.length < 1) {
           callback(responseJSON, {
             allLoaded: true
@@ -121,7 +118,6 @@ class Feed extends React.Component {
   onNavigatorEvent(event) { // this is the onPress handler for the two buttons together
     switch (event.type) {
       case 'NavBarButtonPress':
-        console.log('NavBarButtonPress')
         if (event.id == 'menu') { // this is the same id field from the static navigatorButtons definition
           this.props.navigator.toggleDrawer({
             side: 'left',
@@ -181,7 +177,6 @@ class Feed extends React.Component {
   });
 
   showIntro() {
-    console.log('in intro');
     this.props.navigator.toggleDrawer({
       side: 'left', // the side of the drawer since you can have two, 'left' / 'right'
       animated: true, // does the toggle have transition animation or does it happen immediately (optional)

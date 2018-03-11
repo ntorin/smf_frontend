@@ -31,8 +31,6 @@ class PopulatableListView extends React.Component {
     }
 
     scrollToLocation(location){
-        console.log('location: ' + location);
-        console.log(this.refs.giftedlistview.getScrollPosY());
         this.refs.giftedlistview.scrollToLocation(location);
     }
 

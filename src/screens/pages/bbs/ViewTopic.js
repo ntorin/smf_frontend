@@ -45,7 +45,6 @@ class ViewTopic extends React.Component {
         var yPos = this.refs.populatable.getYPos();
         if (yPos) {
             AsyncStorage.setItem('smf_frontend.topic_' + this.props.topic.id + '_yPos', yPos.toString());
-            console.log('saving yPos: ' + yPos.toString());
             this.refs.populatable.resetYPos();
         }
     }
@@ -135,7 +134,6 @@ class ViewTopic extends React.Component {
                 POSTS_DELETE(selected.id)
                     .then((responseJSON) => {
                         this.setState({ forceUpdate: true })
-                        console.log(responseJSON);
                     });
             }
         }, { text: 'NO' }])
@@ -155,10 +153,7 @@ class ViewTopic extends React.Component {
                 this.setState({ forceUpdate: false })
                 AsyncStorage.getItem('smf_frontend.topic_' + this.props.topic.id + '_yPos').then((yPos) => {
                     if (yPos) {
-                        console.log('yPos: ' + yPos);
-                        console.log(this.refs.populatable.getYPos());
                         if (this.refs.populatable.getYPos() < yPos) {
-                            console.log('scrolling');
                             this.refs.populatable.scrollToLocation(parseInt(yPos));
                         }
                     }
