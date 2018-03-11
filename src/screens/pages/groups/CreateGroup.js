@@ -166,6 +166,10 @@ class CreateGroup extends React.Component {
             return {
                 color: '#FF0000'
             }
+        }else{
+            return {
+                color: '#00FF00'
+            }
         }
     }
 
@@ -175,10 +179,11 @@ class CreateGroup extends React.Component {
                 <View style={layout.row}>
                 <View style={layout.identifier}>
                     <TextInput
-                        placeholder={'Identifier (1-16 chars); required'}
+                        placeholder={'Identifier (1-16 chars)'}
                         placeholderTextColor={PrimaryColor}
                         underlineColorAndroid={PrimaryColor}
                         onChangeText={(text) => this.setState({ identifier: text, valid: false, validation_message: '' })} />
+                        {this.state.identifier.length == 0 && <Text style={styles.important}>a group identifier is required.</Text>}
                         <Text style={this.validationMessageColor()}>{this.state.validation_message}</Text>
                     </View>
                     <Button title={"Validate"}
@@ -187,10 +192,11 @@ class CreateGroup extends React.Component {
 
                 </View>
                 <TextInput
-                    placeholder={'Name (1-16 chars); required'}
+                    placeholder={'Name (1-16 chars)'}
                     placeholderTextColor={PrimaryColor}
                     underlineColorAndroid={PrimaryColor}
                     onChangeText={(text) => this.setState({ name: text })} />
+                    {this.state.name.length == 0 && <Text style={styles.important}>a group name is required.</Text>}
                 <Text style={styles.tagHeader}>{"Tags separated by commas (tag1, tag2, ...); "}</Text>
                 {this.state.tags.length == 0 && <Text style={styles.important}>you must have at least 1 tag to create a group.</Text>}
                 <View style={layout.tags}>

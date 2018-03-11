@@ -154,12 +154,13 @@ class CreateTopic extends React.Component {
             <View style={BaseStyles.container}>
                 {!this.state.isEditingContent && <View>
                     <TextInput
-                        placeholder={'Title (max. 50 characters; required)'}
+                        placeholder={'Title (max. 50 characters)'}
                         value={this.state.title}
                         highlightColor={PrimaryColor}
                         onChangeText={(text) => this.setState({ title: text })} />
+                        {this.state.title.length == 0 && <Text style={styles.important}>a topic title is required.</Text>}
                     <View>
-                    <Text style={styles.tagHeader}>{"Tags separated by commas (tag1, tag2, ...); "}</Text>
+                    <Text style={styles.tagHeader}>{"Tags separated by commas (tag1, tag2, ...)"}</Text>
                     {this.state.tags.length == 0 && <Text style={styles.important}>you must have at least 1 tag to create a topic.</Text>}
                     </View>
                     <View style={layout.row}>

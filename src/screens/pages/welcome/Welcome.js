@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, ScrollView, AsyncStorage } from 'react-native';
+import { StyleSheet, View, Text, ScrollView, AsyncStorage, Keyboard } from 'react-native';
 import { BaseStyles, goToHome, PrimaryColor } from 'helpers/constants';
 import Button from 'components/Button';
 import { CheckBox, FormLabel, FormInput, FormValidationMessage } from 'react-native-elements';
@@ -172,7 +172,7 @@ class Welcome extends React.Component {
                             <View style={[{ padding: 15 }]}>
                                 <View>
                                     <FormLabel>Identifier</FormLabel>
-                                    <FormInput onChangeText={(text) => this.checkIdentifierRegex(text)} />
+                                    <FormInput onChangeText={(text) => this.checkIdentifierRegex(text)} onSubmitEditing={() => Keyboard.dismiss()} />
                                     {!this.state.identifier_valid && <FormValidationMessage>{this.state.identifier_message}</FormValidationMessage>}
                                 </View>
 
@@ -199,7 +199,7 @@ class Welcome extends React.Component {
                             </MarkdownView>
                             <View style={{ padding: 15 }}>
                                 <FormLabel>Name</FormLabel>
-                                <FormInput onChangeText={(text) => this.validateName(text)} />
+                                <FormInput onChangeText={(text) => this.validateName(text)} onSubmitEditing={() => Keyboard.dismiss()}/>
                                 {!this.state.name_valid && <FormValidationMessage>{this.state.name_errors}</FormValidationMessage>}
                             </View>
                             <View style={layout.row}>
@@ -219,7 +219,7 @@ class Welcome extends React.Component {
                             </MarkdownView>
                             <View style={{ padding: 15 }}>
                                 <FormLabel>Email or Identifier</FormLabel>
-                                <FormInput onChangeText={(text) => this.setState({ referrer_valid: false, referral_message: '', referrer_field: text, referrer: '' })} />
+                                <FormInput onChangeText={(text) => this.setState({ referrer_valid: false, referral_message: '', referrer_field: text, referrer: '' })} onSubmitEditing={() => Keyboard.dismiss()}/>
                                 {!this.state.referral_valid && <FormValidationMessage>{this.state.referral_message}</FormValidationMessage>}
                                 {this.state.referral_valid && <Text>{this.state.referral_message}</Text>}
                             </View>
