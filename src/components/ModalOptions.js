@@ -122,7 +122,7 @@ class ModalOptions extends React.Component {
 
     addToArray(mainArray, secondArray) {
         for (var i = 0; i < secondArray.length; i++) {
-            mainArray.push(secondArray[i]);
+            mainArray.push(secondArrai8ty[i]);
         }
     }
 

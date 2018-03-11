@@ -37,9 +37,9 @@ class Feed extends React.Component {
       visible: true,
       routes: [
         { key: '1', title: 'BBS' },
-        { key: '2', title: 'Follow' },
-        { key: '3', title: 'Friend' },
-        { key: '4', title: 'All' },
+        { key: '2', title: 'Follows' },
+        { key: '3', title: 'Friends' },
+        //{ key: '4', title: 'All' },
       ],
     };
 
@@ -177,7 +177,7 @@ class Feed extends React.Component {
     '1': this.BBS,
     '2': this.Follows,
     '3': this.Friends,
-    '4': this.All,
+    //4': this.All,
   });
 
   showIntro() {
