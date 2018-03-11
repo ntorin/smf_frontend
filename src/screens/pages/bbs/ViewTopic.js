@@ -154,11 +154,13 @@ class ViewTopic extends React.Component {
                 }
                 this.setState({ forceUpdate: false })
                 AsyncStorage.getItem('smf_frontend.topic_' + this.props.topic.id + '_yPos').then((yPos) => {
-                    console.log('yPos: ' + yPos);
-                    console.log(this.refs.populatable.getYPos());
-                    if (this.refs.populatable.getYPos() < yPos) {
-                        console.log('scrolling');
-                        this.refs.populatable.scrollToLocation(parseInt(yPos));
+                    if (yPos) {
+                        console.log('yPos: ' + yPos);
+                        console.log(this.refs.populatable.getYPos());
+                        if (this.refs.populatable.getYPos() < yPos) {
+                            console.log('scrolling');
+                            this.refs.populatable.scrollToLocation(parseInt(yPos));
+                        }
                     }
                 });
             });
