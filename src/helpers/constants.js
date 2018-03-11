@@ -230,7 +230,9 @@ export const goToHome = () => {
                     left: {
                         screen: 'smf_frontend.Nav',
                         passProps: props
-                    }
+                    },    
+                    disableOpenGesture: true // optional, can the drawer be opened with a swipe instead of button
+
                 },
                 passProps: props
             });
